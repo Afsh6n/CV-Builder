@@ -1,0 +1,115 @@
+<div class="certificates-form">
+  <div class="form-header">
+    <h2 class="form-title">گواهی‌ها</h2>
+    <p class="form-subtitle">گواهینامه‌ها و مدارک خود را اضافه کنید</p>
+  </div>
+
+  <div class="cert-list">
+    @for (cert of certificates(); track cert.id; let i = $index) {
+      <div class="common-list-card" [class.editing]="isEditing(cert.id)">
+        @if (isEditing(cert.id)) {
+          <div class="edit-form">
+            <app-form-field label="عنوان گواهی">
+              <app-form-input [value]="cert.title" (valueChange)="updateEntry(cert.id, 'title', $event)" />
+            </app-form-field>
+            <app-form-field label="صادرکننده">
+              <app-form-input [value]="cert.issuer" (valueChange)="updateEntry(cert.id, 'issuer', $event)" />
+            </app-form-field>
+            <div class="form-row">
+              <app-form-field label="اعتبار از">
+                <app-persian-date-input [value]="cert.validFrom" (valueChange)="updateEntry(cert.id, 'validFrom', $event)" />
+              </app-form-field>
+              <app-form-field label="اعتبار تا">
+                <app-persian-date-input [value]="cert.validTo" (valueChange)="updateEntry(cert.id, 'validTo', $event)" />
+              </app-form-field>
+            </div>
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label toggle-item">
+                <div class="toggle-switch">
+                  <input type="checkbox" [checked]="cert.current" (change)="toggleCurrent(cert.id)" />
+                  <span class="toggle-slider"></span>
+                </div>
+                <span>تا اکنون معتبر است</span>
+              </label>
+            </div>
+            <app-form-field label="لینک مرتبط">
+              <app-form-input
+                [value]="cert.link || ''"
+                placeholder="https://..."
+                [ltr]="true"
+                (valueChange)="updateEntry(cert.id, 'link', $event)"
+              />
+            </app-form-field>
+            <div class="form-group">
+              <label class="form-label">تصویر گواهی</label>
+              @if (cert.imageData) {
+                <div class="cert-image-preview">
+                  <img [src]="cert.imageData" alt="گواهی" />
+                  <button type="button" class="btn-remove-img" (click)="updateEntry(cert.id, 'imageData', '')">حذف تصویر</button>
+                </div>
+              }
+              <input type="file" accept="image/*" (change)="onImageSelected(cert.id, $event)" class="form-input" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === certificates().length - 1"
+              (moveUp)="moveEntry(cert.id, 'up')"
+              (moveDown)="moveEntry(cert.id, 'down')"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main">
+                  <div class="cert-brand">
+                    <div class="brand-icon">
+                      <app-resume-icon name="certificate" [size]="20" />
+                    </div>
+                    <div class="brand-details">
+                      <h3 class="cert-title">{{ cert.title || 'عنوان گواهی' }}</h3>
+                      <div class="issuer-wrap">
+                        <span class="issuer-name">{{ cert.issuer || 'صادرکننده' }}</span>
+                        @if (cert.current) {
+                          <span class="valid-badge">معتبر</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="meta-info">
+                    <div class="meta-item">
+                      <app-resume-icon name="calendar" [size]="14" />
+                      <span>{{ cert.validFrom || '—' }} — {{ cert.current ? 'اکنون' : (cert.validTo || '—') }}</span>
+                    </div>
+                    @if (cert.link || cert.imageData) {
+                      <div class="meta-item">
+                        <app-resume-icon name="website" [size]="14" />
+                        <span class="has-attachment">دارای پیوست (تصویر/لینک)</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="view-mode-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(cert.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeEntry(cert.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن گواهی</button>
+</div>

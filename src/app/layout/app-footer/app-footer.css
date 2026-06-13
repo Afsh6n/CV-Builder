@@ -1,0 +1,214 @@
+.app-footer {
+  margin-top: auto;
+  background: linear-gradient(145deg, #0b1120 0%, #111827 100%);
+  color: #e2e8f0;
+  padding: 0;
+  border-top: none;
+  position: relative;
+  box-shadow: 0 -10px 30px -15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.app-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, #3b82f6, transparent);
+  opacity: 0.5;
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  position: relative;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.2s ease;
+}
+
+.footer-brand:hover {
+  transform: translateX(-4px);
+}
+
+.footer-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3b82f6, #a855f7);
+  box-shadow: 0 8px 16px -6px rgba(59, 130, 246, 0.3);
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.5px;
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.footer-brand:hover .footer-logo {
+  transform: scale(1.02) rotate(2deg);
+  box-shadow: 0 12px 20px -8px rgba(59, 130, 246, 0.4);
+}
+
+.footer-credit {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.footer-credit strong {
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 800;
+}
+
+.footer-tagline {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #cbd5e6;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.footer-link:hover::before {
+  opacity: 1;
+}
+
+.footer-link:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(96, 165, 250, 0.6);
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.4);
+}
+
+.footer-link-icon {
+  display: flex;
+  opacity: 0.9;
+  transition: transform 0.2s;
+}
+
+.footer-link:hover .footer-link-icon {
+  transform: scale(1.1);
+}
+
+.footer-copy {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: #5b6e8c;
+  padding: 16px 20px 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  letter-spacing: 0.3px;
+  font-weight: 400;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 20px 24px;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .footer-link {
+    padding: 8px 14px;
+  }
+
+  .footer-logo {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+}
+
+.donation-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px dashed #4b5563;
+  font-weight: 500;
+}
+
+.donation-link:hover {
+  color: #fbbf24;
+  border-bottom-color: #fbbf24;
+  text-decoration: none;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-footer {
+  animation: fadeSlideUp 0.5s ease-out;
+}

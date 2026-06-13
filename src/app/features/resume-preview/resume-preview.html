@@ -1,0 +1,420 @@
+@if (resume()) {
+<div class="resume-preview" [class]="layoutClass()" id="resume-preview" dir="rtl" [ngStyle]="themeVars()">
+  <div class="resume-layout">
+    <aside class="resume-sidebar">
+      @if (resume()!.personalInfo.profilePhoto) {
+      <div class="sidebar-photo">
+        <img [src]="resume()!.personalInfo.profilePhoto" alt="عکس پروفایل" class="profile-img"
+          [ngStyle]="photoStyle()" />
+      </div>
+      }
+
+      <div class="sidebar-name-block">
+        <h1 class="sidebar-name">{{ fullName() || 'نام و نام خانوادگی' }}</h1>
+        @if (resume()!.personalInfo.title) {
+        <p class="sidebar-title">{{ resume()!.personalInfo.title }}</p>
+        }
+      </div>
+
+      @if (showPersonalLabels()) {
+      <div class="sidebar-divider"></div>
+      <ul class="personal-info-list">
+        @if (resume()!.personalInfo.birthDate) {
+        <li class="personal-info-row">
+          <span class="personal-info-label">متولد:</span>
+          <span class="personal-info-value">{{ resume()!.personalInfo.birthDate }}</span>
+        </li>
+        }
+        @if (resume()!.personalInfo.maritalStatus) {
+        <li class="personal-info-row">
+          <span class="personal-info-label">وضعیت تأهل:</span>
+          <span class="personal-info-value">{{ resume()!.personalInfo.maritalStatus }}</span>
+        </li>
+        }
+        @if (resume()!.personalInfo.militaryStatus) {
+        <li class="personal-info-row">
+          <span class="personal-info-label">وضعیت سربازی:</span>
+          <span class="personal-info-value">{{ resume()!.personalInfo.militaryStatus }}</span>
+        </li>
+        }
+      </ul>
+      } @else {
+      @if (resume()!.personalInfo.birthDate || resume()!.personalInfo.maritalStatus ||
+      resume()!.personalInfo.militaryStatus) {
+      <div class="sidebar-divider"></div>
+      <p class="sidebar-basic-info">
+        {{ compactBasicInfo() }}
+      </p>
+      }
+      }
+
+      @if (resume()!.settings.display.showQrCode && qrDataUrl()) {
+      <div class="sidebar-qr">
+        <img [src]="qrDataUrl()" alt="QR Code" class="qr-image" width="100" height="100" />
+      </div>
+      }
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <app-resume-icon name="contact" [size]="14" />
+          <span class="section-title-text">اطلاعات تماس</span>
+        </h2>
+        <ul class="contact-list">
+          @if (resume()!.personalInfo.email) {
+          <li class="contact-row">
+            <app-resume-icon name="email" [size]="14" class="contact-icon" />
+            <a class="contact-text ltr-text" [href]="'mailto:' + resume()!.personalInfo.email">
+              {{ resume()!.personalInfo.email }}
+            </a>
+          </li>
+          }
+          @if (resume()!.personalInfo.mobile) {
+          <li class="contact-row">
+            <app-resume-icon name="mobile" [size]="14" class="contact-icon" />
+            <span class="contact-text ltr-text">{{ resume()!.personalInfo.mobile }}</span>
+          </li>
+          }
+          @if (resume()!.personalInfo.phone) {
+          <li class="contact-row">
+            <app-resume-icon name="phone" [size]="14" class="contact-icon" />
+            <span class="contact-text ltr-text">{{ resume()!.personalInfo.phone }}</span>
+          </li>
+          }
+          @if (resume()!.personalInfo.linkedin) {
+          <li class="contact-row">
+            <app-resume-icon name="linkedin" [size]="14" class="contact-icon" />
+            <a class="contact-text ltr-text" [href]="normalizeUrl(resume()!.personalInfo.linkedin)" target="_blank">
+              {{ resume()!.personalInfo.linkedin }}
+            </a>
+          </li>
+          }
+          @if (resume()!.personalInfo.website) {
+          <li class="contact-row">
+            <app-resume-icon name="website" [size]="14" class="contact-icon" />
+            <a class="contact-text ltr-text" [href]="normalizeUrl(resume()!.personalInfo.website)" target="_blank">
+              {{ resume()!.personalInfo.website }}
+            </a>
+          </li>
+          }
+          @if (locationText()) {
+          <li class="contact-row">
+            <app-resume-icon name="location" [size]="14" class="contact-icon" />
+            <span class="contact-text">{{ locationText() }}</span>
+          </li>
+          }
+        </ul>
+      </div>
+
+      @if (resume()!.summary) {
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <app-resume-icon name="summary" [size]="14" />
+          <span class="section-title-text">خلاصه رزومه</span>
+        </h2>
+        <p class="sidebar-summary">{{ resume()!.summary }}</p>
+      </div>
+      }
+
+      @if (resume()!.settings.sections.languages && resume()!.languages.length > 0) {
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <app-resume-icon name="languages" [size]="14" />
+          <span class="section-title-text">زبان</span>
+        </h2>
+        <ul class="language-list">
+          @for (lang of resume()!.languages; track lang.id) {
+          <li class="language-row">
+            <span class="language-name">{{ lang.name }}</span>
+            @if (lang.displayType === 'graphic') {
+            <span class="language-dots">
+              @for (dot of [1,2,3,4,5]; track dot) {
+              <span class="dot" [class.filled]="dot <= lang.level"></span>
+              }
+            </span>
+            } @else {
+            <span class="language-level-text">{{ languageLabels[lang.level] }}</span>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      }
+
+      @if (resume()!.settings.sections.socialMedia && resume()!.socialMedia.length > 0) {
+      <div class="sidebar-section">
+        <h2 class="sidebar-section-title">
+          <app-resume-icon name="social" [size]="14" />
+          <span class="section-title-text">شبکه‌های اجتماعی</span>
+        </h2>
+        <div class="social-icons-row">
+          @for (social of resume()!.socialMedia; track social.id) {
+          <a class="social-icon-link" [href]="normalizeUrl(social.url)" target="_blank"
+            [title]="getSocialDisplay(social)">
+            <app-resume-icon [name]="getSocialIcon(social.platform)" [size]="20" />
+          </a>
+          }
+        </div>
+      </div>
+      }
+    </aside>
+
+    <main class="resume-main">
+      @if (resume()!.settings.sections.careerInfo && resume()!.settings.display.showCareerInfo &&
+      (resume()!.careerInfo.expectedSalary || resume()!.careerInfo.totalExperience)) {
+      <section class="main-section career-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="salary" [size]="16" />
+            حقوق و سابقه
+          </span>
+        </h2>
+        <div class="career-info-grid">
+          @if (resume()!.careerInfo.expectedSalary) {
+          <div class="career-info-item">
+            <span class="career-label">حقوق مورد انتظار:</span>
+            <span class="career-value">{{ resume()!.careerInfo.expectedSalary }}</span>
+          </div>
+          }
+          @if (resume()!.careerInfo.totalExperience) {
+          <div class="career-info-item">
+            <span class="career-label">سابقه کاری:</span>
+            <span class="career-value">{{ resume()!.careerInfo.totalExperience }}</span>
+          </div>
+          }
+        </div>
+      </section>
+      }
+
+      @if (resume()!.education.length > 0) {
+      <section class="main-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="education" [size]="16" />
+            سوابق تحصیلی
+          </span>
+        </h2>
+        @for (edu of resume()!.education; track edu.id) {
+        <div class="entry-block">
+          <div class="entry-header">
+            <div class="entry-title-group">
+              <h3 class="entry-title">{{ edu.degree }} {{ edu.field }}</h3>
+              @if (edu.specialization) { <p class="entry-subtitle">گرایش: {{ edu.specialization }}</p> }
+              <p class="entry-org">{{ edu.institution }}</p>
+              @if (edu.city || edu.province) { <p class="entry-location">{{ getEducationLocation(edu) }}</p> }
+            </div>
+            <div class="entry-date">
+              {{ formatMonth(edu.startDate) }} - {{ edu.currentlyStudying ? 'در حال تحصیل' : formatMonth(edu.endDate) }}
+              @if (edu.gpa) { <span class="entry-gpa">معدل: {{ edu.gpa }}</span> }
+            </div>
+          </div>
+        </div>
+        }
+      </section>
+      }
+
+      @if (resume()!.workExperience.length > 0) {
+      <section class="main-section work-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="work" [size]="16" />
+            سوابق شغلی
+          </span>
+        </h2>
+        <div class="work-timeline">
+          @for (exp of resume()!.workExperience; track exp.id) {
+          <article class="work-card">
+            <div class="work-card-marker"></div>
+            <div class="work-card-body">
+              <div class="work-card-header">
+                <div class="work-card-titles">
+                  <h3 class="work-card-position">{{ exp.position }}</h3>
+                  <p class="work-card-company">{{ exp.company }}</p>
+                  @if (exp.city || exp.province || exp.country) {
+                  <p class="work-card-location">{{ getWorkLocation(exp) }}</p>
+                  }
+                </div>
+                <div class="work-card-date">
+                  {{ formatMonth(exp.startDate) }} – {{ exp.current ? 'تا کنون' : formatMonth(exp.endDate) }}
+                </div>
+              </div>
+              @if (exp.description) {
+              <ul class="work-card-bullets">
+                @for (line of getDescriptionLines(exp.description); track line) {
+                <li>{{ line }}</li>
+                }
+              </ul>
+              }
+            </div>
+          </article>
+          }
+        </div>
+      </section>
+      }
+
+      @if (technicalSkills().length > 0) {
+      <section class="main-section skills-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="skills" [size]="16" />
+            مهارت‌های فنی
+          </span>
+        </h2>
+        @if (useSkillCards(resume()!.settings.technicalSkillsDisplay)) {
+        <div class="skills-card-grid">
+          @for (skill of technicalSkills(); track skill.id) {
+          <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
+          }
+        </div>
+        } @else if (isChartMode(technicalDisplay())) {
+        <app-skill-chart [skills]="technicalSkills()" [displayType]="asChartMode(technicalDisplay())"
+          [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
+        }
+      </section>
+      }
+
+      @if (resume()!.settings.sections.softSkills && softSkills().length > 0) {
+      <section class="main-section skills-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="skills" [size]="16" />
+            مهارت‌های نرم
+          </span>
+        </h2>
+        @if (useSkillCards(resume()!.settings.softSkillsDisplay)) {
+        <div class="skills-card-grid">
+          @for (skill of softSkills(); track skill.id) {
+          <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
+          }
+        </div>
+        } @else if (isChartMode(softDisplay())) {
+        <app-skill-chart [skills]="softSkills()" [displayType]="asChartMode(softDisplay())"
+          [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
+        }
+      </section>
+      }
+
+      @if (resume()!.settings.sections.certificates && resume()!.certificates.length > 0) {
+      <section class="main-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="certificate" [size]="16" />
+            گواهی‌ها
+          </span>
+        </h2>
+        @for (cert of certificatesForDisplay(); track cert.id) {
+        <div class="certificate-block">
+          @if (showCertThumbnail(cert)) {
+          <button type="button" class="cert-thumbnail-btn" (click)="openCertificateImage(cert)" title="مشاهده تصویر">
+            <img [src]="cert.imageData" [alt]="cert.title" class="cert-thumbnail" />
+          </button>
+          } @else {
+          <app-resume-icon name="certificate" [size]="20" class="cert-block-icon" />
+          }
+          <div class="cert-block-body">
+            <h3 class="entry-title">{{ cert.title }}</h3>
+            @if (cert.issuer) { <p class="entry-subtitle">{{ cert.issuer }}</p> }
+          </div>
+          <div class="cert-block-meta">
+            <span class="cert-validity">{{ getCertValidity(cert) }}</span>
+            @if (cert.link) {
+            <a class="cert-view-link" [href]="normalizeUrl(cert.link)" target="_blank">لینک گواهی</a>
+            } @else if (cert.imageData && !showCertThumbnail(cert)) {
+            <button type="button" class="cert-view-link cert-view-btn" (click)="openCertificateImage(cert)">مشاهده
+              تصویر</button>
+            }
+          </div>
+        </div>
+        }
+      </section>
+      }
+
+      @if (resume()!.settings.sections.projects && resume()!.projects.length > 0) {
+      <section class="main-section">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="projects" [size]="16" />
+            پروژه‌ها
+          </span>
+        </h2>
+        @for (project of resume()!.projects; track project.id) {
+        <div class="entry-block project-block">
+          <div class="entry-header">
+            <div class="entry-title-group">
+              <h3 class="entry-title">{{ project.title }}</h3>
+              @if (project.employer) { <p class="entry-subtitle">{{ project.employer }}</p> }
+            </div>
+            @if (project.date) { <div class="entry-date">{{ formatMonth(project.date) }}</div> }
+          </div>
+          @if (project.link) {
+          <a class="project-link ltr-text" [href]="normalizeUrl(project.link)" target="_blank">{{ project.link }}</a>
+          }
+          @if (project.description) { <p class="project-desc">{{ project.description }}</p> }
+        </div>
+        }
+      </section>
+      }
+
+      @if (resume()!.customSections.length > 0) {
+      @for (section of resume()!.customSections; track section.id) {
+      @if (section.title && section.entries.length > 0) {
+      <section class="main-section custom-section-block">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon [name]="$any(section.icon)" [size]="16" />
+            {{ section.title }}
+          </span>
+        </h2>
+        @for (entry of section.entries; track entry.id) {
+        @if (entry.title || entry.description) {
+        <div class="custom-entry">
+          <div class="custom-entry-header">
+            <div>
+              <h3 class="entry-title">{{ entry.title }}</h3>
+              @if (entry.subtitle) { <p class="entry-subtitle">{{ entry.subtitle }}</p> }
+            </div>
+            @if (entry.date) {
+            <span class="entry-date">{{ entry.date | monthFormat }}</span>
+            }
+          </div>
+          @if (entry.description) { <p class="custom-entry-desc">{{ entry.description }}</p> }
+          @if (entry.link) {
+          <a class="project-link ltr-text" [href]="normalizeUrl(entry.link)" target="_blank">{{ entry.link }}</a>
+          }
+        </div>
+        }
+        }
+      </section>
+      }
+      }
+      }
+
+      <footer class="resume-footer">
+        @if (resume()!.settings.display.showLastUpdated && formatLastUpdated()) {
+        <div class="footer-item">
+          <app-resume-icon name="calendar" [size]="12" />
+          <span>آخرین بروزرسانی: {{ formatLastUpdated() }}</span>
+        </div>
+        }
+        <div class="footer-item credit">
+          <app-resume-icon name="github" [size]="12" />
+          <span>رزومه‌ساز: github.com/Afsh6n</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+</div>
+
+@if (lightboxImage()) {
+<app-certificate-lightbox [imageSrc]="lightboxImage()" [title]="lightboxTitle()" (close)="closeLightbox()" />
+}
+}

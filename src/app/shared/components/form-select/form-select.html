@@ -1,0 +1,16 @@
+<select
+  [id]="selectId() || fieldId()"
+  class="form-input form-select"
+  [class.form-input--error]="!!error()"
+  [value]="value()"
+  [disabled]="disabled()"
+  (change)="onChange($event)"
+  (blur)="blurred.emit()"
+>
+  @if (placeholder()) {
+    <option value="">{{ placeholder() }}</option>
+  }
+  @for (opt of options(); track opt.value) {
+    <option [value]="opt.value">{{ opt.label }}</option>
+  }
+</select>

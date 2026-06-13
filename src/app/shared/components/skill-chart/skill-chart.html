@@ -1,0 +1,52 @@
+@if (skills().length > 0) {
+  <div class="skill-chart-host">
+    @if (displayType() === 'radialBar') {
+      <apx-chart
+        [series]="radialSeries()"
+        [labels]="radialLabels()"
+        [chart]="radialChart()"
+        [colors]="radialColors()"
+        [plotOptions]="radialPlotOptions()"
+        [stroke]="radialStroke()"
+        [legend]="radialLegend()"
+        [tooltip]="tooltipOptions()"
+      />
+    } @else if (displayType() === 'radialIndividual') {
+      <div class="individual-grid">
+        @for (opt of individualOptions(); track $index) {
+          <div class="individual-item">
+            <apx-chart
+              [series]="opt.series"
+              [chart]="opt.chart"
+              [plotOptions]="opt.plotOptions"
+              [colors]="opt.colors"
+              [stroke]="opt.stroke"
+            />
+          </div>
+        }
+      </div>
+    } @else if (displayType() === 'pie') {
+      <apx-chart
+        [series]="pieSeries()"
+        [labels]="pieLabels()"
+        [chart]="pieChart()"
+        [colors]="radialColors()"
+        [plotOptions]="pieOptions()"
+        [legend]="radialLegend()"
+      />
+    } @else {
+      <apx-chart
+        [series]="barSeries()"
+        [chart]="barChart()"
+        [plotOptions]="barPlotOptions()"
+        [colors]="barColors()"
+        [dataLabels]="barDataLabels()"
+        [xaxis]="barXAxis()"
+        [yaxis]="barYAxis()"
+        [grid]="barGrid()"
+        [tooltip]="barTooltip()"
+        [legend]="barLegend()"
+      />
+    }
+  </div>
+}

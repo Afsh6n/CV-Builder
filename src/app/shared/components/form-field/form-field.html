@@ -1,0 +1,14 @@
+<div class="form-group" [class.form-group--inline]="inline()">
+  @if (label()) {
+    <label class="form-label" [attr.for]="controlId">
+      {{ label() }}
+      @if (required()) { <span class="required-mark">*</span> }
+    </label>
+  }
+  <ng-content />
+  @if (error()) {
+    <span class="form-error" role="alert">{{ error() }}</span>
+  } @else if (hint()) {
+    <span class="form-hint">{{ hint() }}</span>
+  }
+</div>

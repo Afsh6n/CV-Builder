@@ -1,0 +1,78 @@
+<div class="skills-form">
+  <div class="form-header">
+    <h2 class="form-title">مهارت‌ها</h2>
+    <p class="form-subtitle">مهارت‌های فنی و نرم را با سطح ۱ تا ۵ اضافه کنید</p>
+  </div>
+
+  @for (group of skillGroups(); track group.cat) {
+    <div class="skill-group">
+      <h3 class="group-title">{{ group.title }}</h3>
+      <div class="skills-list">
+        @for (skill of (group.cat === 'technical' ? technicalSkills() : softSkills()); track skill.id; let si = $index) {
+          <div class="skill-card" [class.editing]="isEditing(skill.id)">
+            @if (isEditing(skill.id)) {
+              <div class="edit-form">
+                <app-form-field label="نام مهارت" [required]="true" [error]="nameError(skill.id)">
+                  <app-form-input
+                    [value]="skill.name"
+                    [error]="nameError(skill.id)"
+                    [suggestions]="skillSuggestions()"
+                    (valueChange)="updateSkill(skill.id, 'name', $event)"
+                  />
+                </app-form-field>
+                <app-form-field label="سطح تسلط">
+                  <app-segmented-control
+                    [options]="levelOptions"
+                    [value]="skill.level"
+                    ariaLabel="سطح مهارت"
+                    (valueChange)="updateSkill(skill.id, 'level', $event)"
+                  />
+                </app-form-field>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
+                  <button type="button" class="btn btn-primary" (click)="stopEditing(skill.id)">ذخیره</button>
+                </div>
+              </div>
+            } @else {
+              <div class="view-mode">
+                <app-order-buttons
+                  [disableUp]="si === 0"
+                  [disableDown]="si === skillCountInCategory(group.cat) - 1"
+                  (moveUp)="moveSkill(skill.id, 'up')"
+                  (moveDown)="moveSkill(skill.id, 'down')"
+                />
+                <div class="view-mode-body skill-info-wrap">
+                  <div class="skill-chart-preview">
+                    <apx-chart
+                      [series]="getChartOptions(skill.level).series"
+                      [chart]="getChartOptions(skill.level).chart"
+                      [plotOptions]="getChartOptions(skill.level).plotOptions"
+                      [colors]="getChartOptions(skill.level).colors"
+                      [stroke]="getChartOptions(skill.level).stroke"
+                      [labels]="getChartOptions(skill.level).labels"
+                    ></apx-chart>
+                  </div>
+                  <div class="skill-text-info">
+                    <span class="skill-name">{{ skill.name || 'نام مهارت' }}</span>
+                    <span class="skill-level-text">{{ levelLabels[skill.level] }}</span>
+                  </div>
+                </div>
+                <div class="skill-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(skill.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeSkill(skill.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <button type="button" class="btn btn-add-small" (click)="addSkill(group.cat === 'technical' ? 'technical' : 'soft')">
+        + افزودن {{ group.title }}
+      </button>
+    </div>
+  }
+</div>

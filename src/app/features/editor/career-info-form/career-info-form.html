@@ -1,0 +1,21 @@
+<div class="form-header">
+  <h2 class="form-title">حقوق و سابقه کاری</h2>
+  <p class="form-subtitle">میزان حقوق مورد انتظار و مدت تجربه کلی خود را وارد کنید</p>
+</div>
+
+<div class="form-row">
+  <app-form-field label="حقوق مورد انتظار" [required]="true" [error]="fieldError('expectedSalary')">
+    <app-form-input
+      [value]="careerInfo().expectedSalary"
+      placeholder="مثال: ۴۰ تا ۵۰ میلیون تومان"
+      (valueChange)="update('expectedSalary', $event)"
+    />
+  </app-form-field>
+  <app-form-field label="مدت سابقه کاری" [required]="true" [error]="fieldError('totalExperience')">
+    <app-form-input
+      [value]="careerInfo().totalExperience"
+      placeholder="مثال: ۵ سال"
+      (valueChange)="update('totalExperience', $event)"
+    />
+  </app-form-field>
+</div>

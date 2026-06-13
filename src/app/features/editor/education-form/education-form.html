@@ -1,0 +1,162 @@
+<div class="education-form">
+  <div class="form-header">
+    <h2 class="form-title">سوابق تحصیلی</h2>
+    <p class="form-subtitle">سوابق آموزشی خود را اضافه کنید</p>
+  </div>
+
+  <div class="education-list">
+    @for (edu of education(); track edu.id; let i = $index) {
+      <div class="common-list-card" [class.editing]="isEditing(edu.id)">
+        @if (isEditing(edu.id)) {
+          <div class="edit-form">
+            <div class="form-row">
+              <app-form-field label="نام مؤسسه / دانشگاه" [required]="true" [error]="fieldError(edu.id, 'institution')">
+                <app-form-input
+                  [value]="edu.institution"
+                  [error]="fieldError(edu.id, 'institution')"
+                  [suggestions]="institutionSuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'institution', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="رشته تحصیلی" [required]="true" [error]="fieldError(edu.id, 'field')">
+                <app-form-input
+                  [value]="edu.field"
+                  [error]="fieldError(edu.id, 'field')"
+                  [suggestions]="fieldSuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'field', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-row">
+              <app-form-field label="گرایش / تخصص">
+                <app-form-input
+                  [value]="edu.specialization"
+                  [suggestions]="specializationSuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'specialization', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="مقطع تحصیلی" [required]="true" [error]="fieldError(edu.id, 'degree')">
+                <app-form-select
+                  [options]="degreeSelectOptions"
+                  [value]="edu.degree"
+                  (valueChange)="updateEntry(edu.id, 'degree', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-row">
+              <app-form-field label="کشور">
+                <app-form-input
+                  [value]="edu.country"
+                  [suggestions]="countrySuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'country', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="استان">
+                <app-form-input
+                  [value]="edu.province"
+                  [suggestions]="provinceSuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'province', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="شهر">
+                <app-form-input
+                  [value]="edu.city"
+                  [suggestions]="citySuggestions()"
+                  (valueChange)="updateEntry(edu.id, 'city', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-row">
+              <app-form-field label="ورود (ماه/سال)">
+                <app-persian-date-input
+                  mode="month"
+                  [value]="edu.startDate"
+                  (valueChange)="updateEntry(edu.id, 'startDate', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="فراغت از تحصیل">
+                <app-persian-date-input
+                  mode="month"
+                  [value]="edu.endDate"
+                  [disabled]="edu.currentlyStudying"
+                  (valueChange)="updateEntry(edu.id, 'endDate', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label toggle-item">
+                <div class="toggle-switch">
+                  <input type="checkbox" [checked]="edu.currentlyStudying" (change)="toggleStudying(edu.id)" />
+                  <span class="toggle-slider"></span>
+                </div>
+                <span>در حال تحصیل</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing(edu.id)">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === education().length - 1"
+              (moveUp)="moveEntry(edu.id, 'up')"
+              (moveDown)="moveEntry(edu.id, 'down')"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main">
+                  <div class="institution-brand">
+                    <div class="brand-icon">
+                      <app-resume-icon name="education" [size]="20" />
+                    </div>
+                    <div class="brand-details">
+                      <h3 class="institution-name">{{ edu.institution || 'نام مؤسسه' }}</h3>
+                      <div class="degree-wrap">
+                        <span class="degree-text">{{ edu.degree || 'مقطع' }} {{ edu.field ? 'در ' + edu.field : '' }}</span>
+                        @if (edu.currentlyStudying) {
+                          <span class="studying-badge">در حال تحصیل</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="meta-info">
+                    <div class="meta-item">
+                      <app-resume-icon name="calendar" [size]="14" />
+                      <span>{{ edu.startDate || 'ورود' }} — {{ edu.currentlyStudying ? 'اکنون' : (edu.endDate || 'فراغت') }}</span>
+                    </div>
+                    @if (edu.gpa) {
+                      <div class="meta-item">
+                        <app-resume-icon name="certificate" [size]="14" />
+                        <span>معدل: {{ edu.gpa }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="view-mode-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(edu.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeEntry(edu.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن سابقه تحصیلی</button>
+</div>

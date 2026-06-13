@@ -1,0 +1,21 @@
+<input
+  [id]="inputId() || fieldId()"
+  [type]="type()"
+  class="form-input"
+  [class.ltr]="ltr()"
+  [class.form-input--error]="!!error()"
+  [placeholder]="placeholder()"
+  [value]="value()"
+  [disabled]="disabled()"
+  [attr.list]="suggestions().length ? datalistId() : null"
+  (input)="onInput($event)"
+  (blur)="blurred.emit()"
+/>
+
+@if (suggestions().length) {
+  <datalist [id]="datalistId()">
+    @for (opt of suggestions(); track opt) {
+      <option [value]="opt"></option>
+    }
+  </datalist>
+}

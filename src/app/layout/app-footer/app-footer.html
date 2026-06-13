@@ -1,0 +1,33 @@
+<footer class="app-footer" dir="rtl">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">CV</span>
+      <div>
+        <p class="footer-credit">
+          {{ footer.credit }}
+          <strong>{{ footer.author }}</strong>
+        </p>
+        <p class="footer-tagline">رزومه ساز فارسی — راست‌چین و PDF</p>
+      </div>
+    </div>
+    <nav class="footer-links" aria-label="لینک‌های سازنده">
+      @for (link of footer.links; track link.url) {
+      <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="footer-link">
+        <span class="footer-link-icon">
+          <app-resume-icon [name]="link.icon" [size]="18" />
+        </span>
+        <span>{{ link.label }}</span>
+      </a>
+      }
+    </nav>
+  </div>
+  <p class="footer-copy">
+    © {{ year }} — ساخته‌شده با ❤️
+    <span class="donation-note">
+      —
+      <a href="https://daramet.com/Afsh5n" target="_blank" rel="noopener noreferrer" class="donation-link">
+        اگر مفید بود، حمایت کنید ☕️
+      </a>
+    </span>
+  </p>
+</footer>

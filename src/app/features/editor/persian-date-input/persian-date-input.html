@@ -1,0 +1,86 @@
+<div class="persian-date-wrapper" [class.has-error]="!!error()" [class.is-open]="open()">
+  <button
+    type="button"
+    class="date-trigger form-input"
+    [class.is-disabled]="disabled()"
+    [disabled]="disabled()"
+    (click)="toggle()"
+    [attr.aria-expanded]="open()"
+  >
+    <span [class.placeholder-text]="!displayValue()">{{ displayValue() || displayPlaceholder() }}</span>
+    <span class="date-icon" aria-hidden="true">📅</span>
+  </button>
+
+  @if (open()) {
+    <div class="calendar-popup" role="dialog" [attr.aria-label]="mode() === 'month' ? 'انتخاب ماه و سال' : 'انتخاب تاریخ'">
+      <div class="picker-header">
+        <button type="button" class="nav-btn" (click)="shiftYear(-1)" title="سال قبل">«</button>
+        <div class="current-view">
+          <button type="button" class="view-selector" (click)="showMonthPicker()">
+            {{ monthNames[viewMonth() - 1] }}
+          </button>
+          <button type="button" class="view-selector" (click)="showYearPicker()">
+            {{ toPersianDigits('' + viewYear()) }}
+          </button>
+        </div>
+        <button type="button" class="nav-btn" (click)="shiftYear(1)" title="سال بعد">»</button>
+      </div>
+
+      @if (viewMode() === 'years') {
+        <div class="years-grid">
+          @for (y of yearOptions(); track y) {
+            <button
+              type="button"
+              class="year-cell"
+              [class.selected]="viewYear() === y"
+              (click)="selectYear(y)"
+            >
+              {{ toPersianDigits('' + y) }}
+            </button>
+          }
+        </div>
+      } @else if (viewMode() === 'months') {
+        <div class="months-grid">
+          @for (name of monthNames; track $index) {
+            <button
+              type="button"
+              class="month-cell"
+              [class.selected]="viewMonth() === $index + 1"
+              (click)="onMonthSelect($index + 1)"
+            >
+              {{ name }}
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="cal-weekdays">
+          @for (wd of ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج']; track $index) {
+            <span class="cal-wd">{{ wd }}</span>
+          }
+        </div>
+        <div class="cal-grid">
+          @for (cell of calendarCells(); track $index) {
+            @if (cell.inMonth && cell.date) {
+              <button
+                type="button"
+                class="cal-day"
+                [class.selected]="isSelectedDay(cell.date)"
+                [class.today]="isToday(cell.date)"
+                (click)="selectDay(cell.date!)"
+              >
+                {{ toPersianDigits('' + cell.day) }}
+              </button>
+            } @else {
+              <span class="cal-day cal-day--empty"></span>
+            }
+          }
+        </div>
+      }
+
+      <div class="cal-footer">
+        <button type="button" class="cal-today" (click)="selectToday()">امروز</button>
+        <button type="button" class="cal-clear" (click)="clear()">پاک کردن</button>
+      </div>
+    </div>
+  }
+</div>

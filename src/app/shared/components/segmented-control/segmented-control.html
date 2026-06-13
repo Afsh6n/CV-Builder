@@ -1,0 +1,21 @@
+<div
+  class="segmented-control"
+  [class.segmented-control--wrap]="wrap()"
+  role="group"
+  [attr.aria-label]="ariaLabel()"
+>
+  @for (opt of options(); track $index) {
+    <button
+      type="button"
+      class="segment-option"
+      [attr.aria-pressed]="isSelected(opt.value)"
+      [class.active]="isSelected(opt.value)"
+      (click)="select(opt.value)"
+    >
+      <span class="segment-label">{{ opt.label }}</span>
+      @if (opt.description) {
+        <span class="segment-desc">{{ opt.description }}</span>
+      }
+    </button>
+  }
+</div>

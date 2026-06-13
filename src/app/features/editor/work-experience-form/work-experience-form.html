@@ -1,0 +1,158 @@
+<div class="work-experience-form">
+  <div class="form-header">
+    <h2 class="form-title">سوابق شغلی</h2>
+    <p class="form-subtitle">تجربیات کاری خود را اضافه کنید</p>
+  </div>
+
+  <div class="experience-list">
+    @for (exp of workExperience(); track exp.id; let i = $index) {
+      <div class="common-list-card" [class.editing]="isEditing(exp.id)">
+        @if (isEditing(exp.id)) {
+          <div class="edit-form">
+            <div class="form-row">
+              <app-form-field label="سمت شغلی" [required]="true" [error]="fieldError(exp.id, 'position')">
+                <app-form-input
+                  [value]="exp.position"
+                  placeholder="توسعه‌دهنده Angular"
+                  [error]="fieldError(exp.id, 'position')"
+                  [suggestions]="positionSuggestions()"
+                  (valueChange)="updateEntry(exp.id, 'position', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="عنوان محل کار" [required]="true" [error]="fieldError(exp.id, 'company')">
+                <app-form-input
+                  [value]="exp.company"
+                  placeholder="نام شرکت"
+                  [error]="fieldError(exp.id, 'company')"
+                  [suggestions]="companySuggestions()"
+                  (valueChange)="updateEntry(exp.id, 'company', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-row three-col">
+              <app-form-field label="کشور">
+                <app-form-input
+                  [value]="exp.country"
+                  [suggestions]="countrySuggestions()"
+                  (valueChange)="updateEntry(exp.id, 'country', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="استان">
+                <app-form-input
+                  [value]="exp.province"
+                  [suggestions]="provinceSuggestions()"
+                  (valueChange)="updateEntry(exp.id, 'province', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="شهر">
+                <app-form-input
+                  [value]="exp.city"
+                  [suggestions]="citySuggestions()"
+                  (valueChange)="updateEntry(exp.id, 'city', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-row">
+              <app-form-field label="شروع" [required]="true" [error]="fieldError(exp.id, 'startDate')">
+                <app-persian-date-input
+                  mode="month"
+                  [value]="exp.startDate"
+                  [error]="fieldError(exp.id, 'startDate')"
+                  (valueChange)="updateEntry(exp.id, 'startDate', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="اتمام" [error]="fieldError(exp.id, 'endDate')">
+                <app-persian-date-input
+                  mode="month"
+                  [value]="exp.endDate"
+                  [disabled]="exp.current"
+                  [error]="fieldError(exp.id, 'endDate')"
+                  (valueChange)="updateEntry(exp.id, 'endDate', $event)"
+                />
+              </app-form-field>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label toggle-item">
+                <div class="toggle-switch">
+                  <input type="checkbox" [checked]="exp.current" (change)="toggleCurrent(exp.id)" />
+                  <span class="toggle-slider"></span>
+                </div>
+                <span>مشغول فعالیت در این مجموعه هستم</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">وظایف / دستاوردها</label>
+              <textarea class="form-textarea" [value]="exp.description" (input)="updateEntry(exp.id, 'description', $any($event.target).value)" placeholder="هر مورد را در یک خط جداگانه بنویسید..." rows="4"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing(exp.id)">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === workExperience().length - 1"
+              (moveUp)="moveEntry(exp.id, 'up')"
+              (moveDown)="moveEntry(exp.id, 'down')"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main">
+                  <div class="company-brand">
+                    <div class="brand-icon">
+                      <app-resume-icon name="experience" [size]="20" />
+                    </div>
+                    <div class="brand-details">
+                      <h3 class="company-name">{{ exp.company || 'محل کار' }}</h3>
+                      <div class="position-wrap">
+                        <span class="position-title">{{ exp.position || 'سمت شغلی' }}</span>
+                        @if (exp.current) {
+                          <span class="current-badge">مشغول به کار</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="meta-info">
+                    <div class="meta-item">
+                      <app-resume-icon name="calendar" [size]="14" />
+                      <span>{{ exp.startDate || 'شروع' }} — {{ exp.current ? 'اکنون' : (exp.endDate || 'اتمام') }}</span>
+                    </div>
+                    @if (exp.city || exp.country) {
+                      <div class="meta-item">
+                        <app-resume-icon name="location" [size]="14" />
+                        <span>{{ exp.city }}{{ exp.city && exp.province ? '، ' : '' }}{{ exp.province }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  @if (exp.description) {
+                    <p class="description-preview">{{ exp.description }}</p>
+                  }
+                </div>
+
+                <div class="view-mode-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(exp.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeEntry(exp.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن سابقه شغلی</button>
+</div>

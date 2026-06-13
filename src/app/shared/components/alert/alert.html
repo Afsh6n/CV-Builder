@@ -1,0 +1,45 @@
+@if (alertService.state(); as alert) {
+  <div class="alert-backdrop" (click)="onBackdropClick(alert)" role="presentation">
+    <div
+      class="alert-panel"
+      [class.alert-panel--success]="alert.type === 'success'"
+      [class.alert-panel--error]="alert.type === 'error'"
+      [class.alert-panel--warning]="alert.type === 'warning'"
+      [class.alert-panel--info]="alert.type === 'info'"
+      (click)="$event.stopPropagation()"
+      role="alertdialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="alert.title ? 'alert-title' : null"
+      [attr.aria-describedby]="'alert-message'"
+    >
+      <div class="alert-icon" aria-hidden="true">
+        @switch (alert.type) {
+          @case ('success') { ✓ }
+          @case ('error') { ✕ }
+          @case ('warning') { ! }
+          @default { i }
+        }
+      </div>
+      <div class="alert-body">
+        @if (alert.title) {
+          <h3 id="alert-title" class="alert-title">{{ alert.title }}</h3>
+        }
+        <p id="alert-message" class="alert-message">{{ alert.message }}</p>
+      </div>
+      <div class="alert-actions">
+        @if (alert.mode === 'confirm') {
+          <button type="button" class="alert-btn alert-btn--secondary" (click)="alertService.dismiss(false)">
+            انصراف
+          </button>
+          <button type="button" class="alert-btn alert-btn--primary" (click)="alertService.dismiss(true)">
+            تأیید
+          </button>
+        } @else {
+          <button type="button" class="alert-btn alert-btn--primary" (click)="alertService.dismiss()">
+            متوجه شدم
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

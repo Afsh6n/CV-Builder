@@ -1,0 +1,67 @@
+.skills-form {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.form-header { margin-bottom: 20px; }
+.form-title { font-size: 20px; font-weight: 600; color: #1e293b; margin: 0 0 8px; }
+.form-subtitle { font-size: 14px; color: #64748b; margin: 0; }
+
+.skill-group { margin-bottom: 20px; }
+.group-title { font-size: 16px; font-weight: 600; color: #334155; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+
+.skills-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+
+.skill-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; background: #f8fafc; }
+.skill-card.editing { border-color: var(--theme-primary, #3b82f6); background: white; }
+
+.view-mode { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.skill-info-wrap { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.skill-chart-preview { width: 60px; height: 60px; }
+.skill-text-info { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.skill-name { font-size: 14px; font-weight: 600; color: #1e293b; display: block; }
+.skill-level-text { font-size: 12px; color: #64748b; }
+
+.skill-actions { display: flex; gap: 6px; }
+.action-btn { width: 30px; height: 30px; border: 1px solid #d1d5db; border-radius: 6px; background: white; cursor: pointer; }
+.action-btn.delete:hover { color: #ef4444; }
+
+.edit-form { display: flex; flex-direction: column; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 14px; font-weight: 500; color: #374151; }
+.form-input { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; }
+
+.level-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+.level-btn {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.level-btn.active {
+  background: var(--theme-primary, #3b82f6);
+  border-color: var(--theme-primary, #3b82f6);
+  color: white;
+}
+
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; }
+.btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; }
+.btn-primary { background: var(--theme-primary, #3b82f6); color: white; }
+.btn-secondary { background: #e2e8f0; color: #475569; }
+
+.btn-add-small {
+  width: 100%;
+  padding: 10px;
+  background: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 13px;
+}

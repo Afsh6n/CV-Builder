@@ -1,0 +1,14 @@
+<header class="app-header">
+  <div class="header-brand">
+    <div class="brand-icon" aria-hidden="true">
+      <app-resume-icon name="summary" [size]="22" />
+    </div>
+    <div class="header-content">
+      <h1 class="app-title">{{ meta.title }}</h1>
+      <p class="app-subtitle">{{ meta.subtitle }}</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <ng-content select="[header-actions]" />
+  </div>
+</header>

@@ -1,0 +1,419 @@
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 40%, #f1f5f9 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden-file {
+  display: none;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.app-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  overflow: hidden;
+}
+
+.editor-panel {
+  background: transparent;
+  overflow-y: auto;
+  padding: 28px 24px;
+  border-left: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.editor-content {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.editor-section {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.section-header {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.summary-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1f2937;
+  background: white;
+  transition: all 0.2s ease;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.summary-textarea:hover {
+  border-color: #94a3b8;
+}
+
+.summary-textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.summary-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.preview-panel {
+  background: #e2e8f0;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.preview-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.preview-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.preview-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 12px;
+}
+
+.preview-placeholder {
+  width: 100%;
+  max-width: 210mm;
+  min-height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  border: 2px dashed #cbd5e1;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.placeholder-icon {
+  color: #94a3b8;
+  margin-bottom: 24px;
+  background: #f1f5f9;
+  padding: 24px;
+  border-radius: 50%;
+}
+
+.placeholder-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 12px 0;
+}
+
+.placeholder-text {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+  max-width: 320px;
+}
+
+.placeholder-progress {
+  width: 100%;
+  max-width: 300px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.preview-skeleton {
+  width: 90%;
+  height: 200px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.preview-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-panel {
+    border-left: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .preview-panel {
+    background: #f1f5f9;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .editor-panel,
+  .preview-panel {
+    padding: 20px;
+  }
+
+  .editor-content {
+    max-width: 100%;
+  }
+}
+
+/* Custom Scrollbar */
+.editor-panel::-webkit-scrollbar,
+.preview-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editor-panel::-webkit-scrollbar-track,
+.preview-panel::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.editor-panel::-webkit-scrollbar-thumb,
+.preview-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.editor-panel::-webkit-scrollbar-thumb:hover,
+.preview-panel::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.pdf-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pdf-dialog {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  width: min(420px, 100%);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pdf-dialog-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.pdf-dialog-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.pdf-dialog-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.pdf-filename-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.pdf-filename-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.pdf-filename-input:focus {
+  border-color: #3b82f6;
+}
+
+.format-options {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.format-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.format-btn span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.format-btn.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.format-btn.active span {
+  color: #3b82f6;
+}
+
+.method-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.method-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: right;
+}
+
+.method-btn strong {
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.method-btn small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.method-btn.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.method-btn.active strong {
+  color: #3b82f6;
+}
+
+.pdf-dialog-hint {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.pdf-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

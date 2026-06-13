@@ -1,0 +1,132 @@
+<div class="settings-panel">
+  <div class="form-header">
+    <h2 class="form-title">تنظیمات قالب</h2>
+    <p class="form-subtitle">فونت، تم، لایه‌بندی و گزینه‌های اختیاری</p>
+  </div>
+
+  <app-form-field label="فونت رزومه">
+    <app-form-select
+      [options]="fontOptions()"
+      [value]="settings().fontFamilyId"
+      placeholder=""
+      (valueChange)="onFontChange($event)"
+    />
+  </app-form-field>
+
+  <div class="setting-block">
+    <label class="setting-label">رنگ تم</label>
+    <div class="theme-swatches">
+      @for (t of themes; track t.id) {
+        <button
+          type="button"
+          class="theme-swatch"
+          [class.active]="settings().themeId === t.id"
+          [style.background]="t.primary"
+          [title]="t.name"
+          (click)="update({ themeId: t.id })"
+        ></button>
+      }
+    </div>
+  </div>
+
+  <app-form-field label="حالت نمایش (لایه‌بندی)">
+    <app-form-select
+      [options]="layoutOptions()"
+      [value]="settings().layoutId"
+      placeholder=""
+      (valueChange)="onLayoutChange($event)"
+    />
+  </app-form-field>
+
+  <app-form-field label="نمایش مهارت‌های فنی">
+    <app-form-select
+      [options]="skillDisplayOptions"
+      [value]="settings().technicalSkillsDisplay"
+      placeholder=""
+      (valueChange)="onSkillDisplayChange('technicalSkillsDisplay', $event)"
+    />
+  </app-form-field>
+
+  <app-form-field label="نمایش مهارت‌های نرم">
+    <app-form-select
+      [options]="skillDisplayOptions"
+      [value]="settings().softSkillsDisplay"
+      placeholder=""
+      (valueChange)="onSkillDisplayChange('softSkillsDisplay', $event)"
+    />
+  </app-form-field>
+
+  <div class="setting-block">
+    <label class="setting-label">بخش‌های اختیاری</label>
+    <p class="setting-hint">مهارت‌های فنی همیشه در رزومه نمایش داده می‌شوند.</p>
+    <div class="section-toggles">
+      @for (item of [
+        { key: 'softSkills', label: 'مهارت‌های نرم' },
+        { key: 'certificates', label: 'گواهی‌ها' },
+        { key: 'languages', label: 'زبان' },
+        { key: 'socialMedia', label: 'شبکه‌های اجتماعی' },
+        { key: 'projects', label: 'پروژه‌ها' },
+        { key: 'careerInfo', label: 'حقوق و سابقه کاری' }
+      ]; track item.key) {
+        <label class="toggle-item">
+          <div class="toggle-switch">
+            <input type="checkbox" [checked]="isSectionEnabled($any(item.key))" (change)="toggleSection($any(item.key))" />
+            <span class="toggle-slider"></span>
+          </div>
+          <span>{{ item.label }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <div class="setting-block optional-block">
+    <label class="setting-label">گزینه‌های نمایش</label>
+    <div class="section-toggles">
+      <label class="toggle-item">
+        <div class="toggle-switch">
+          <input type="checkbox" [checked]="settings().display.showPersonalInfoLabels" (change)="updateDisplay({ showPersonalInfoLabels: $any($event.target).checked })" />
+          <span class="toggle-slider"></span>
+        </div>
+        <span>اطلاعات شخصی با برچسب</span>
+      </label>
+      <label class="toggle-item">
+        <div class="toggle-switch">
+          <input type="checkbox" [checked]="settings().display.showLastUpdated" (change)="updateDisplay({ showLastUpdated: $any($event.target).checked })" />
+          <span class="toggle-slider"></span>
+        </div>
+        <span>نمایش تاریخ آخرین بروزرسانی</span>
+      </label>
+      <label class="toggle-item">
+        <div class="toggle-switch">
+          <input type="checkbox" [checked]="settings().display.showCareerInfo" (change)="updateDisplay({ showCareerInfo: $any($event.target).checked })" />
+          <span class="toggle-slider"></span>
+        </div>
+        <span>نمایش حقوق و سابقه</span>
+      </label>
+      <label class="toggle-item">
+        <div class="toggle-switch">
+          <input type="checkbox" [checked]="settings().display.showCertificateThumbnails" (change)="updateDisplay({ showCertificateThumbnails: $any($event.target).checked })" />
+          <span class="toggle-slider"></span>
+        </div>
+        <span>مینیاتور گواهی‌ها</span>
+      </label>
+      <label class="toggle-item">
+        <div class="toggle-switch">
+          <input type="checkbox" [checked]="settings().display.showQrCode" (change)="updateDisplay({ showQrCode: $any($event.target).checked })" />
+          <span class="toggle-slider"></span>
+        </div>
+        <span>QR کد</span>
+      </label>
+    </div>
+    @if (settings().display.showQrCode) {
+      <app-form-field label="محتوای QR">
+        <app-form-input
+          [value]="settings().display.qrCodeContent"
+          placeholder="https://linkedin.com/in/..."
+          [ltr]="true"
+          (valueChange)="updateDisplay({ qrCodeContent: $event })"
+        />
+      </app-form-field>
+    }
+  </div>
+</div>

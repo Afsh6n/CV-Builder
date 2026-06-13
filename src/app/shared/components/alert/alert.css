@@ -1,0 +1,103 @@
+.alert-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(2px);
+}
+
+.alert-panel {
+  width: min(100%, 420px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  border-top: 4px solid #3b82f6;
+  animation: alert-in 0.2s ease-out;
+}
+
+.alert-panel--success { border-top-color: #22c55e; }
+.alert-panel--error { border-top-color: #ef4444; }
+.alert-panel--warning { border-top-color: #f59e0b; }
+.alert-panel--info { border-top-color: #3b82f6; }
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.alert-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.alert-panel--success .alert-icon { background: #f0fdf4; color: #16a34a; }
+.alert-panel--error .alert-icon { background: #fef2f2; color: #dc2626; }
+.alert-panel--warning .alert-icon { background: #fffbeb; color: #d97706; }
+
+.alert-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.alert-message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.alert-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.alert-btn:active { transform: scale(0.98); }
+
+.alert-btn--primary {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.alert-btn--primary:hover { background: #2563eb; }
+
+.alert-btn--secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.alert-btn--secondary:hover { background: #e2e8f0; }

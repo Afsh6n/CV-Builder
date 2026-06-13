@@ -1,0 +1,23 @@
+.skill-chart-host {
+  width: 100%;
+  min-height: 140px;
+  direction: ltr;
+}
+
+.individual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  justify-content: center;
+}
+
+.individual-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-chart-host :deep(.apexcharts-canvas) {
+  margin: 0 auto;
+}

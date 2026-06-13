@@ -1,0 +1,18 @@
+<div class="order-buttons" role="group" [attr.aria-label]="ariaLabel()">
+  <button
+    type="button"
+    class="order-btn"
+    (click)="moveUp.emit()"
+    [disabled]="disableUp()"
+    title="انتقال به بالا"
+    aria-label="بالا"
+  >▲</button>
+  <button
+    type="button"
+    class="order-btn"
+    (click)="moveDown.emit()"
+    [disabled]="disableDown()"
+    title="انتقال به پایین"
+    aria-label="پایین"
+  >▼</button>
+</div>

@@ -1,0 +1,100 @@
+<div class="projects-form">
+  <div class="form-header">
+    <h2 class="form-title">پروژه‌ها</h2>
+    <p class="form-subtitle">پروژه‌های انجام‌شده خود را اضافه کنید</p>
+  </div>
+
+  <div class="projects-list">
+    @for (project of projects(); track project.id; let i = $index) {
+      <div class="project-card" [class.editing]="isEditing(project.id)">
+        @if (isEditing(project.id)) {
+          <div class="edit-form">
+            <app-form-field label="عنوان">
+              <app-form-input [value]="project.title" (valueChange)="updateEntry(project.id, 'title', $event)" />
+            </app-form-field>
+            <app-form-field label="کارفرما / درخواست‌کننده">
+              <app-form-input [value]="project.employer" (valueChange)="updateEntry(project.id, 'employer', $event)" />
+            </app-form-field>
+            <div class="form-row">
+              <app-form-field label="لینک مرتبط">
+                <app-form-input
+                  [value]="project.link"
+                  placeholder="https://..."
+                  [ltr]="true"
+                  (valueChange)="updateEntry(project.id, 'link', $event)"
+                />
+              </app-form-field>
+              <app-form-field label="تاریخ">
+                <app-persian-date-input
+                  mode="month"
+                  [value]="project.date"
+                  (valueChange)="updateEntry(project.id, 'date', $event)"
+                />
+              </app-form-field>
+            </div>
+            <div class="form-group">
+              <label class="form-label">توضیحات</label>
+              <textarea class="form-textarea" [value]="project.description" (input)="updateEntry(project.id, 'description', $any($event.target).value)" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing(project.id)">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === projects().length - 1"
+              (moveUp)="moveEntry(project.id, 'up')"
+              (moveDown)="moveEntry(project.id, 'down')"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main">
+                  <div class="project-brand">
+                    <div class="brand-icon">
+                      <app-resume-icon name="projects" [size]="20" />
+                    </div>
+                    <div class="brand-details">
+                      <h3 class="project-title">{{ project.title || 'عنوان پروژه' }}</h3>
+                      <div class="employer-wrap">
+                        <span class="employer-name">{{ project.employer || 'پروژه شخصی' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="meta-info">
+                    @if (project.date) {
+                      <div class="meta-item">
+                        <app-resume-icon name="calendar" [size]="14" />
+                        <span>{{ project.date }}</span>
+                      </div>
+                    }
+                    @if (project.link) {
+                      <div class="meta-item">
+                        <app-resume-icon name="website" [size]="14" />
+                        <span class="has-link">دارای لینک پروژه</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="view-mode-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(project.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeEntry(project.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن پروژه</button>
+</div>

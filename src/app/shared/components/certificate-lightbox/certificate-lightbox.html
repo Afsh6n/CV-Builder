@@ -1,0 +1,11 @@
+@if (imageSrc()) {
+  <div class="lightbox-backdrop" (click)="close.emit()" role="dialog" aria-modal="true">
+    <div class="lightbox-panel" (click)="$event.stopPropagation()">
+      <button type="button" class="lightbox-close" (click)="close.emit()" aria-label="بستن">×</button>
+      <img [src]="imageSrc()" [alt]="title() || 'تصویر گواهی'" class="lightbox-image" />
+      @if (title()) {
+        <p class="lightbox-caption">{{ title() }}</p>
+      }
+    </div>
+  </div>
+}

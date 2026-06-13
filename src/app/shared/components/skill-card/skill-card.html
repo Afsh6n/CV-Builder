@@ -1,0 +1,16 @@
+<article class="skill-card" [style.--accent]="accentColor()">
+  <div class="skill-card-top">
+    <div class="skill-avatar" aria-hidden="true">{{ initial() }}</div>
+    <div class="skill-meta">
+      <h4 class="skill-name">{{ name() }}</h4>
+    </div>
+    <app-resume-icon name="skills" [size]="16" class="skill-icon" />
+  </div>
+  <div class="skill-progress" role="progressbar" [attr.aria-valuenow]="percent()" aria-valuemin="0" aria-valuemax="100">
+    <div class="skill-progress-fill" [style.width.%]="percent()"></div>
+  </div>
+  <div class="skill-card-bottom">
+    <span class="skill-percent">{{ percent() }}%</span>
+    <span class="skill-level-text">سطح {{ level() }}/۵</span>
+  </div>
+</article>

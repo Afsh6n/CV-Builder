@@ -1,0 +1,99 @@
+<div class="languages-form">
+  <div class="form-header">
+    <h2 class="form-title">زبان</h2>
+    <p class="form-subtitle">زبان‌های مسلط — با دکمه‌های بالا/پایین ترتیب را تغییر دهید</p>
+  </div>
+
+  <div class="languages-list">
+    @for (lang of languages(); track lang.id; let i = $index) {
+      <div class="language-card" [class.editing]="isEditing(lang.id)">
+        @if (isEditing(lang.id)) {
+          <div class="edit-form">
+            <app-form-field label="انتخاب زبان">
+              <app-form-select
+                [options]="languageSelectOptions"
+                [value]="isCustomLanguage(lang.name) ? '__custom__' : lang.name"
+                (valueChange)="onLanguageSelect(lang.id, $event)"
+              />
+            </app-form-field>
+            @if (isCustomLanguage(lang.name) || !lang.name) {
+              <app-form-field label="نام زبان">
+                <app-form-input
+                  [value]="lang.name"
+                  placeholder="نام زبان"
+                  (valueChange)="updateEntry(lang.id, 'name', $event)"
+                />
+              </app-form-field>
+            }
+            <app-form-field label="نوع نمایش سطح">
+              <app-form-select
+                [options]="displayTypeOptions"
+                [value]="lang.displayType"
+                placeholder=""
+                (valueChange)="updateEntry(lang.id, 'displayType', $event)"
+              />
+            </app-form-field>
+            <div class="form-group">
+              <label class="form-label">سطح: {{ levelLabels[lang.level] }} ({{ lang.level }}/۵)</label>
+              <input type="range" min="1" max="5" step="1" [ngModel]="lang.level" (ngModelChange)="updateEntry(lang.id, 'level', +$event)" class="level-slider" />
+              <div class="level-scale">
+                @for (lvl of levels; track lvl) {
+                  <span class="level-mark" [class.active]="lang.level === lvl">{{ levelLabels[lvl] }}</span>
+                }
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === languages().length - 1"
+              (moveUp)="moveUp(lang.id)"
+              (moveDown)="moveDown(lang.id)"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main">
+                  <div class="lang-brand">
+                    <div class="brand-icon">
+                      <app-resume-icon name="languages" [size]="20" />
+                    </div>
+                    <div class="brand-details">
+                      <h3 class="lang-name">{{ lang.name || 'نام زبان' }}</h3>
+                      <div class="level-wrap">
+                        @if (lang.displayType === 'graphic') {
+                          <div class="dots">
+                            @for (dot of [1,2,3,4,5]; track dot) {
+                              <span class="dot" [class.filled]="dot <= lang.level"></span>
+                            }
+                          </div>
+                        } @else {
+                          <span class="level-badge">{{ levelLabels[lang.level] }}</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="view-mode-actions">
+                  <button type="button" class="action-btn" (click)="startEditing(lang.id)" title="ویرایش">
+                    <app-resume-icon name="edit" [size]="16" />
+                  </button>
+                  <button type="button" class="action-btn delete" (click)="removeEntry(lang.id)" title="حذف">
+                    <app-resume-icon name="delete" [size]="16" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن زبان</button>
+</div>

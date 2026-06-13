@@ -1,0 +1,67 @@
+<div class="social-media-form form-card">
+  <div class="form-header">
+    <h2 class="form-title">شبکه‌های اجتماعی</h2>
+    <p class="form-subtitle">حساب‌های شبکه‌های اجتماعی خود را اضافه کنید</p>
+  </div>
+
+  <div class="social-list">
+    @for (item of socialMedia(); track item.id; let i = $index) {
+      <div class="social-card" [class.editing]="isEditing(item.id)">
+        @if (isEditing(item.id)) {
+          <div class="edit-form">
+            <app-form-field label="پلتفرم">
+              <div class="platform-picker" role="group" aria-label="انتخاب پلتفرم">
+                @for (p of platforms; track p.value) {
+                  <button
+                    type="button"
+                    class="platform-btn"
+                    [class.active]="item.platform === p.value"
+                    [attr.aria-pressed]="item.platform === p.value"
+                    (click)="updateEntry(item.id, 'platform', p.value)"
+                  >
+                    <app-resume-icon [name]="getPlatformIcon(p.value)" [size]="20" />
+                    <span>{{ p.label }}</span>
+                  </button>
+                }
+              </div>
+            </app-form-field>
+            <app-form-field [label]="item.platform === 'website' || item.platform === 'other' ? 'لینک یا نام کاربری' : 'نام کاربری'">
+              <app-form-input
+                [value]="item.username"
+                [placeholder]="item.platform === 'website' || item.platform === 'other' ? 'https://...' : '@username'"
+                [ltr]="true"
+                (valueChange)="updateEntry(item.id, 'username', $event)"
+              />
+            </app-form-field>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
+              <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
+            </div>
+          </div>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="i === 0"
+              [disableDown]="i === socialMedia().length - 1"
+              (moveUp)="moveEntry(item.id, 'up')"
+              (moveDown)="moveEntry(item.id, 'down')"
+            />
+            <div class="social-icon-badge" [attr.data-platform]="item.platform">
+              <app-resume-icon [name]="getPlatformIcon(item.platform)" [size]="22" />
+            </div>
+            <div class="social-info">
+              <span class="platform-name">{{ getPlatformLabel(item.platform) }}</span>
+              <span class="username">{{ item.username || item.url || '—' }}</span>
+            </div>
+            <div class="social-actions">
+              <button type="button" class="action-btn" (click)="startEditing(item.id)">✎</button>
+              <button type="button" class="action-btn delete" (click)="removeEntry(item.id)">✕</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن شبکه اجتماعی</button>
+</div>

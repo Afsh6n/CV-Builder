@@ -1,0 +1,195 @@
+<div class="personal-details-form form-card">
+  <div class="form-header">
+    <h2 class="form-title">اطلاعات پایه</h2>
+    <p class="form-subtitle">اطلاعات شخصی و تماس خود را وارد کنید</p>
+  </div>
+
+  <div class="form-content">
+    <div class="form-row">
+      <app-form-field label="نام" [required]="true" [error]="errors().firstName">
+        <input
+          type="text"
+          class="form-input"
+          [class.error]="!!errors().firstName"
+          [ngModel]="model().firstName"
+          (ngModelChange)="updateField('firstName', $event)"
+          placeholder="نام"
+          (blur)="touch('firstName')"
+        />
+      </app-form-field>
+      <app-form-field label="نام خانوادگی" [required]="true" [error]="errors().lastName">
+        <input
+          type="text"
+          class="form-input"
+          [class.error]="!!errors().lastName"
+          [ngModel]="model().lastName"
+          (ngModelChange)="updateField('lastName', $event)"
+          placeholder="نام خانوادگی"
+          (blur)="touch('lastName')"
+        />
+      </app-form-field>
+    </div>
+
+    <app-form-field label="عنوان شغلی رزومه" [required]="true" [error]="errors().title">
+      <input
+        type="text"
+        class="form-input"
+        [class.error]="!!errors().title"
+        [ngModel]="model().title"
+        (ngModelChange)="updateField('title', $event)"
+        placeholder="توسعه‌دهنده Angular"
+        list="list-title"
+        (blur)="touch('title')"
+      />
+      <datalist id="list-title">
+        @for (opt of titleSuggestions(); track opt) {
+          <option [value]="opt"></option>
+        }
+      </datalist>
+    </app-form-field>
+
+    <div class="form-row three-col">
+      <app-form-field label="وضعیت تأهل">
+        <app-segmented-control
+          [options]="maritalSegments"
+          [value]="model().maritalStatus"
+          ariaLabel="وضعیت تأهل"
+          (valueChange)="onMaritalChange($event)"
+        />
+      </app-form-field>
+
+      <app-form-field label="وضعیت سربازی">
+        <app-form-select
+          [options]="militaryOptions"
+          [value]="model().militaryStatus"
+          placeholder="انتخاب کنید..."
+          (valueChange)="onMilitaryChange($event)"
+        />
+      </app-form-field>
+
+      <app-form-field label="تاریخ تولد (شمسی)">
+        <app-persian-date-input
+          [value]="model().birthDate"
+          (valueChange)="onBirthDateChange($event)"
+        />
+      </app-form-field>
+    </div>
+
+    <h3 class="subsection-title">اطلاعات تماس</h3>
+
+    <div class="form-row">
+      <app-form-field label="ایمیل" [error]="errors().email">
+        <input
+          type="email"
+          class="form-input ltr"
+          [class.error]="!!errors().email"
+          [ngModel]="model().email"
+          (ngModelChange)="updateField('email', $event)"
+          placeholder="example@email.com"
+          (blur)="touch('email')"
+        />
+      </app-form-field>
+      <app-form-field label="موبایل" [error]="errors().mobile">
+        <input
+          type="tel"
+          class="form-input ltr"
+          [class.error]="!!errors().mobile"
+          [ngModel]="model().mobile"
+          (ngModelChange)="updateField('mobile', $event)"
+          placeholder="09123456789"
+          (blur)="touch('mobile')"
+        />
+      </app-form-field>
+    </div>
+
+    <div class="form-row">
+      <app-form-field label="تلفن ثابت" [error]="errors().phone">
+        <input
+          type="tel"
+          class="form-input ltr"
+          [class.error]="!!errors().phone"
+          [ngModel]="model().phone"
+          (ngModelChange)="updateField('phone', $event)"
+          placeholder="02188888888"
+          (blur)="touch('phone')"
+        />
+      </app-form-field>
+      <app-form-field label="لینکدین" [error]="errors().linkedin">
+        <input
+          type="url"
+          class="form-input ltr"
+          [class.error]="!!errors().linkedin"
+          [ngModel]="model().linkedin"
+          (ngModelChange)="updateField('linkedin', $event)"
+          placeholder="linkedin.com/in/username"
+          (blur)="touch('linkedin')"
+        />
+      </app-form-field>
+    </div>
+
+    <div class="form-row">
+      <app-form-field label="وب‌سایت" [error]="errors().website">
+        <input
+          type="url"
+          class="form-input ltr"
+          [class.error]="!!errors().website"
+          [ngModel]="model().website"
+          (ngModelChange)="updateField('website', $event)"
+          placeholder="example.com"
+          (blur)="touch('website')"
+        />
+      </app-form-field>
+      <app-form-field label="کشور">
+        <input
+          type="text"
+          class="form-input"
+          [ngModel]="model().country"
+          (ngModelChange)="updateField('country', $event)"
+          placeholder="مثال: ایران"
+          list="list-country"
+          (blur)="touch('country')"
+        />
+        <datalist id="list-country">
+          @for (opt of countrySuggestions(); track opt) {
+            <option [value]="opt"></option>
+          }
+        </datalist>
+      </app-form-field>
+    </div>
+
+    <div class="form-row">
+      <app-form-field label="استان">
+        <input
+          type="text"
+          class="form-input"
+          [ngModel]="model().province"
+          (ngModelChange)="updateField('province', $event)"
+          placeholder="مثال: تهران"
+          list="list-province"
+          (blur)="touch('province')"
+        />
+        <datalist id="list-province">
+          @for (opt of provinceSuggestions(); track opt) {
+            <option [value]="opt"></option>
+          }
+        </datalist>
+      </app-form-field>
+      <app-form-field label="شهر">
+        <input
+          type="text"
+          class="form-input"
+          [ngModel]="model().city"
+          (ngModelChange)="updateField('city', $event)"
+          placeholder="مثال: تهران"
+          list="list-city"
+          (blur)="touch('city')"
+        />
+        <datalist id="list-city">
+          @for (opt of citySuggestions(); track opt) {
+            <option [value]="opt"></option>
+          }
+        </datalist>
+      </app-form-field>
+    </div>
+  </div>
+</div>
