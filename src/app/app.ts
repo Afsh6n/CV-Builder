@@ -132,10 +132,6 @@ export class App {
     this.resumeService.updateProfilePhoto(photoData);
   }
 
-  onPhotoOffsetChanged(offset: number): void {
-    this.resumeService.updatePhotoOffset(offset);
-  }
-
   onSectionToggle(section: string | null): void {
     if (!section) {
       this.editingSection.set(null);

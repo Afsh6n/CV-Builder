@@ -1,58 +1,55 @@
 <div class="photo-uploader">
+
   <div class="form-header">
     <h2 class="form-title">عکس پروفایل</h2>
-    <p class="form-subtitle">تصویر خود را آپلود و موقعیت آن را تنظیم کنید</p>
+    <p class="form-subtitle">تصویر خود را آپلود کنید</p>
   </div>
 
   <div class="photo-preview-area" [class.has-photo]="previewPhoto()" (click)="triggerFileInput()">
+
     @if (previewPhoto()) {
-      <img [src]="previewPhoto()" alt="عکس پروفایل" class="profile-photo" [ngStyle]="getPhotoStyle()" />
-      <div class="photo-overlay">
-        <button type="button" class="change-photo-btn" (click)="$event.stopPropagation(); triggerFileInput()" [disabled]="isUploading()">
-          تغییر عکس
-        </button>
-        <button type="button" class="remove-photo-btn" (click)="$event.stopPropagation(); removePhoto()" [disabled]="isUploading()">
-          حذف
-        </button>
-      </div>
+    <img [src]="previewPhoto()" alt="عکس پروفایل" class="profile-photo" />
+
+    <div class="photo-overlay">
+      <button type="button" class="change-photo-btn" (click)="$event.stopPropagation(); triggerFileInput()"
+        [disabled]="isUploading()">
+        تغییر عکس
+      </button>
+
+      <button type="button" class="remove-photo-btn" (click)="$event.stopPropagation(); removePhoto()"
+        [disabled]="isUploading()">
+        حذف
+      </button>
+    </div>
+
     } @else {
-      <div class="upload-placeholder">
-        @if (isUploading()) {
-          <div class="loading-spinner"></div>
-          <p class="upload-text">در حال آپلود...</p>
-        } @else {
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="upload-icon">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-            <circle cx="12" cy="13" r="4"></circle>
-          </svg>
-          <p class="upload-text">برای آپلود کلیک کنید</p>
-          <p class="upload-subtext">JPEG, PNG, GIF (حداکثر ۵ مگابایت)</p>
-        }
-      </div>
+
+    <div class="upload-placeholder">
+      @if (isUploading()) {
+      <div class="loading-spinner"></div>
+      <p class="upload-text">در حال آپلود...</p>
+      } @else {
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" class="upload-icon">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+
+      <p class="upload-text">برای آپلود کلیک کنید</p>
+      <p class="upload-subtext">JPEG, PNG, GIF (حداکثر ۵ مگابایت)</p>
+      }
+    </div>
     }
+
   </div>
 
-  @if (previewPhoto()) {
-    <div class="offset-control">
-      <label class="offset-label">تنظیم موقعیت عمودی عکس</label>
-      <div class="offset-slider-row">
-        <span class="offset-hint">بالا</span>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          [ngModel]="offset()"
-          (ngModelChange)="onOffsetChange($event)"
-          class="offset-slider"
-        />
-        <span class="offset-hint">پایین</span>
-      </div>
-    </div>
-  }
-
-  <input type="file" id="photo-input" accept="image/jpeg,image/jpg,image/png,image/gif" (change)="onFileSelected($event)" class="hidden-input" />
+  <input #fileInput type="file" accept="image/jpeg,image/jpg,image/png,image/gif" (change)="onFileSelected($event)"
+    class="hidden-input" />
 
   @if (error()) {
-    <div class="error-message">{{ error() }}</div>
+  <div class="error-message">{{ error() }}</div>
   }
+
+  <p class="photo-hint">سایز پیشنهادی: 400×400 (مربع)</p>
+
 </div>

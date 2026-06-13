@@ -54,7 +54,6 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  display: block;
 }
 
 .photo-overlay {
@@ -75,8 +74,8 @@
   opacity: 1;
 }
 
-.remove-photo-btn,
-.change-photo-btn {
+.change-photo-btn,
+.remove-photo-btn {
   padding: 6px 14px;
   border-radius: 6px;
   font-size: 13px;
@@ -86,12 +85,12 @@
   color: white;
 }
 
-.remove-photo-btn {
-  background: #ef4444;
-}
-
 .change-photo-btn {
   background: #3b82f6;
+}
+
+.remove-photo-btn {
+  background: #ef4444;
 }
 
 .upload-placeholder {
@@ -128,45 +127,28 @@
   animation: spin 1s linear infinite;
 }
 
+.photo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.photo-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  padding-top: 10px;
+}
+
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .hidden-input {
   display: none;
-}
-
-.offset-control {
-  margin-top: 16px;
-  padding: 12px;
-  background: #f8fafc;
-  border-radius: 8px;
-}
-
-.offset-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: #475569;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.offset-slider-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.offset-hint {
-  font-size: 12px;
-  color: #64748b;
-  white-space: nowrap;
-}
-
-.offset-slider {
-  flex: 1;
-  accent-color: #3b82f6;
 }
 
 .error-message {

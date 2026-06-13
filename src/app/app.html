@@ -21,9 +21,7 @@
         <div class="editor-section form-card">
           <app-photo-uploader
             [currentPhoto]="resume().personalInfo.profilePhoto || ''"
-            [photoOffsetY]="resume().personalInfo.photoOffsetY"
             (photoChanged)="onPhotoChanged($event)"
-            (offsetChanged)="onPhotoOffsetChanged($event)"
           />
         </div>
 
