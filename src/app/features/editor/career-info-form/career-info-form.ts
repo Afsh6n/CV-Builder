@@ -4,6 +4,7 @@ import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { requiredError } from '../../../shared/validators/field.validators';
 import { CareerInfo } from '../../../core/types/resume.types';
+import { normalizeSalary } from '../../../shared/utils/salary.formatter';
 
 type FieldErrors = Partial<Record<keyof CareerInfo, string>>;
 
@@ -14,15 +15,21 @@ type FieldErrors = Partial<Record<keyof CareerInfo, string>>;
   styleUrl: './career-info-form.css'
 })
 export class CareerInfoForm {
-  careerInfo = input<CareerInfo>({ expectedSalary: '', totalExperience: '' });
+  careerInfo = input.required<CareerInfo>();
   careerInfoChanged = output<CareerInfo>();
 
   fieldErrors = signal<FieldErrors>({});
 
   update(field: keyof CareerInfo, value: string): void {
-    const updatedInfo = { ...this.careerInfo(), [field]: value };
-    this.careerInfoChanged.emit(updatedInfo);
-    this.validateField(field, value);
+    const normalizedValue =
+      field === 'expectedSalary' ? normalizeSalary(value) : value;
+
+    this.careerInfoChanged.emit({
+      ...this.careerInfo(),
+      [field]: normalizedValue
+    });
+
+    this.validateField(field, normalizedValue);
   }
 
   fieldError(field: keyof CareerInfo): string {
@@ -30,10 +37,11 @@ export class CareerInfoForm {
   }
 
   private validateField(field: keyof CareerInfo, value: string): void {
-    let error = '';
-    if (field === 'expectedSalary' || field === 'totalExperience') {
-      error = requiredError(value, field === 'expectedSalary' ? 'حقوق مورد انتظار' : 'مدت سابقه کاری');
-    }
-    this.fieldErrors.update(errors => ({ ...errors, [field]: error }));
+    const label =
+      field === 'expectedSalary' ? 'حقوق مورد انتظار' : 'مدت سابقه کاری';
+
+    const error = requiredError(value, label);
+
+    this.fieldErrors.update(e => ({ ...e, [field]: error }));
   }
 }

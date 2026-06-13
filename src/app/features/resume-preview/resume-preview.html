@@ -175,13 +175,15 @@
           @if (resume()!.careerInfo.expectedSalary) {
           <div class="career-info-item">
             <span class="career-label">حقوق مورد انتظار:</span>
-            <span class="career-value">{{ resume()!.careerInfo.expectedSalary }}</span>
+            <span>
+              {{ formatSalaryView(careerInfo()?.expectedSalary) }} تومان
+            </span>
           </div>
           }
           @if (resume()!.careerInfo.totalExperience) {
           <div class="career-info-item">
             <span class="career-label">سابقه کاری:</span>
-            <span class="career-value">{{ resume()!.careerInfo.totalExperience }}</span>
+            {{ formatExperience(careerInfo()?.totalExperience) }}
           </div>
           }
         </div>

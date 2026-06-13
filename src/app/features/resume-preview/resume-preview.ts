@@ -11,6 +11,7 @@ import { CertificateLightbox } from '../../shared/components/certificate-lightbo
 import { fontFamilyCss } from '../../core/constants/font.constants';
 import { Certificate, Resume, SkillDisplayType, SocialPlatform, ThemeId } from '../../core/types/resume.types';
 import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '../../core/constants/resume.constants';
+import { formatSalary } from '../../shared/utils/salary.formatter';
 
 @Component({
   selector: 'app-resume-preview',
@@ -38,6 +39,7 @@ export class ResumePreview {
   lightboxTitle = signal<string>('');
 
   layoutClass = computed(() => `layout-${this.resume()?.settings.layoutId || 'default'}`);
+  careerInfo = computed(() => this.resume()?.careerInfo);
 
   themeVars = computed(() => {
     const r = this.resume();
@@ -76,7 +78,7 @@ export class ResumePreview {
       const qrContent = r.settings.display.qrCodeContent.trim();
       const showQr = r.settings.display.showQrCode && !!qrContent;
       untracked(() => {
-        this.fontLoader.ensureLoaded(fontId).catch(() => {});
+        this.fontLoader.ensureLoaded(fontId).catch(() => { });
         if (showQr) {
           this.qrCodeService.toDataUrl(qrContent).then(url => this.qrDataUrl.set(url));
         } else if (this.qrDataUrl()) {
@@ -190,5 +192,15 @@ export class ResumePreview {
 
   showCertThumbnail(cert: Certificate): boolean {
     return !!(this.resume()?.settings.display.showCertificateThumbnails && cert.imageData);
+  }
+
+  formatSalaryView(value?: string): string {
+    if (!value) return '';
+    return formatSalary(value);
+  }
+
+  formatExperience(value?: string): string {
+    if (!value) return '';
+    return `${value} سال`;
   }
 }
