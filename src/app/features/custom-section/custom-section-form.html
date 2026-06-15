@@ -27,12 +27,16 @@
             <h4 class="entries-title">آیتم‌ها</h4>
             @for (entry of section.entries; track entry.id) {
               <div class="entry-card">
-                <input class="form-input" placeholder="عنوان" [ngModel]="entry.title" (ngModelChange)="updateEntry(section.id, entry.id, 'title', $event)" />
-                <input class="form-input" placeholder="زیرعنوان" [ngModel]="entry.subtitle" (ngModelChange)="updateEntry(section.id, entry.id, 'subtitle', $event)" />
-                <input class="form-input" type="month" [ngModel]="entry.date" (ngModelChange)="updateEntry(section.id, entry.id, 'date', $event)" />
-                <textarea class="form-input" rows="2" placeholder="توضیحات" [ngModel]="entry.description" (ngModelChange)="updateEntry(section.id, entry.id, 'description', $event)"></textarea>
-                <input class="form-input ltr" placeholder="لینک (اختیاری)" [ngModel]="entry.link" (ngModelChange)="updateEntry(section.id, entry.id, 'link', $event)" />
-                <button type="button" class="btn-remove-entry" (click)="removeEntry(section.id, entry.id)">حذف آیتم</button>
+                <div class="entry-fields-grid">
+                  <input class="form-input" placeholder="عنوان" [ngModel]="entry.title" (ngModelChange)="updateEntry(section.id, entry.id, 'title', $event)" />
+                  <input class="form-input" placeholder="زیرعنوان" [ngModel]="entry.subtitle" (ngModelChange)="updateEntry(section.id, entry.id, 'subtitle', $event)" />
+                  <input class="form-input" type="month" [ngModel]="entry.date" (ngModelChange)="updateEntry(section.id, entry.id, 'date', $event)" />
+                  <input class="form-input ltr" placeholder="لینک (اختیاری)" [ngModel]="entry.link" (ngModelChange)="updateEntry(section.id, entry.id, 'link', $event)" />
+                  <textarea class="form-input entry-field-full" rows="2" placeholder="توضیحات" [ngModel]="entry.description" (ngModelChange)="updateEntry(section.id, entry.id, 'description', $event)"></textarea>
+                </div>
+                <div class="entry-actions">
+                  <button type="button" class="btn-remove-entry" (click)="removeEntry(section.id, entry.id)">حذف آیتم</button>
+                </div>
               </div>
             }
             <button type="button" class="btn-add-entry" (click)="addEntry(section.id)">+ افزودن آیتم</button>

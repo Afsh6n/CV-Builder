@@ -61,12 +61,19 @@ export class CertificatesForm {
     reader.readAsDataURL(file);
   }
 
+  startEditing(id: string): void {
+    this.editModeChanged.emit(id);
+  }
+
+  stopEditing(): void {
+    this.editModeChanged.emit(null);
+  }
+
+  isEditing(id: string): boolean {
+    return this.editingId() === id;
+  }
   moveEntry(id: string, direction: 'up' | 'down'): void {
     const next = moveItemInList(this.certificates(), id, direction);
     if (next) this.certificatesChanged.emit(next);
   }
-
-  startEditing(id: string): void { this.editModeChanged.emit(id); }
-  stopEditing(): void { this.editModeChanged.emit(null); }
-  isEditing(id: string): boolean { return this.editingId() === id; }
 }
