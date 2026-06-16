@@ -13,6 +13,8 @@ import { Certificate, Resume, SkillDisplayType, SocialPlatform, ThemeId } from '
 import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '../../core/constants/resume.constants';
 import { formatSalary } from '../../shared/utils/salary.formatter';
 
+type SectionType = 'career' | 'education' | 'work' | 'technicalSkills' | 'softSkills' | 'certificates' | 'projects' | 'custom';
+
 @Component({
   selector: 'app-resume-preview',
   imports: [
@@ -37,6 +39,11 @@ export class ResumePreview {
   qrDataUrl = signal<string>('');
   lightboxImage = signal<string>('');
   lightboxTitle = signal<string>('');
+
+  // Drag and drop for preview section reordering
+  sectionOrder = signal<SectionType[]>(['career', 'education', 'work', 'technicalSkills', 'softSkills', 'certificates', 'projects', 'custom']);
+  draggedSection = signal<SectionType | null>(null);
+  isDragging = signal<boolean>(false);
 
   layoutClass = computed(() => `layout-${this.resume()?.settings.layoutId || 'default'}`);
   careerInfo = computed(() => this.resume()?.careerInfo);
@@ -202,5 +209,87 @@ export class ResumePreview {
   formatExperience(value?: string): string {
     if (!value) return '';
     return `${value} سال`;
+  }
+
+  // Drag and drop methods
+  onDragStart(section: SectionType, event: DragEvent): void {
+    this.draggedSection.set(section);
+    this.isDragging.set(true);
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', section);
+    }
+  }
+
+  onDragEnd(): void {
+    this.draggedSection.set(null);
+    this.isDragging.set(false);
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  onDrop(targetSection: SectionType, event: DragEvent): void {
+    event.preventDefault();
+    const dragged = this.draggedSection();
+    if (!dragged || dragged === targetSection) {
+      this.onDragEnd();
+      return;
+    }
+
+    const currentOrder = [...this.sectionOrder()];
+    const draggedIndex = currentOrder.indexOf(dragged);
+    const targetIndex = currentOrder.indexOf(targetSection);
+
+    if (draggedIndex !== -1 && targetIndex !== -1) {
+      const newOrder = [...currentOrder];
+      newOrder.splice(draggedIndex, 1);
+      newOrder.splice(targetIndex, 0, dragged);
+      this.sectionOrder.set(newOrder);
+    }
+
+    this.onDragEnd();
+  }
+
+  isSectionVisible(section: SectionType): boolean {
+    const r = this.resume();
+    if (!r) return false;
+
+    switch (section) {
+      case 'career':
+        return !!(
+          r.settings.sections.careerInfo &&
+          r.settings.display.showCareerInfo &&
+          (r.careerInfo.expectedSalary || r.careerInfo.totalExperience)
+        );
+      case 'education':
+        return r.education.length > 0;
+      case 'work':
+        return r.workExperience.length > 0;
+      case 'technicalSkills':
+        return this.technicalSkills().length > 0;
+      case 'softSkills':
+        return !!(r.settings.sections.softSkills && this.softSkills().length > 0);
+      case 'certificates':
+        return !!(r.settings.sections.certificates && r.certificates.length > 0);
+      case 'projects':
+        return !!(r.settings.sections.projects && r.projects.length > 0);
+      case 'custom':
+        return r.customSections.length > 0;
+      default:
+        return false;
+    }
+  }
+
+  getVisibleSections(): SectionType[] {
+    return this.sectionOrder().filter(section => this.isSectionVisible(section));
+  }
+
+  isSectionBeingDragged(section: SectionType): boolean {
+    return this.draggedSection() === section;
   }
 }

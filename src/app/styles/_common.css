@@ -18,7 +18,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   direction: rtl;
   font-family: 'Vazirmatn UI', 'Vazirmatn', Tahoma, sans-serif !important;
   margin: 0;
@@ -26,8 +27,14 @@ html, body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -64,8 +71,19 @@ html, body {
   background: #94a3b8;
 }
 
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-family: inherit;
+}
+
+app-resume-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
 }
 
 .btn {
@@ -150,7 +168,7 @@ input, textarea, select, button {
   font-size: 14px;
   font-weight: 500;
   color: #374151;
-    padding-top: 15px;
+  padding-top: 15px;
 }
 
 .required-mark {
@@ -179,7 +197,9 @@ input, textarea, select, button {
   color: #1f2937;
   background: #fff;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .form-input:hover {
@@ -245,28 +265,3 @@ input, textarea, select, button {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #64748b;
-}
-
-.btn-icon:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-  color: #1e293b;
-}
-
-.btn-icon.delete:hover {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  color: #ef4444;
-}

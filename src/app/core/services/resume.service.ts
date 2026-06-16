@@ -82,18 +82,6 @@ export class ResumeService {
     this.resumeSignal.update(c => this.withTimestamp({ ...c, customSections }));
   }
 
-  moveLanguage(id: string, direction: 'up' | 'down'): void {
-    this.resumeSignal.update(current => {
-      const list = [...current.languages];
-      const index = list.findIndex(l => l.id === id);
-      if (index === -1) return current;
-      const newIndex = direction === 'up' ? index - 1 : index + 1;
-      if (newIndex < 0 || newIndex >= list.length) return current;
-      [list[index], list[newIndex]] = [list[newIndex], list[index]];
-      return { ...current, languages: list };
-    });
-  }
-
   updateProfilePhoto(photoData: string): void {
     this.resumeSignal.update(c =>
       this.withTimestamp({

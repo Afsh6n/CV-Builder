@@ -1,22 +1,28 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { PersianDateInput } from '../persian-date-input/persian-date-input';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
 import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
+import { ListEditController } from '../../../shared/utils/list-edit.controller';
 import { Project } from '../../../core/types/resume.types';
 import { createEmptyProject } from '../../../core/utils/resume.factories';
+
 @Component({
   selector: 'app-projects-form',
   imports: [
-    CommonModule,
     FormField,
     FormInput,
     PersianDateInput,
     OrderButtons,
-    ResumeIcon
+    ResumeIcon,
+    EditorItemActions,
+    EditorFormActions,
+    EditorAddButton
   ],
   templateUrl: './projects-form.html',
   styleUrl: './projects-form.css'
@@ -27,16 +33,18 @@ export class ProjectsForm {
   editingId = input<string | null>(null);
   editModeChanged = output<string | null>();
 
-  addEntry(): void {
-    const entry = createEmptyProject();
-    this.projectsChanged.emit([...this.projects(), entry]);
-    this.editModeChanged.emit(entry.id);
-  }
+  private readonly editCtrl = new ListEditController<Project>(
+    () => this.projects(),
+    items => this.projectsChanged.emit(items),
+    () => this.editingId(),
+    id => this.editModeChanged.emit(id),
+    createEmptyProject
+  );
 
-  removeEntry(id: string): void {
-    this.projectsChanged.emit(this.projects().filter(p => p.id !== id));
-    if (this.editingId() === id) this.editModeChanged.emit(null);
-  }
+  addEntry = (): void => { this.editCtrl.add(); };
+  removeEntry = (id: string): void => { this.editCtrl.remove(id); };
+  startEditing = (id: string): void => { this.editCtrl.startEditing(id); };
+  isEditing = (id: string): boolean => this.editCtrl.isEditing(id);
 
   updateEntry(id: string, field: keyof Project, value: unknown): void {
     const updated = this.projects().map(p => (p.id === id ? { ...p, [field]: value } : p));
@@ -48,17 +56,13 @@ export class ProjectsForm {
     if (next) this.projectsChanged.emit(next);
   }
 
-  startEditing(id: string): void {
-    this.editModeChanged.emit(id);
-  }
-
   stopEditing(id: string): void {
-    const p = this.projects().find(x => x.id === id);
-    if (p && !p.title.trim()) return;
-    this.editModeChanged.emit(null);
+    const project = this.projects().find(p => p.id === id);
+    if (project && !project.title.trim()) return;
+    this.editCtrl.completeSave(id);
   }
 
-  isEditing(id: string): boolean {
-    return this.editingId() === id;
+  cancelEditing(id: string): void {
+    this.editCtrl.cancel(id);
   }
 }

@@ -1,12 +1,12 @@
-<div class="social-media-form form-card">
+<div class="social-media-form">
   <div class="form-header">
     <h2 class="form-title">شبکه‌های اجتماعی</h2>
     <p class="form-subtitle">حساب‌های شبکه‌های اجتماعی خود را اضافه کنید</p>
   </div>
 
-  <div class="social-list">
+  <div class="editor-item-list">
     @for (item of socialMedia(); track item.id; let i = $index) {
-      <div class="social-card" [class.editing]="isEditing(item.id)">
+      <div class="common-list-card" [class.editing]="isEditing(item.id)">
         @if (isEditing(item.id)) {
           <div class="edit-form">
             <app-form-field label="پلتفرم">
@@ -33,10 +33,10 @@
                 (valueChange)="updateEntry(item.id, 'username', $event)"
               />
             </app-form-field>
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
-              <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
-            </div>
+            <app-editor-form-actions
+              (cancel)="cancelEditing(item.id)"
+              (save)="saveEditing(item.id)"
+            />
           </div>
         } @else {
           <div class="view-mode">
@@ -46,16 +46,22 @@
               (moveUp)="moveEntry(item.id, 'up')"
               (moveDown)="moveEntry(item.id, 'down')"
             />
-            <div class="social-icon-badge" [attr.data-platform]="item.platform">
-              <app-resume-icon [name]="getPlatformIcon(item.platform)" [size]="22" />
-            </div>
-            <div class="social-info">
-              <span class="platform-name">{{ getPlatformLabel(item.platform) }}</span>
-              <span class="username">{{ item.username || item.url || '—' }}</span>
-            </div>
-            <div class="social-actions">
-              <button type="button" class="action-btn" (click)="startEditing(item.id)">✎</button>
-              <button type="button" class="action-btn delete" (click)="removeEntry(item.id)">✕</button>
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main social-view-main">
+                  <div class="social-icon-badge" [attr.data-platform]="item.platform">
+                    <app-resume-icon [name]="getPlatformIcon(item.platform)" [size]="22" />
+                  </div>
+                  <div class="social-info">
+                    <span class="item-title">{{ getPlatformLabel(item.platform) }}</span>
+                    <span class="item-subtitle username">{{ item.username || item.url || '—' }}</span>
+                  </div>
+                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(item.id)"
+                  (delete)="removeEntry(item.id)"
+                />
+              </div>
             </div>
           </div>
         }
@@ -63,5 +69,5 @@
     }
   </div>
 
-  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن شبکه اجتماعی</button>
+  <app-editor-add-button label="افزودن شبکه اجتماعی" (clicked)="addEntry()" />
 </div>

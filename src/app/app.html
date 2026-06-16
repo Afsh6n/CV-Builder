@@ -86,7 +86,6 @@
               [languages]="resume().languages"
               [editingId]="editingSection()"
               (languagesChanged)="onLanguagesChanged($event)"
-              (moveRequested)="onLanguageMove($event)"
               (editModeChanged)="onSectionToggle($event)"
             />
           </div>
@@ -124,7 +123,7 @@
         </div>
 
         @if (resume().settings.sections.socialMedia) {
-          <div class="editor-section">
+          <div class="editor-section form-card">
             <app-social-media-form
               [socialMedia]="resume().socialMedia"
               [editingId]="editingSection()"
@@ -133,6 +132,14 @@
             />
           </div>
         }
+
+        <div class="editor-section form-card">
+          <div class="editor-download-section">
+            <button type="button" class="btn btn-primary btn-full" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
+              @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -140,6 +147,17 @@
       <div class="preview-header">
         <h2 class="preview-title">پیش‌نمایش زنده</h2>
         <p class="preview-subtitle">خروجی PDF دقیقاً از همین پیش‌نمایش ساخته می‌شود</p>
+        <p class="preview-drag-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-left: 4px;">
+            <circle cx="9" cy="12" r="1"/>
+            <circle cx="9" cy="5" r="1"/>
+            <circle cx="9" cy="19" r="1"/>
+            <circle cx="15" cy="12" r="1"/>
+            <circle cx="15" cy="5" r="1"/>
+            <circle cx="15" cy="19" r="1"/>
+          </svg>
+          برای تغییر ترتیب بخش‌ها، روی آیکون نقطه‌ها کلیک کرده و بکشید
+        </p>
       </div>
       <div class="preview-content">
         @if (isEnoughDataFilled()) {

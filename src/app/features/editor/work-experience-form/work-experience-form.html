@@ -4,7 +4,7 @@
     <p class="form-subtitle">تجربیات کاری خود را اضافه کنید</p>
   </div>
 
-  <div class="experience-list">
+  <div class="editor-item-list">
     @for (exp of workExperience(); track exp.id; let i = $index) {
       <div class="common-list-card" [class.editing]="isEditing(exp.id)">
         @if (isEditing(exp.id)) {
@@ -86,13 +86,19 @@
 
             <div class="form-group">
               <label class="form-label">وظایف / دستاوردها</label>
-              <textarea class="form-textarea" [value]="exp.description" (input)="updateEntry(exp.id, 'description', $any($event.target).value)" placeholder="هر مورد را در یک خط جداگانه بنویسید..." rows="4"></textarea>
+              <textarea
+                class="form-textarea"
+                [value]="exp.description"
+                (input)="updateEntry(exp.id, 'description', $any($event.target).value)"
+                placeholder="هر مورد را در یک خط جداگانه بنویسید..."
+                rows="4"
+              ></textarea>
             </div>
 
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
-              <button type="button" class="btn btn-primary" (click)="stopEditing(exp.id)">ذخیره</button>
-            </div>
+            <app-editor-form-actions
+              (cancel)="cancelEditing(exp.id)"
+              (save)="stopEditing(exp.id)"
+            />
           </div>
         } @else {
           <div class="view-mode">
@@ -105,21 +111,21 @@
             <div class="view-mode-body">
               <div class="view-mode-content">
                 <div class="view-mode-main">
-                  <div class="company-brand">
+                  <div class="item-brand">
                     <div class="brand-icon">
                       <app-resume-icon name="experience" [size]="20" />
                     </div>
                     <div class="brand-details">
-                      <h3 class="company-name">{{ exp.company || 'محل کار' }}</h3>
-                      <div class="position-wrap">
-                        <span class="position-title">{{ exp.position || 'سمت شغلی' }}</span>
+                      <h3 class="item-title">{{ exp.company || 'محل کار' }}</h3>
+                      <div class="item-subtitle-row">
+                        <span class="item-subtitle">{{ exp.position || 'سمت شغلی' }}</span>
                         @if (exp.current) {
-                          <span class="current-badge">مشغول به کار</span>
+                          <span class="status-badge status-badge--success">مشغول به کار</span>
                         }
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="meta-info">
                     <div class="meta-item">
                       <app-resume-icon name="calendar" [size]="14" />
@@ -137,15 +143,10 @@
                     <p class="description-preview">{{ exp.description }}</p>
                   }
                 </div>
-
-                <div class="view-mode-actions">
-                  <button type="button" class="action-btn" (click)="startEditing(exp.id)" title="ویرایش">
-                    <app-resume-icon name="edit" [size]="16" />
-                  </button>
-                  <button type="button" class="action-btn delete" (click)="removeEntry(exp.id)" title="حذف">
-                    <app-resume-icon name="delete" [size]="16" />
-                  </button>
-                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(exp.id)"
+                  (delete)="removeEntry(exp.id)"
+                />
               </div>
             </div>
           </div>
@@ -154,5 +155,5 @@
     }
   </div>
 
-  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن سابقه شغلی</button>
+  <app-editor-add-button label="افزودن سابقه شغلی" (clicked)="addEntry()" />
 </div>

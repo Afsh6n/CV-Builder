@@ -1,18 +1,28 @@
 ﻿import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { ResumeIcon, ResumeIconName } from '../../../shared/components/resume-icon/resume-icon';
-import { urlError } from '../../../shared/validators/field.validators';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
+import { ListEditController } from '../../../shared/utils/list-edit.controller';
 import { SocialMedia, SocialPlatform } from '../../../core/types/resume.types';
 import { SOCIAL_PLATFORMS } from '../../../core/constants/resume.constants';
 import { createEmptySocialMedia } from '../../../core/utils/resume.factories';
 
 @Component({
   selector: 'app-social-media-form',
-  imports: [CommonModule, FormField, FormInput, ResumeIcon, OrderButtons],
+  imports: [
+    FormField,
+    FormInput,
+    ResumeIcon,
+    OrderButtons,
+    EditorItemActions,
+    EditorFormActions,
+    EditorAddButton
+  ],
   templateUrl: './social-media-form.html',
   styleUrl: './social-media-form.css'
 })
@@ -22,46 +32,42 @@ export class SocialMediaForm {
   editingId = input<string | null>(null);
   editModeChanged = output<string | null>();
 
+  private readonly editCtrl = new ListEditController<SocialMedia>(
+    () => this.socialMedia(),
+    items => this.socialMediaChanged.emit(items),
+    () => this.editingId(),
+    id => this.editModeChanged.emit(id),
+    createEmptySocialMedia
+  );
+
   platforms = SOCIAL_PLATFORMS;
-  touchedUrl = new Set<string>();
 
-  addEntry(): void {
-    const entry = createEmptySocialMedia();
-    this.socialMediaChanged.emit([...this.socialMedia(), entry]);
-    this.editModeChanged.emit(entry.id);
-  }
-
-  removeEntry(id: string): void {
-    this.socialMediaChanged.emit(this.socialMedia().filter(s => s.id !== id));
-    if (this.editingId() === id) this.editModeChanged.emit(null);
-    this.touchedUrl.delete(id);
-  }
+  addEntry = (): void => { this.editCtrl.add(); };
+  removeEntry = (id: string): void => { this.editCtrl.remove(id); };
+  startEditing = (id: string): void => { this.editCtrl.startEditing(id); };
+  saveEditing = (id: string): void => { this.editCtrl.completeSave(id); };
+  cancelEditing = (id: string): void => { this.editCtrl.cancel(id); };
+  isEditing = (id: string): boolean => this.editCtrl.isEditing(id);
 
   updateEntry(id: string, field: keyof SocialMedia, value: unknown): void {
     const entry = this.socialMedia().find(s => s.id === id);
     if (!entry) return;
 
-    let updatedValue = value;
     let updatedUrl = entry.url;
-
     if (field === 'platform') {
-      const platform = value as SocialPlatform;
-      updatedUrl = this.generateUrl(platform, entry.username);
+      updatedUrl = this.generateUrl(value as SocialPlatform, entry.username);
     } else if (field === 'username') {
-      const username = value as string;
-      updatedUrl = this.generateUrl(entry.platform, username);
+      updatedUrl = this.generateUrl(entry.platform, value as string);
     }
 
-    const updated = this.socialMedia().map(s => 
-      (s.id === id ? { ...s, [field]: updatedValue, url: updatedUrl } : s)
+    const updated = this.socialMedia().map(s =>
+      s.id === id ? { ...s, [field]: value, url: updatedUrl } : s
     );
     this.socialMediaChanged.emit(updated);
   }
 
   private generateUrl(platform: SocialPlatform, username: string): string {
     if (!username.trim()) return '';
-    
-    // If it's already a full URL, just return it
     if (username.startsWith('http://') || username.startsWith('https://')) {
       return username;
     }
@@ -99,20 +105,8 @@ export class SocialMediaForm {
     return map[platform] || 'social';
   }
 
-  urlFieldError(id: string, url: string): string {
-    return this.touchedUrl.has(id) ? urlError(url) : '';
-  }
-
-  touchUrl(id: string): void {
-    this.touchedUrl.add(id);
-  }
-
   moveEntry(id: string, direction: 'up' | 'down'): void {
     const next = moveItemInList(this.socialMedia(), id, direction);
     if (next) this.socialMediaChanged.emit(next);
   }
-
-  startEditing(id: string): void { this.editModeChanged.emit(id); }
-  stopEditing(): void { this.editModeChanged.emit(null); }
-  isEditing(id: string): boolean { return this.editingId() === id; }
 }

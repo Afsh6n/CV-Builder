@@ -4,7 +4,7 @@
     <p class="form-subtitle">گواهینامه‌ها و مدارک خود را اضافه کنید</p>
   </div>
 
-  <div class="cert-list">
+  <div class="editor-item-list">
     @for (cert of certificates(); track cert.id; let i = $index) {
       <div class="common-list-card" [class.editing]="isEditing(cert.id)">
         @if (isEditing(cert.id)) {
@@ -50,10 +50,10 @@
               }
               <input type="file" accept="image/*" (change)="onImageSelected(cert.id, $event)" class="form-input" />
             </div>
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
-              <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
-            </div>
+            <app-editor-form-actions
+              (cancel)="cancelEditing(cert.id)"
+              (save)="saveEditing(cert.id)"
+            />
           </div>
         } @else {
           <div class="view-mode">
@@ -66,21 +66,20 @@
             <div class="view-mode-body">
               <div class="view-mode-content">
                 <div class="view-mode-main">
-                  <div class="cert-brand">
-                    <div class="brand-icon">
+                  <div class="item-brand">
+                    <div class="brand-icon brand-icon--teal">
                       <app-resume-icon name="certificate" [size]="20" />
                     </div>
                     <div class="brand-details">
-                      <h3 class="cert-title">{{ cert.title || 'عنوان گواهی' }}</h3>
-                      <div class="issuer-wrap">
-                        <span class="issuer-name">{{ cert.issuer || 'صادرکننده' }}</span>
+                      <h3 class="item-title">{{ cert.title || 'عنوان گواهی' }}</h3>
+                      <div class="item-subtitle-row">
+                        <span class="item-subtitle">{{ cert.issuer || 'صادرکننده' }}</span>
                         @if (cert.current) {
-                          <span class="valid-badge">معتبر</span>
+                          <span class="status-badge status-badge--teal">معتبر</span>
                         }
                       </div>
                     </div>
                   </div>
-                  
                   <div class="meta-info">
                     <div class="meta-item">
                       <app-resume-icon name="calendar" [size]="14" />
@@ -89,20 +88,15 @@
                     @if (cert.link || cert.imageData) {
                       <div class="meta-item">
                         <app-resume-icon name="website" [size]="14" />
-                        <span class="has-attachment">دارای پیوست (تصویر/لینک)</span>
+                        <span class="meta-highlight meta-highlight--teal">دارای پیوست (تصویر/لینک)</span>
                       </div>
                     }
                   </div>
                 </div>
-
-                <div class="view-mode-actions">
-                  <button type="button" class="action-btn" (click)="startEditing(cert.id)" title="ویرایش">
-                    <app-resume-icon name="edit" [size]="16" />
-                  </button>
-                  <button type="button" class="action-btn delete" (click)="removeEntry(cert.id)" title="حذف">
-                    <app-resume-icon name="delete" [size]="16" />
-                  </button>
-                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(cert.id)"
+                  (delete)="removeEntry(cert.id)"
+                />
               </div>
             </div>
           </div>
@@ -111,5 +105,5 @@
     }
   </div>
 
-  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن گواهی</button>
+  <app-editor-add-button label="افزودن گواهی" (clicked)="addEntry()" />
 </div>

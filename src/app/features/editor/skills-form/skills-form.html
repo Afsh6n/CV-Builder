@@ -7,9 +7,9 @@
   @for (group of skillGroups(); track group.cat) {
     <div class="skill-group">
       <h3 class="group-title">{{ group.title }}</h3>
-      <div class="skills-list">
+      <div class="editor-item-list skill-list">
         @for (skill of (group.cat === 'technical' ? technicalSkills() : softSkills()); track skill.id; let si = $index) {
-          <div class="skill-card" [class.editing]="isEditing(skill.id)">
+          <div class="common-list-card" [class.editing]="isEditing(skill.id)">
             @if (isEditing(skill.id)) {
               <div class="edit-form">
                 <app-form-field label="نام مهارت" [required]="true" [error]="nameError(skill.id)">
@@ -28,10 +28,10 @@
                     (valueChange)="updateSkill(skill.id, 'level', $event)"
                   />
                 </app-form-field>
-                <div class="form-actions">
-                  <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
-                  <button type="button" class="btn btn-primary" (click)="stopEditing(skill.id)">ذخیره</button>
-                </div>
+                <app-editor-form-actions
+                  (cancel)="cancelEditing(skill.id)"
+                  (save)="stopEditing(skill.id)"
+                />
               </div>
             } @else {
               <div class="view-mode">
@@ -41,38 +41,39 @@
                   (moveUp)="moveSkill(skill.id, 'up')"
                   (moveDown)="moveSkill(skill.id, 'down')"
                 />
-                <div class="view-mode-body skill-info-wrap">
-                  <div class="skill-chart-preview">
-                    <apx-chart
-                      [series]="getChartOptions(skill.level).series"
-                      [chart]="getChartOptions(skill.level).chart"
-                      [plotOptions]="getChartOptions(skill.level).plotOptions"
-                      [colors]="getChartOptions(skill.level).colors"
-                      [stroke]="getChartOptions(skill.level).stroke"
-                      [labels]="getChartOptions(skill.level).labels"
-                    ></apx-chart>
+                <div class="view-mode-body">
+                  <div class="view-mode-content">
+                    <div class="view-mode-main skill-view-main">
+                      <div class="skill-chart-preview">
+                        <apx-chart
+                          [series]="getChartOptions(skill.level).series"
+                          [chart]="getChartOptions(skill.level).chart"
+                          [plotOptions]="getChartOptions(skill.level).plotOptions"
+                          [colors]="getChartOptions(skill.level).colors"
+                          [stroke]="getChartOptions(skill.level).stroke"
+                          [labels]="getChartOptions(skill.level).labels"
+                        ></apx-chart>
+                      </div>
+                      <div class="skill-text-info">
+                        <span class="item-title">{{ skill.name || 'نام مهارت' }}</span>
+                        <span class="item-subtitle">{{ levelLabels[skill.level] }}</span>
+                      </div>
+                    </div>
+                    <app-editor-item-actions
+                      (edit)="startEditing(skill.id)"
+                      (delete)="removeSkill(skill.id)"
+                    />
                   </div>
-                  <div class="skill-text-info">
-                    <span class="skill-name">{{ skill.name || 'نام مهارت' }}</span>
-                    <span class="skill-level-text">{{ levelLabels[skill.level] }}</span>
-                  </div>
-                </div>
-                <div class="skill-actions">
-                  <button type="button" class="action-btn" (click)="startEditing(skill.id)" title="ویرایش">
-                    <app-resume-icon name="edit" [size]="16" />
-                  </button>
-                  <button type="button" class="action-btn delete" (click)="removeSkill(skill.id)" title="حذف">
-                    <app-resume-icon name="delete" [size]="16" />
-                  </button>
                 </div>
               </div>
             }
           </div>
         }
       </div>
-      <button type="button" class="btn btn-add-small" (click)="addSkill(group.cat === 'technical' ? 'technical' : 'soft')">
-        + افزودن {{ group.title }}
-      </button>
+      <app-editor-add-button
+        [label]="'افزودن ' + group.title"
+        (clicked)="addSkill(group.cat === 'technical' ? 'technical' : 'soft')"
+      />
     </div>
   }
 </div>

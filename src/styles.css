@@ -1,4 +1,4 @@
-@import "./app/styles/_common.css";
-@import "tailwindcss";
-@import "./app/styles/forms.css";
-@import "./app/styles/list-form.css";
+@import './app/styles/_common.css';
+@import 'tailwindcss';
+@import './app/styles/forms.css';
+@import './app/styles/editor-custom-shared.css';

@@ -20,10 +20,18 @@
   animation: alert-in 0.2s ease-out;
 }
 
-.alert-panel--success { border-top-color: #22c55e; }
-.alert-panel--error { border-top-color: #ef4444; }
-.alert-panel--warning { border-top-color: #f59e0b; }
-.alert-panel--info { border-top-color: #3b82f6; }
+.alert-panel--success {
+  border-top-color: #22c55e;
+}
+.alert-panel--error {
+  border-top-color: #ef4444;
+}
+.alert-panel--warning {
+  border-top-color: #f59e0b;
+}
+.alert-panel--info {
+  border-top-color: #3b82f6;
+}
 
 @keyframes alert-in {
   from {
@@ -50,9 +58,18 @@
   color: #2563eb;
 }
 
-.alert-panel--success .alert-icon { background: #f0fdf4; color: #16a34a; }
-.alert-panel--error .alert-icon { background: #fef2f2; color: #dc2626; }
-.alert-panel--warning .alert-icon { background: #fffbeb; color: #d97706; }
+.alert-panel--success .alert-icon {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.alert-panel--error .alert-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.alert-panel--warning .alert-icon {
+  background: #fffbeb;
+  color: #d97706;
+}
 
 .alert-title {
   margin: 0 0 8px;
@@ -83,21 +100,29 @@
   font-family: inherit;
   cursor: pointer;
   border: none;
-  transition: background 0.15s, transform 0.1s;
+  transition:
+    background 0.15s,
+    transform 0.1s;
 }
 
-.alert-btn:active { transform: scale(0.98); }
+.alert-btn:active {
+  transform: scale(0.98);
+}
 
 .alert-btn--primary {
   background: #3b82f6;
   color: #fff;
 }
 
-.alert-btn--primary:hover { background: #2563eb; }
+.alert-btn--primary:hover {
+  background: #2563eb;
+}
 
 .alert-btn--secondary {
   background: #f1f5f9;
   color: #475569;
 }
 
-.alert-btn--secondary:hover { background: #e2e8f0; }
+.alert-btn--secondary:hover {
+  background: #e2e8f0;
+}

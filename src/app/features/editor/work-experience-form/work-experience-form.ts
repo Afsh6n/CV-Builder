@@ -1,12 +1,15 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { PersianDateInput } from '../persian-date-input/persian-date-input';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
 import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
 import { SuggestionService } from '../../../core/services/suggestion.service';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
+import { ListEditController } from '../../../shared/utils/list-edit.controller';
 import { requiredError, jalaliDateError } from '../../../shared/validators/field.validators';
 import { WorkExperience } from '../../../core/types/resume.types';
 import { createEmptyWorkExperience } from '../../../core/utils/resume.factories';
@@ -16,12 +19,14 @@ type FieldErrors = Partial<Record<keyof WorkExperience, string>>;
 @Component({
   selector: 'app-work-experience-form',
   imports: [
-    CommonModule,
     FormField,
     FormInput,
     PersianDateInput,
     OrderButtons,
-    ResumeIcon
+    ResumeIcon,
+    EditorItemActions,
+    EditorFormActions,
+    EditorAddButton
   ],
   templateUrl: './work-experience-form.html',
   styleUrl: './work-experience-form.css'
@@ -34,6 +39,14 @@ export class WorkExperienceForm {
   editingId = input<string | null>(null);
   editModeChanged = output<string | null>();
 
+  private readonly editCtrl = new ListEditController<WorkExperience>(
+    () => this.workExperience(),
+    items => this.workExperienceChanged.emit(items),
+    () => this.editingId(),
+    id => this.editModeChanged.emit(id),
+    createEmptyWorkExperience
+  );
+
   fieldErrors = signal<Record<string, FieldErrors>>({});
 
   positionSuggestions = computed(() => this.suggestionService.getSuggestions('position'));
@@ -42,17 +55,13 @@ export class WorkExperienceForm {
   provinceSuggestions = computed(() => this.suggestionService.getSuggestions('province'));
   citySuggestions = computed(() => this.suggestionService.getSuggestions('city'));
 
-  addEntry(): void {
-    const newEntry = createEmptyWorkExperience();
-    this.workExperienceChanged.emit([...this.workExperience(), newEntry]);
-    this.editModeChanged.emit(newEntry.id);
-  }
-
-  removeEntry(id: string): void {
-    this.workExperienceChanged.emit(this.workExperience().filter(exp => exp.id !== id));
+  addEntry = (): void => { this.editCtrl.add(); };
+  removeEntry = (id: string): void => {
+    this.editCtrl.remove(id);
     this.clearErrors(id);
-    if (this.editingId() === id) this.editModeChanged.emit(null);
-  }
+  };
+  startEditing = (id: string): void => { this.editCtrl.startEditing(id); };
+  isEditing = (id: string): boolean => this.editCtrl.isEditing(id);
 
   updateEntry(id: string, field: keyof WorkExperience, value: unknown): void {
     const updated = this.workExperience().map(exp =>
@@ -85,16 +94,8 @@ export class WorkExperienceForm {
     if (next) this.workExperienceChanged.emit(next);
   }
 
-  errorsFor(id: string): FieldErrors {
-    return this.fieldErrors()[id] ?? {};
-  }
-
   fieldError(id: string, field: keyof WorkExperience): string {
-    return this.errorsFor(id)[field] ?? '';
-  }
-
-  startEditing(id: string): void {
-    this.editModeChanged.emit(id);
+    return this.fieldErrors()[id]?.[field] ?? '';
   }
 
   stopEditing(id: string): void {
@@ -102,11 +103,12 @@ export class WorkExperienceForm {
     if (exp && !this.validateEntry(exp)) return;
     this.saveSuggestions(id);
     this.clearErrors(id);
-    this.editModeChanged.emit(null);
+    this.editCtrl.completeSave(id);
   }
 
-  isEditing(id: string): boolean {
-    return this.editingId() === id;
+  cancelEditing(id: string): void {
+    this.editCtrl.cancel(id);
+    this.clearErrors(id);
   }
 
   private validateEntry(exp: WorkExperience): boolean {
@@ -116,12 +118,9 @@ export class WorkExperienceForm {
       startDate:
         requiredError(exp.startDate, 'تاریخ شروع') ||
         jalaliDateError(exp.startDate, 'month'),
-      endDate: exp.current
-        ? ''
-        : jalaliDateError(exp.endDate, 'month')
+      endDate: exp.current ? '' : jalaliDateError(exp.endDate, 'month')
     };
-    const hasError = Object.values(errors).some(Boolean);
-    if (hasError) {
+    if (Object.values(errors).some(Boolean)) {
       this.fieldErrors.update(m => ({ ...m, [exp.id]: errors }));
       return false;
     }

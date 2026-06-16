@@ -4,7 +4,7 @@
     <p class="form-subtitle">سوابق آموزشی خود را اضافه کنید</p>
   </div>
 
-  <div class="education-list">
+  <div class="editor-item-list">
     @for (edu of education(); track edu.id; let i = $index) {
       <div class="common-list-card" [class.editing]="isEditing(edu.id)">
         @if (isEditing(edu.id)) {
@@ -97,10 +97,10 @@
               </label>
             </div>
 
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
-              <button type="button" class="btn btn-primary" (click)="stopEditing(edu.id)">ذخیره</button>
-            </div>
+            <app-editor-form-actions
+              (cancel)="cancelEditing(edu.id)"
+              (save)="stopEditing(edu.id)"
+            />
           </div>
         } @else {
           <div class="view-mode">
@@ -113,21 +113,23 @@
             <div class="view-mode-body">
               <div class="view-mode-content">
                 <div class="view-mode-main">
-                  <div class="institution-brand">
-                    <div class="brand-icon">
+                  <div class="item-brand">
+                    <div class="brand-icon brand-icon--purple">
                       <app-resume-icon name="education" [size]="20" />
                     </div>
                     <div class="brand-details">
-                      <h3 class="institution-name">{{ edu.institution || 'نام مؤسسه' }}</h3>
-                      <div class="degree-wrap">
-                        <span class="degree-text">{{ edu.degree || 'مقطع' }} {{ edu.field ? 'در ' + edu.field : '' }}</span>
+                      <h3 class="item-title">{{ edu.institution || 'نام مؤسسه' }}</h3>
+                      <div class="item-subtitle-row">
+                        <span class="item-subtitle">
+                          {{ edu.degree || 'مقطع' }}{{ edu.field ? ' در ' + edu.field : '' }}
+                        </span>
                         @if (edu.currentlyStudying) {
-                          <span class="studying-badge">در حال تحصیل</span>
+                          <span class="status-badge status-badge--info">در حال تحصیل</span>
                         }
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="meta-info">
                     <div class="meta-item">
                       <app-resume-icon name="calendar" [size]="14" />
@@ -141,15 +143,10 @@
                     }
                   </div>
                 </div>
-
-                <div class="view-mode-actions">
-                  <button type="button" class="action-btn" (click)="startEditing(edu.id)" title="ویرایش">
-                    <app-resume-icon name="edit" [size]="16" />
-                  </button>
-                  <button type="button" class="action-btn delete" (click)="removeEntry(edu.id)" title="حذف">
-                    <app-resume-icon name="delete" [size]="16" />
-                  </button>
-                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(edu.id)"
+                  (delete)="removeEntry(edu.id)"
+                />
               </div>
             </div>
           </div>
@@ -158,5 +155,5 @@
     }
   </div>
 
-  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن سابقه تحصیلی</button>
+  <app-editor-add-button label="افزودن سابقه تحصیلی" (clicked)="addEntry()" />
 </div>

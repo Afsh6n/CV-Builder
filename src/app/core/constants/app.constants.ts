@@ -16,7 +16,7 @@ export const APP_FOOTER = {
   credit: 'ساخته شده توسط',
   links: [
     { label: 'GitHub', url: 'https://github.com/Afsh6n', icon: 'github' as ResumeIconName },
-    { label: 'Telegram', url: 'https://t.me/Afsh6n', icon: 'telegram' as ResumeIconName },
+    { label: 'Telegram', url: 'https://t.me/DevYara', icon: 'telegram' as ResumeIconName },
     { label: 'LinkedIn', url: 'https://linkedin.com/in/Afsh6n', icon: 'linkedin' as ResumeIconName },
   ] satisfies FooterLink[]
 } as const;

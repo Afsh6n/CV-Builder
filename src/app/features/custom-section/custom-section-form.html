@@ -4,75 +4,88 @@
     <p class="form-subtitle">بخش دلخواه با عنوان، آیکون، تاریخ و توضیحات اضافه کنید</p>
   </div>
 
-  @for (section of sections(); track section.id; let si = $index) {
-    <div class="section-card" [class.editing]="isEditing(section.id)">
-      @if (isEditing(section.id)) {
-        <div class="edit-form">
-          <div class="form-group">
-            <label class="form-label">عنوان بخش</label>
-            <input class="form-input" [ngModel]="section.title" (ngModelChange)="updateSection(section.id, 'title', $event)" placeholder="مثال: دوره‌های آنلاین" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">آیکون بخش</label>
-            <app-segmented-control
-              [options]="iconSegments(section)"
-              [value]="section.icon"
-              [wrap]="true"
-              ariaLabel="انتخاب آیکون"
-              (valueChange)="onIconChange(section.id, $event)"
+  <div class="editor-item-list">
+    @for (section of sections(); track section.id; let si = $index) {
+      <div class="common-list-card" [class.editing]="isEditing(section.id)">
+        @if (isEditing(section.id)) {
+          <div class="edit-form">
+            <div class="form-group">
+              <label class="form-label">عنوان بخش</label>
+              <input
+                class="form-input"
+                [ngModel]="section.title"
+                (ngModelChange)="updateSection(section.id, 'title', $event)"
+                placeholder="مثال: دوره‌های آنلاین"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">آیکون بخش</label>
+              <app-segmented-control
+                [options]="iconSegments()"
+                [value]="section.icon"
+                [wrap]="true"
+                ariaLabel="انتخاب آیکون"
+                (valueChange)="onIconChange(section.id, $event)"
+              />
+            </div>
+
+            <div class="entries-block">
+              <h4 class="entries-title">آیتم‌ها</h4>
+              @for (entry of section.entries; track entry.id) {
+                <div class="entry-card">
+                  <div class="entry-fields-grid">
+                    <input class="form-input" placeholder="عنوان" [ngModel]="entry.title" (ngModelChange)="updateEntry(section.id, entry.id, 'title', $event)" />
+                    <input class="form-input" placeholder="زیرعنوان" [ngModel]="entry.subtitle" (ngModelChange)="updateEntry(section.id, entry.id, 'subtitle', $event)" />
+                    <input class="form-input" type="month" [ngModel]="entry.date" (ngModelChange)="updateEntry(section.id, entry.id, 'date', $event)" />
+                    <input class="form-input ltr" placeholder="لینک (اختیاری)" [ngModel]="entry.link" (ngModelChange)="updateEntry(section.id, entry.id, 'link', $event)" />
+                    <textarea class="form-input entry-field-full" rows="2" placeholder="توضیحات" [ngModel]="entry.description" (ngModelChange)="updateEntry(section.id, entry.id, 'description', $event)"></textarea>
+                  </div>
+                  <div class="entry-actions">
+                    <button type="button" class="btn-remove-entry" (click)="removeEntry(section.id, entry.id)">حذف آیتم</button>
+                  </div>
+                </div>
+              }
+              <button type="button" class="btn-add-entry" (click)="addEntry(section.id)">+ افزودن آیتم</button>
+            </div>
+
+            <app-editor-form-actions
+              [showDanger]="true"
+              dangerLabel="حذف بخش"
+              (cancel)="cancelEditing(section.id)"
+              (danger)="removeSection(section.id)"
+              (save)="saveEditing(section.id)"
             />
           </div>
-
-          <div class="entries-block">
-            <h4 class="entries-title">آیتم‌ها</h4>
-            @for (entry of section.entries; track entry.id) {
-              <div class="entry-card">
-                <div class="entry-fields-grid">
-                  <input class="form-input" placeholder="عنوان" [ngModel]="entry.title" (ngModelChange)="updateEntry(section.id, entry.id, 'title', $event)" />
-                  <input class="form-input" placeholder="زیرعنوان" [ngModel]="entry.subtitle" (ngModelChange)="updateEntry(section.id, entry.id, 'subtitle', $event)" />
-                  <input class="form-input" type="month" [ngModel]="entry.date" (ngModelChange)="updateEntry(section.id, entry.id, 'date', $event)" />
-                  <input class="form-input ltr" placeholder="لینک (اختیاری)" [ngModel]="entry.link" (ngModelChange)="updateEntry(section.id, entry.id, 'link', $event)" />
-                  <textarea class="form-input entry-field-full" rows="2" placeholder="توضیحات" [ngModel]="entry.description" (ngModelChange)="updateEntry(section.id, entry.id, 'description', $event)"></textarea>
+        } @else {
+          <div class="view-mode">
+            <app-order-buttons
+              [disableUp]="si === 0"
+              [disableDown]="si === sections().length - 1"
+              (moveUp)="moveSection(section.id, 'up')"
+              (moveDown)="moveSection(section.id, 'down')"
+            />
+            <div class="view-mode-body">
+              <div class="view-mode-content">
+                <div class="view-mode-main custom-view-main">
+                  <div class="section-icon-wrap">
+                    <app-resume-icon [name]="$any(section.icon)" [size]="18" />
+                  </div>
+                  <div class="section-info">
+                    <span class="item-title">{{ section.title || 'بخش بدون عنوان' }}</span>
+                    <span class="item-subtitle">{{ section.entries.length }} آیتم</span>
+                  </div>
                 </div>
-                <div class="entry-actions">
-                  <button type="button" class="btn-remove-entry" (click)="removeEntry(section.id, entry.id)">حذف آیتم</button>
-                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(section.id)"
+                  (delete)="removeSection(section.id)"
+                />
               </div>
-            }
-            <button type="button" class="btn-add-entry" (click)="addEntry(section.id)">+ افزودن آیتم</button>
+            </div>
           </div>
+        }
+      </div>
+    }
+  </div>
 
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary" (click)="stopEditing()">انصراف</button>
-            <button type="button" class="btn btn-danger" (click)="removeSection(section.id)">حذف بخش</button>
-            <button type="button" class="btn btn-primary" (click)="stopEditing()">ذخیره</button>
-          </div>
-        </div>
-      } @else {
-        <div class="view-mode">
-          <app-order-buttons
-            [disableUp]="si === 0"
-            [disableDown]="si === sections().length - 1"
-            (moveUp)="moveSection(section.id, 'up')"
-            (moveDown)="moveSection(section.id, 'down')"
-          />
-          <app-resume-icon [name]="$any(section.icon)" [size]="18" />
-          <div class="section-info">
-            <span class="section-name">{{ section.title || 'بخش بدون عنوان' }}</span>
-            <span class="section-count">{{ section.entries.length }} آیتم</span>
-          </div>
-          <div class="section-actions">
-            <button type="button" class="action-btn" (click)="startEditing(section.id)" title="ویرایش">
-              <app-resume-icon name="edit" [size]="16" />
-            </button>
-            <button type="button" class="action-btn delete" (click)="removeSection(section.id)" title="حذف">
-              <app-resume-icon name="delete" [size]="16" />
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-  }
-
-  <button type="button" class="btn btn-add" (click)="addSection()">+ افزودن بخش سفارشی</button>
+  <app-editor-add-button label="افزودن بخش سفارشی" (clicked)="addSection()" />
 </div>

@@ -108,10 +108,6 @@ export class App {
     this.resumeService.setLanguages(languages);
   }
 
-  onLanguageMove(event: { id: string; direction: 'up' | 'down' }): void {
-    this.resumeService.moveLanguage(event.id, event.direction);
-  }
-
   onProjectsChanged(projects: Project[]): void {
     this.resumeService.setProjects(projects);
   }

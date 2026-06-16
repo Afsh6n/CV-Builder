@@ -4,9 +4,9 @@
     <p class="form-subtitle">پروژه‌های انجام‌شده خود را اضافه کنید</p>
   </div>
 
-  <div class="projects-list">
+  <div class="editor-item-list">
     @for (project of projects(); track project.id; let i = $index) {
-      <div class="project-card" [class.editing]="isEditing(project.id)">
+      <div class="common-list-card" [class.editing]="isEditing(project.id)">
         @if (isEditing(project.id)) {
           <div class="edit-form">
             <app-form-field label="عنوان">
@@ -34,12 +34,17 @@
             </div>
             <div class="form-group">
               <label class="form-label">توضیحات</label>
-              <textarea class="form-textarea" [value]="project.description" (input)="updateEntry(project.id, 'description', $any($event.target).value)" rows="3"></textarea>
+              <textarea
+                class="form-textarea"
+                [value]="project.description"
+                (input)="updateEntry(project.id, 'description', $any($event.target).value)"
+                rows="3"
+              ></textarea>
             </div>
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="editModeChanged.emit(null)">انصراف</button>
-              <button type="button" class="btn btn-primary" (click)="stopEditing(project.id)">ذخیره</button>
-            </div>
+            <app-editor-form-actions
+              (cancel)="cancelEditing(project.id)"
+              (save)="stopEditing(project.id)"
+            />
           </div>
         } @else {
           <div class="view-mode">
@@ -52,18 +57,17 @@
             <div class="view-mode-body">
               <div class="view-mode-content">
                 <div class="view-mode-main">
-                  <div class="project-brand">
-                    <div class="brand-icon">
+                  <div class="item-brand">
+                    <div class="brand-icon brand-icon--indigo">
                       <app-resume-icon name="projects" [size]="20" />
                     </div>
                     <div class="brand-details">
-                      <h3 class="project-title">{{ project.title || 'عنوان پروژه' }}</h3>
-                      <div class="employer-wrap">
-                        <span class="employer-name">{{ project.employer || 'پروژه شخصی' }}</span>
+                      <h3 class="item-title">{{ project.title || 'عنوان پروژه' }}</h3>
+                      <div class="item-subtitle-row">
+                        <span class="item-subtitle">{{ project.employer || 'پروژه شخصی' }}</span>
                       </div>
                     </div>
                   </div>
-                  
                   <div class="meta-info">
                     @if (project.date) {
                       <div class="meta-item">
@@ -74,20 +78,15 @@
                     @if (project.link) {
                       <div class="meta-item">
                         <app-resume-icon name="website" [size]="14" />
-                        <span class="has-link">دارای لینک پروژه</span>
+                        <span class="meta-highlight meta-highlight--indigo">دارای لینک پروژه</span>
                       </div>
                     }
                   </div>
                 </div>
-
-                <div class="view-mode-actions">
-                  <button type="button" class="action-btn" (click)="startEditing(project.id)" title="ویرایش">
-                    <app-resume-icon name="edit" [size]="16" />
-                  </button>
-                  <button type="button" class="action-btn delete" (click)="removeEntry(project.id)" title="حذف">
-                    <app-resume-icon name="delete" [size]="16" />
-                  </button>
-                </div>
+                <app-editor-item-actions
+                  (edit)="startEditing(project.id)"
+                  (delete)="removeEntry(project.id)"
+                />
               </div>
             </div>
           </div>
@@ -96,5 +95,5 @@
     }
   </div>
 
-  <button type="button" class="btn btn-add" (click)="addEntry()">+ افزودن پروژه</button>
+  <app-editor-add-button label="افزودن پروژه" (clicked)="addEntry()" />
 </div>
