@@ -4,8 +4,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-form-input',
   imports: [CommonModule],
-  templateUrl: './form-input.html',
-  styleUrl: './form-input.css'
+  templateUrl: './form-input.html'
 })
 export class FormInput {
   inputId = input<string>('');

@@ -4,8 +4,7 @@ let uid = 0;
 
 @Component({
   selector: 'app-form-field',
-  templateUrl: './form-field.html',
-  styleUrl: './form-field.css'
+  templateUrl: './form-field.html'
 })
 export class FormField {
   label = input<string>('');

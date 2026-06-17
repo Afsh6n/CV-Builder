@@ -10,7 +10,6 @@ export interface SelectOption<T extends string = string> {
   selector: 'app-form-select',
   imports: [CommonModule],
   templateUrl: './form-select.html',
-  styleUrl: './form-select.css'
 })
 export class FormSelect<T extends string = string> {
   selectId = input<string>('');

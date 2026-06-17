@@ -1,8 +1,8 @@
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ResumeIcon } from '../resume-icon/resume-icon';
 import { SKILL_LEVEL_PERCENT } from '../../../core/constants/resume.constants';
 import { SkillLevel } from '../../../core/types/resume.types';
+import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
 
 @Component({
   selector: 'app-skill-card',
