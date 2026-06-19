@@ -1,17 +1,18 @@
-import { Component, input, computed, signal, effect, inject, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MonthFormatPipe } from '../../shared/pipes/month-format.pipe';
-import { toPersianDigits } from '../../shared/pipes/persian-digits.pipe';
+import { Component, input, computed, signal, effect, inject, untracked } from '@angular/core';
+
+import { CertificateLightbox } from './certificate-lightbox/certificate-lightbox';
+import { SkillCard } from './skill-card/skill-card';
+import { SkillChart } from './skill-chart/skill-chart';
+import { fontFamilyCss } from '../../core/constants/font.constants';
+import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '../../core/constants/resume.constants';
 import { FontLoaderService } from '../../core/services/font-loader.service';
 import { QrCodeService } from '../../core/services/qr-code.service';
-import { fontFamilyCss } from '../../core/constants/font.constants';
 import { Certificate, Resume, SkillDisplayType, SocialPlatform, ThemeId } from '../../core/types/resume.types';
-import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '../../core/constants/resume.constants';
-import { formatSalary } from '../../shared/utils/salary.formatter';
-import { CertificateLightbox } from './certificate-lightbox/certificate-lightbox';
-import { SkillChart } from './skill-chart/skill-chart';
 import { ResumeIcon, ResumeIconName } from '../../shared/components/resume-icon/resume-icon';
-import { SkillCard } from './skill-card/skill-card';
+import { MonthFormatPipe } from '../../shared/pipes/month-format.pipe';
+import { toPersianDigits } from '../../shared/pipes/persian-digits.pipe';
+import { formatSalary } from '../../shared/utils/salary.formatter';
 
 type SectionType = 'career' | 'education' | 'work' | 'technicalSkills' | 'softSkills' | 'certificates' | 'projects' | 'custom';
 

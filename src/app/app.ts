@@ -1,28 +1,31 @@
-import { Component, signal, computed, inject, ElementRef, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, signal, computed, inject, ElementRef, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ResumeService } from './core/services/resume.service';
+
+import { AiResumeService } from './core/services/ai-resume.service';
+import { AlertService } from './core/services/alert.service';
 import { ExportService } from './core/services/export.service';
 import { FontLoaderService } from './core/services/font-loader.service';
-import { AlertService } from './core/services/alert.service';
-import { PhotoUploader } from './features/editor/photo-uploader/photo-uploader';
-import { PersonalDetailsForm } from './features/editor/personal-details-form/personal-details-form';
-import { WorkExperienceForm } from './features/editor/work-experience-form/work-experience-form';
-import { EducationForm } from './features/editor/education-form/education-form';
-import { SkillsForm } from './features/editor/skills-form/skills-form';
-import { LanguagesForm } from './features/editor/languages-form/languages-form';
-import { ProjectsForm } from './features/editor/projects-form/projects-form';
-import { SocialMediaForm } from './features/editor/social-media-form/social-media-form';
-import { CertificatesForm } from './features/editor/certificates-form/certificates-form';
-import { CareerInfoForm } from './features/editor/career-info-form/career-info-form';
-import { ResumeSettingsPanel } from './features/editor/resume-settings-panel/resume-settings-panel';
-import { ResumePreview } from './features/resume-preview/resume-preview';
+import { ResumeService } from './core/services/resume.service';
+import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, ResumeSettings, Skill, SocialMedia, WorkExperience } from './core/types/resume.types';
+import { countFilledFields, isEnoughDataForPreview } from './core/utils/resume.utils';
 import { CustomSectionForm } from './features/custom-section/custom-section-form';
+import { CareerInfoForm } from './features/editor/career-info-form/career-info-form';
+import { CertificatesForm } from './features/editor/certificates-form/certificates-form';
+import { EducationForm } from './features/editor/education-form/education-form';
+import { LanguagesForm } from './features/editor/languages-form/languages-form';
+import { PersonalDetailsForm } from './features/editor/personal-details-form/personal-details-form';
+import { PhotoUploader } from './features/editor/photo-uploader/photo-uploader';
+import { ProjectsForm } from './features/editor/projects-form/projects-form';
+import { ResumeSettingsPanel } from './features/editor/resume-settings-panel/resume-settings-panel';
+import { SkillsForm } from './features/editor/skills-form/skills-form';
+import { SocialMediaForm } from './features/editor/social-media-form/social-media-form';
+import { WorkExperienceForm } from './features/editor/work-experience-form/work-experience-form';
+import { ResumePreview } from './features/resume-preview/resume-preview';
 import { AppFooter } from './layout/app-footer/app-footer';
 import { AppHeader } from './layout/app-header/app-header';
 import { Alert } from './shared/components/alert/alert';
-import { countFilledFields, isEnoughDataForPreview } from './core/utils/resume.utils';
-import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, ResumeSettings, Skill, SocialMedia, WorkExperience } from './core/types/resume.types';
+import { InitialInput } from "./features/initial-input/initial-input";
 
 @Component({
   selector: 'app-root',
@@ -44,8 +47,9 @@ import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalIn
     ResumePreview,
     AppFooter,
     AppHeader,
-    Alert
-  ],
+    Alert,
+    InitialInput
+],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -54,6 +58,7 @@ export class App {
   private exportService = inject(ExportService);
   private fontLoader = inject(FontLoaderService);
   private alertService = inject(AlertService);
+  private aiResumeService = inject(AiResumeService);
 
   fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
@@ -68,6 +73,7 @@ export class App {
   showPdfDialog = signal<boolean>(false);
   pdfFilename = signal<string>('');
   summary = signal<string>('');
+  showInitialInput = signal<boolean>(true);
 
   constructor() {
     this.summary.set(this.resume().summary);
@@ -184,7 +190,12 @@ export class App {
       }
 
       this.showPdfDialog.set(false);
-      await this.alertService.success('فایل با موفقیت تولید شد.');
+      await this.alertService.success(
+        'فایل رزومه با موفقیت دانلود شد!',
+        'دانلود موفق',
+        false,
+        'https://daramet.com/Afsh5n'
+      );
     } catch (error) {
       console.error('Export failed:', error);
       const detail = error instanceof Error ? error.message : '';
@@ -201,5 +212,24 @@ export class App {
       this.summary.set('');
       this.editingSection.set(null);
     }
+  }
+
+  getAiOptimizationPrompt(): string {
+    const currentResume = this.resume();
+    return this.aiResumeService.generateResumeOptimizationPrompt(currentResume);
+  }
+
+  getAiSummaryPrompt(): string {
+    const currentResume = this.resume();
+    return this.aiResumeService.generateSummaryOptimizationPrompt(currentResume);
+  }
+
+  showEditor(): void {
+    this.summary.set(this.resume().summary);
+    this.showInitialInput.set(false);
+  }
+
+  showInitialInputScreen(): void {
+    this.showInitialInput.set(true);
   }
 }

@@ -1,16 +1,54 @@
 <div class="app-container" dir="rtl">
   <app-header>
     <div header-actions class="header-actions">
-      <button type="button" class="btn btn-secondary" (click)="resetResume()" [disabled]="isGeneratingPdf()">بازنشانی</button>
-      <button type="button" class="btn btn-primary" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
-        @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
-      </button>
+      @if (showInitialInput()) {
+        <button type="button" class="btn btn-secondary" (click)="showEditor()">ورود به ویرایشگر</button>
+      } @else {
+        <button type="button" class="btn btn-secondary" (click)="showInitialInputScreen()">ورود اطلاعات با هوش مصنوعی</button>
+        <button type="button" class="btn btn-secondary" (click)="resetResume()" [disabled]="isGeneratingPdf()">بازنشانی</button>
+        <button type="button" class="btn btn-primary" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
+          @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
+        </button>
+      }
     </div>
   </app-header>
 
   <main class="app-main">
-    <section class="editor-panel">
-      <div class="editor-content">
+    @if (showInitialInput()) {
+      <section class="editor-panel">
+        <app-initial-input (onComplete)="showEditor()" />
+      </section>
+      <section class="preview-panel">
+        <div class="preview-header">
+          <h2 class="preview-title">پیش‌نمایش زنده</h2>
+          <p class="preview-subtitle">خروجی PDF دقیقاً از همین پیش‌نمایش ساخته می‌شود</p>
+        </div>
+        <div class="preview-content">
+          <div class="preview-placeholder">
+            <div class="placeholder-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <h3 class="placeholder-title">رزومه شما هنوز آماده نمایش نیست</h3>
+            <p class="placeholder-text">
+              لطفاً اطلاعات خود را در باکس هوش مصنوعی وارد کنید تا فرآیند ساخت و بهینه‌سازی اتوماتیک رزومه آغاز شود.
+            </p>
+            <div class="placeholder-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="0"></div>
+              </div>
+              <span class="progress-text">0 از 8 مورد تکمیل شده</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    } @else {
+      <section class="editor-panel">
+        <div class="editor-content">
         <div class="editor-section form-card">
           <app-resume-settings-panel
             [settings]="resume().settings"
@@ -161,9 +199,7 @@
       </div>
       <div class="preview-content">
         @if (isEnoughDataFilled()) {
-          <app-resume-preview
-            [resume]="previewResume()"
-          />
+          <app-resume-preview [resume]="previewResume()" />
         } @else {
           <div class="preview-placeholder">
             <div class="placeholder-icon">
@@ -188,6 +224,7 @@
         }
       </div>
     </section>
+    }
   </main>
 
   <app-footer />

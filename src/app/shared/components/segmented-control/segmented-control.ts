@@ -1,5 +1,5 @@
-import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, input, output, computed } from '@angular/core';
 
 export interface SegmentOption<T extends string | number = string | number> {
   value: T;

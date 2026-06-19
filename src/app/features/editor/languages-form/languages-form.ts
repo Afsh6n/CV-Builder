@@ -1,18 +1,19 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
+import { LANGUAGE_LEVEL_LABELS, LANGUAGE_OPTIONS } from '../../../core/constants/resume.constants';
+import { Language } from '../../../core/types/resume.types';
+import { createEmptyLanguage } from '../../../core/utils/resume.factories';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { FormSelect, SelectOption } from '../../../shared/components/form-select/form-select';
-import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
 import { ListEditController } from '../../../shared/utils/list-edit.controller';
-import { Language } from '../../../core/types/resume.types';
-import { LANGUAGE_LEVEL_LABELS, LANGUAGE_OPTIONS } from '../../../core/constants/resume.constants';
-import { createEmptyLanguage } from '../../../core/utils/resume.factories';
 
 @Component({
   selector: 'app-languages-form',

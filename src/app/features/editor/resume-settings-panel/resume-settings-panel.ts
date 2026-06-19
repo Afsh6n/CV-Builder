@@ -1,13 +1,14 @@
-﻿import { Component, input, output, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
+import { Component, input, output, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormSelect } from '../../../shared/components/form-select/form-select';
-import { FormInput } from '../../../shared/components/form-input/form-input';
+
 import { FONT_PRESETS, FontFamilyId } from '../../../core/constants/font.constants';
-import { ResumeDisplayOptions, ResumeSettings } from '../../../core/types/resume.types';
 import { LAYOUT_PRESETS, SKILL_DISPLAY_OPTIONS, THEME_PRESETS } from '../../../core/constants/resume.constants';
+import { ResumeDisplayOptions, ResumeSettings } from '../../../core/types/resume.types';
 import { LayoutId, SkillDisplayType, ThemeId } from '../../../core/types/resume.types';
+import { FormField } from '../../../shared/components/form-field/form-field';
+import { FormInput } from '../../../shared/components/form-input/form-input';
+import { FormSelect } from '../../../shared/components/form-select/form-select';
 
 @Component({
   selector: 'app-resume-settings-panel',

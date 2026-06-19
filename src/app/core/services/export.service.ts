@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+
 import { FontLoaderService } from './font-loader.service';
 import { Resume } from '../types/resume.types';
 

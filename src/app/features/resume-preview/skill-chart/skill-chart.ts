@@ -11,6 +11,7 @@ import {
   ApexXAxis,
   ApexYAxis
 } from 'ng-apexcharts';
+
 import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '../../../core/constants/resume.constants';
 import { Skill, SkillDisplayType, SkillLevel } from '../../../core/types/resume.types';
 

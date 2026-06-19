@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '../../core/constants/resume.constants';
 import { SkillLevel } from '../../core/types/resume.types';
 

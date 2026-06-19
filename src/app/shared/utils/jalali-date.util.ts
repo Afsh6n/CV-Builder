@@ -1,4 +1,5 @@
 import moment from 'jalali-moment';
+
 import { toEnglishDigits } from '../pipes/persian-digits.pipe';
 
 export type JalaliDateMode = 'date' | 'month';

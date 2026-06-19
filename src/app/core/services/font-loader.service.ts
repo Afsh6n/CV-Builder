@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { FONT_PRESETS, FontFamilyId, getFontPreset } from '../constants/font.constants';
+
 import { AlertService } from './alert.service';
+import { FONT_PRESETS, FontFamilyId, getFontPreset } from '../constants/font.constants';
 
 
 @Injectable({ providedIn: 'root' })

@@ -1,18 +1,19 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { SegmentedControl, SegmentOption } from '../../../shared/components/segmented-control/segmented-control';
+
+import { SKILL_LEVEL_LABELS } from '../../../core/constants/resume.constants';
+import { SuggestionService } from '../../../core/services/suggestion.service';
+import { Skill, SkillCategory, SkillLevel } from '../../../core/types/resume.types';
+import { createEmptySkill } from '../../../core/utils/resume.factories';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
-import { SuggestionService } from '../../../core/services/suggestion.service';
+import { SegmentedControl, SegmentOption } from '../../../shared/components/segmented-control/segmented-control';
 import { ListEditController } from '../../../shared/utils/list-edit.controller';
 import { requiredError } from '../../../shared/validators/field.validators';
-import { Skill, SkillCategory, SkillLevel } from '../../../core/types/resume.types';
-import { SKILL_LEVEL_LABELS } from '../../../core/constants/resume.constants';
-import { createEmptySkill } from '../../../core/utils/resume.factories';
 
 @Component({
   selector: 'app-skills-form',

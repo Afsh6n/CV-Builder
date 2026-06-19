@@ -1,16 +1,17 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { CUSTOM_SECTION_ICON_OPTIONS } from '../../core/constants/app.constants';
-import { SegmentedControl } from '../../shared/components/segmented-control/segmented-control';
-import { ResumeIcon, ResumeIconName } from '../../shared/components/resume-icon/resume-icon';
-import { OrderButtons } from '../../shared/components/order-buttons/order-buttons';
-import { EditorItemActions } from '../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../shared/components/editor-add-button/editor-add-button';
-import { moveItemInList } from '../../shared/utils/array-order.util';
-import { ListEditController } from '../../shared/utils/list-edit.controller';
 import { CustomSection, CustomSectionEntry } from '../../core/types/resume.types';
 import { createEmptyCustomSection, createEmptyCustomSectionEntry } from '../../core/utils/resume.factories';
+import { EditorAddButton } from '../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../shared/components/editor-item-actions/editor-item-actions';
+import { OrderButtons } from '../../shared/components/order-buttons/order-buttons';
+import { ResumeIcon, ResumeIconName } from '../../shared/components/resume-icon/resume-icon';
+import { SegmentedControl } from '../../shared/components/segmented-control/segmented-control';
+import { moveItemInList } from '../../shared/utils/array-order.util';
+import { ListEditController } from '../../shared/utils/list-edit.controller';
 
 @Component({
   selector: 'app-custom-section-form',

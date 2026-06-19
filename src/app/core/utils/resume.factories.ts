@@ -1,7 +1,7 @@
-import { CareerInfo, Certificate, CustomSection, CustomSectionEntry, Education, Language, PersonalInfo, Project, Resume, Skill, SocialMedia, WorkExperience } from "../types/resume.types";
 import {
   DEFAULT_SETTINGS
 } from '../constants/resume.constants';
+import { CareerInfo, Certificate, CustomSection, CustomSectionEntry, Education, Language, PersonalInfo, Project, Resume, Skill, SocialMedia, WorkExperience } from "../types/resume.types";
 
 export const createEmptyPersonalInfo = (): PersonalInfo => ({
   firstName: '',

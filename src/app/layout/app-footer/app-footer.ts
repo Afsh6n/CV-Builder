@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { APP_FOOTER } from '../../core/constants/app.constants';
 import { ResumeIcon } from '../../shared/components/resume-icon/resume-icon';
 

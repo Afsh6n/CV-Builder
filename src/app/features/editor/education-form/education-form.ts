@@ -1,20 +1,21 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
+
+import { DEGREE_OPTIONS } from '../../../core/constants/resume.constants';
+import { SuggestionService } from '../../../core/services/suggestion.service';
+import { Education } from '../../../core/types/resume.types';
+import { createEmptyEducation } from '../../../core/utils/resume.factories';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { FormSelect, SelectOption } from '../../../shared/components/form-select/form-select';
-import { PersianDateInput } from '../persian-date-input/persian-date-input';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
 import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
-import { SuggestionService } from '../../../core/services/suggestion.service';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
 import { ListEditController } from '../../../shared/utils/list-edit.controller';
 import { requiredError, jalaliDateError } from '../../../shared/validators/field.validators';
-import { Education } from '../../../core/types/resume.types';
-import { DEGREE_OPTIONS } from '../../../core/constants/resume.constants';
-import { createEmptyEducation } from '../../../core/utils/resume.factories';
+import { PersianDateInput } from '../persian-date-input/persian-date-input';
 
 type FieldErrors = Partial<Record<keyof Education, string>>;
 

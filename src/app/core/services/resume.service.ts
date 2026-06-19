@@ -1,8 +1,9 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
+
 import { DEFAULT_FONT_ID, FONT_PRESETS, FontFamilyId } from '../constants/font.constants';
+import { DEFAULT_DISPLAY, DEFAULT_SECTIONS, DEFAULT_SETTINGS } from '../constants/resume.constants';
 import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, Resume, ResumeSettings, Skill, SkillCategory, SkillLevel, SocialMedia, WorkExperience } from '../types/resume.types';
 import { createEmptyCareerInfo, createEmptyCertificate, createEmptyEducation, createEmptyLanguage, createEmptyResume, createEmptySkill, createEmptyWorkExperience } from '../utils/resume.factories';
-import { DEFAULT_DISPLAY, DEFAULT_SECTIONS, DEFAULT_SETTINGS } from '../constants/resume.constants';
 
 @Injectable({ providedIn: 'root' })
 export class ResumeService {

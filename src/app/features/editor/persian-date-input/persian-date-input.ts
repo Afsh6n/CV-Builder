@@ -9,6 +9,8 @@ import {
   ElementRef,
   HostListener
 } from '@angular/core';
+import moment from 'jalali-moment';
+
 import { toPersianDigits } from '../../../shared/pipes/persian-digits.pipe';
 import {
   JalaliDateMode,
@@ -19,7 +21,6 @@ import {
   buildYearOptions,
   JALALI_MONTHS
 } from '../../../shared/utils/jalali-date.util';
-import moment from 'jalali-moment';
 
 export type PersianDateMode = JalaliDateMode;
 

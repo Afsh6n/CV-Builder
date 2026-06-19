@@ -1,5 +1,6 @@
-import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, input, computed } from '@angular/core';
+
 import { SKILL_LEVEL_PERCENT } from '../../../core/constants/resume.constants';
 import { SkillLevel } from '../../../core/types/resume.types';
 import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';

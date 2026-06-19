@@ -1,5 +1,5 @@
-import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 
 export interface SelectOption<T extends string = string> {
   value: T;

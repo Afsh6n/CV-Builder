@@ -1,16 +1,17 @@
 ﻿import { Component, input, output } from '@angular/core';
+
+import { SOCIAL_PLATFORMS } from '../../../core/constants/resume.constants';
+import { SocialMedia, SocialPlatform } from '../../../core/types/resume.types';
+import { createEmptySocialMedia } from '../../../core/utils/resume.factories';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
 import { FormField } from '../../../shared/components/form-field/form-field';
 import { FormInput } from '../../../shared/components/form-input/form-input';
-import { ResumeIcon, ResumeIconName } from '../../../shared/components/resume-icon/resume-icon';
 import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { ResumeIcon, ResumeIconName } from '../../../shared/components/resume-icon/resume-icon';
 import { moveItemInList } from '../../../shared/utils/array-order.util';
 import { ListEditController } from '../../../shared/utils/list-edit.controller';
-import { SocialMedia, SocialPlatform } from '../../../core/types/resume.types';
-import { SOCIAL_PLATFORMS } from '../../../core/constants/resume.constants';
-import { createEmptySocialMedia } from '../../../core/utils/resume.factories';
 
 @Component({
   selector: 'app-social-media-form',

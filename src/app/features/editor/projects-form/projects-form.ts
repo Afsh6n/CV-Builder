@@ -1,16 +1,17 @@
 import { Component, input, output } from '@angular/core';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormInput } from '../../../shared/components/form-input/form-input';
-import { PersianDateInput } from '../persian-date-input/persian-date-input';
-import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
-import { moveItemInList } from '../../../shared/utils/array-order.util';
-import { ListEditController } from '../../../shared/utils/list-edit.controller';
+
 import { Project } from '../../../core/types/resume.types';
 import { createEmptyProject } from '../../../core/utils/resume.factories';
+import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
+import { FormField } from '../../../shared/components/form-field/form-field';
+import { FormInput } from '../../../shared/components/form-input/form-input';
+import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
+import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
+import { moveItemInList } from '../../../shared/utils/array-order.util';
+import { ListEditController } from '../../../shared/utils/list-edit.controller';
+import { PersianDateInput } from '../persian-date-input/persian-date-input';
 
 @Component({
   selector: 'app-projects-form',

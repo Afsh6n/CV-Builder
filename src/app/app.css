@@ -37,6 +37,12 @@
   overflow: hidden;
 }
 
+.initial-input-panel {
+  background: transparent;
+  overflow-y: auto;
+  padding: 28px 24px;
+}
+
 .editor-panel {
   background: transparent;
   overflow-y: auto;

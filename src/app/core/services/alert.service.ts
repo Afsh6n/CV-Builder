@@ -8,19 +8,23 @@ export interface AlertState {
   title?: string;
   mode: 'alert' | 'confirm';
   resolve: (value: boolean) => void;
+  html?: boolean;
+  donationLink?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AlertService {
   readonly state = signal<AlertState | null>(null);
 
-  show(message: string, type: AlertType = 'info', title?: string): Promise<void> {
+  show(message: string, type: AlertType = 'info', title?: string, html?: boolean, donationLink?: string): Promise<void> {
     return new Promise(resolve => {
       this.state.set({
         message,
         type,
         title,
         mode: 'alert',
+        html,
+        donationLink,
         resolve: () => {
           this.state.set(null);
           resolve();
@@ -29,16 +33,16 @@ export class AlertService {
     });
   }
 
-  success(message: string, title?: string): Promise<void> {
-    return this.show(message, 'success', title);
+  success(message: string, title?: string, html?: boolean, donationLink?: string): Promise<void> {
+    return this.show(message, 'success', title, html, donationLink);
   }
 
-  error(message: string, title?: string): Promise<void> {
-    return this.show(message, 'error', title);
+  error(message: string, title?: string, html?: boolean): Promise<void> {
+    return this.show(message, 'error', title, html);
   }
 
-  warning(message: string, title?: string): Promise<void> {
-    return this.show(message, 'warning', title);
+  warning(message: string, title?: string, html?: boolean): Promise<void> {
+    return this.show(message, 'warning', title, html);
   }
 
   confirm(message: string, title?: string): Promise<boolean> {
