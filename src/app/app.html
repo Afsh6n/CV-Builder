@@ -1,179 +1,136 @@
-<div class="app-container" dir="rtl">
+<div class="app-container">
   <app-header>
     <div header-actions class="header-actions">
       @if (showInitialInput()) {
-        <button type="button" class="btn btn-secondary" (click)="showEditor()">ورود به ویرایشگر</button>
+      <button type="button" class="btn btn-outline-primary" (click)="showEditor()">
+        <app-resume-icon name="edit" [size]="18" style="margin-left: 6px;" />
+        ساخت دستی رزومه
+      </button>
       } @else {
-        <button type="button" class="btn btn-secondary" (click)="showInitialInputScreen()">ورود اطلاعات با هوش مصنوعی</button>
-        <button type="button" class="btn btn-secondary" (click)="resetResume()" [disabled]="isGeneratingPdf()">بازنشانی</button>
-        <button type="button" class="btn btn-primary" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
-          @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
-        </button>
+      <button type="button" class="btn btn-secondary" (click)="showInitialInputScreen()">ورود اطلاعات با هوش
+        مصنوعی</button>
+      <button type="button" class="btn btn-secondary" (click)="resetResume()"
+        [disabled]="isGeneratingPdf()">بازنشانی</button>
+      <button type="button" class="btn btn-primary" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
+        @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
+      </button>
       }
     </div>
   </app-header>
 
   <main class="app-main">
     @if (showInitialInput()) {
-      <section class="editor-panel">
-        <app-initial-input (onComplete)="showEditor()" />
-      </section>
-      <section class="preview-panel">
-        <div class="preview-header">
-          <h2 class="preview-title">پیش‌نمایش زنده</h2>
-          <p class="preview-subtitle">خروجی PDF دقیقاً از همین پیش‌نمایش ساخته می‌شود</p>
-        </div>
-        <div class="preview-content">
-          <div class="preview-placeholder">
-            <div class="placeholder-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="12" y1="18" x2="12" y2="12"/>
-                <line x1="9" y1="15" x2="15" y2="15"/>
-              </svg>
+    <section class="editor-panel">
+      <app-initial-input (onComplete)="showEditor()" />
+    </section>
+    <section class="preview-panel">
+      <div class="preview-header">
+        <h2 class="preview-title">پیش‌نمایش زنده</h2>
+        <p class="preview-subtitle">خروجی PDF دقیقاً از همین پیش‌نمایش ساخته می‌شود</p>
+      </div>
+      <div class="preview-content">
+        <div class="preview-placeholder">
+          <div class="placeholder-icon">
+            <app-resume-icon name="summary" [size]="64" />
+          </div>
+          <h3 class="placeholder-title">رزومه شما هنوز آماده نمایش نیست</h3>
+          <p class="placeholder-text">
+            لطفاً اطلاعات خود را در باکس هوش مصنوعی وارد کنید تا فرآیند ساخت و بهینه‌سازی اتوماتیک رزومه آغاز شود.
+          </p>
+          <button type="button" class="btn btn-primary" (click)="showEditor()" style="margin-bottom: 20px;">
+            ورود به ویرایشگر دستی
+          </button>
+          <div class="placeholder-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="0"></div>
             </div>
-            <h3 class="placeholder-title">رزومه شما هنوز آماده نمایش نیست</h3>
-            <p class="placeholder-text">
-              لطفاً اطلاعات خود را در باکس هوش مصنوعی وارد کنید تا فرآیند ساخت و بهینه‌سازی اتوماتیک رزومه آغاز شود.
-            </p>
-            <div class="placeholder-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="0"></div>
-              </div>
-              <span class="progress-text">0 از 8 مورد تکمیل شده</span>
-            </div>
+            <span class="progress-text">۰ از ۸ مورد تکمیل شده</span>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
     } @else {
-      <section class="editor-panel">
-        <div class="editor-content">
+    <section class="editor-panel">
+      <div class="editor-content">
         <div class="editor-section form-card">
-          <app-resume-settings-panel
-            [settings]="resume().settings"
-            (settingsChanged)="onSettingsChanged($event)"
-          />
+          <app-resume-settings-panel [settings]="resume().settings" (settingsChanged)="onSettingsChanged($event)" />
         </div>
 
         <div class="editor-section form-card">
-          <app-photo-uploader
-            [currentPhoto]="resume().personalInfo.profilePhoto || ''"
-            (photoChanged)="onPhotoChanged($event)"
-          />
+          <app-photo-uploader [currentPhoto]="resume().personalInfo.profilePhoto || ''"
+            (photoChanged)="onPhotoChanged($event)" />
         </div>
 
         <div class="editor-section">
-          <app-personal-details-form
-            [personalInfo]="resume().personalInfo"
-            (personalInfoChanged)="onPersonalInfoChanged($event)"
-          />
+          <app-personal-details-form [personalInfo]="resume().personalInfo"
+            (personalInfoChanged)="onPersonalInfoChanged($event)" />
         </div>
 
         <div class="editor-section form-card">
-          <app-career-info-form
-            [careerInfo]="resume().careerInfo"
-            (careerInfoChanged)="onCareerInfoChanged($event)"
-          />
+          <app-career-info-form [careerInfo]="resume().careerInfo" (careerInfoChanged)="onCareerInfoChanged($event)" />
         </div>
 
         <div class="editor-section summary-section form-card">
           <div class="section-header">
             <h2 class="section-title">خلاصه رزومه</h2>
           </div>
-          <textarea
-            class="summary-textarea"
-            [value]="summary()"
-            (input)="onSummaryChanged($event)"
-            placeholder="خلاصه‌ای از مهارت‌ها، تجربیات و اهداف شغلی خود بنویسید..."
-            rows="4"
-          ></textarea>
+          <textarea class="summary-textarea" [value]="summary()" (input)="onSummaryChanged($event)"
+            placeholder="خلاصه‌ای از مهارت‌ها، تجربیات و اهداف شغلی خود بنویسید..." rows="4"></textarea>
         </div>
 
         <div class="editor-section form-card">
-          <app-work-experience-form
-            [workExperience]="resume().workExperience"
-            [editingId]="editingSection()"
-            (workExperienceChanged)="onWorkExperienceChanged($event)"
-            (editModeChanged)="onSectionToggle($event)"
-          />
+          <app-work-experience-form [workExperience]="resume().workExperience" [editingId]="editingSection()"
+            (workExperienceChanged)="onWorkExperienceChanged($event)" (editModeChanged)="onSectionToggle($event)" />
         </div>
 
         <div class="editor-section form-card">
-          <app-education-form
-            [education]="resume().education"
-            [editingId]="editingSection()"
-            (educationChanged)="onEducationChanged($event)"
-            (editModeChanged)="onSectionToggle($event)"
-          />
+          <app-education-form [education]="resume().education" [editingId]="editingSection()"
+            (educationChanged)="onEducationChanged($event)" (editModeChanged)="onSectionToggle($event)" />
         </div>
 
         <div class="editor-section form-card">
-          <app-skills-form
-            [skills]="resume().skills"
-            [showSoftSkills]="resume().settings.sections.softSkills"
-            [editingId]="editingSection()"
-            (skillsChanged)="onSkillsChanged($event)"
-            (editModeChanged)="onSectionToggle($event)"
-          />
+          <app-skills-form [skills]="resume().skills" [showSoftSkills]="resume().settings.sections.softSkills"
+            [editingId]="editingSection()" (skillsChanged)="onSkillsChanged($event)"
+            (editModeChanged)="onSectionToggle($event)" />
         </div>
 
         @if (resume().settings.sections.languages) {
-          <div class="editor-section form-card">
-            <app-languages-form
-              [languages]="resume().languages"
-              [editingId]="editingSection()"
-              (languagesChanged)="onLanguagesChanged($event)"
-              (editModeChanged)="onSectionToggle($event)"
-            />
-          </div>
+        <div class="editor-section form-card">
+          <app-languages-form [languages]="resume().languages" [editingId]="editingSection()"
+            (languagesChanged)="onLanguagesChanged($event)" (editModeChanged)="onSectionToggle($event)" />
+        </div>
         }
 
         @if (resume().settings.sections.certificates) {
-          <div class="editor-section form-card">
-            <app-certificates-form
-              [certificates]="resume().certificates"
-              [editingId]="editingSection()"
-              (certificatesChanged)="onCertificatesChanged($event)"
-              (editModeChanged)="onSectionToggle($event)"
-            />
-          </div>
+        <div class="editor-section form-card">
+          <app-certificates-form [certificates]="resume().certificates" [editingId]="editingSection()"
+            (certificatesChanged)="onCertificatesChanged($event)" (editModeChanged)="onSectionToggle($event)" />
+        </div>
         }
 
         @if (resume().settings.sections.projects) {
-          <div class="editor-section form-card">
-            <app-projects-form
-              [projects]="resume().projects"
-              [editingId]="editingSection()"
-              (projectsChanged)="onProjectsChanged($event)"
-              (editModeChanged)="onSectionToggle($event)"
-            />
-          </div>
+        <div class="editor-section form-card">
+          <app-projects-form [projects]="resume().projects" [editingId]="editingSection()"
+            (projectsChanged)="onProjectsChanged($event)" (editModeChanged)="onSectionToggle($event)" />
+        </div>
         }
 
         <div class="editor-section form-card">
-          <app-custom-section-form
-            [sections]="resume().customSections"
-            [editingId]="editingSection()"
-            (sectionsChanged)="onCustomSectionsChanged($event)"
-            (editModeChanged)="onSectionToggle($event)"
-          />
+          <app-custom-section-form [sections]="resume().customSections" [editingId]="editingSection()"
+            (sectionsChanged)="onCustomSectionsChanged($event)" (editModeChanged)="onSectionToggle($event)" />
         </div>
 
         @if (resume().settings.sections.socialMedia) {
-          <div class="editor-section form-card">
-            <app-social-media-form
-              [socialMedia]="resume().socialMedia"
-              [editingId]="editingSection()"
-              (socialMediaChanged)="onSocialMediaChanged($event)"
-              (editModeChanged)="onSectionToggle($event)"
-            />
-          </div>
+        <div class="editor-section form-card">
+          <app-social-media-form [socialMedia]="resume().socialMedia" [editingId]="editingSection()"
+            (socialMediaChanged)="onSocialMediaChanged($event)" (editModeChanged)="onSectionToggle($event)" />
+        </div>
         }
 
         <div class="editor-section form-card">
           <div class="editor-download-section">
-            <button type="button" class="btn btn-primary btn-full" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
+            <button type="button" class="btn btn-primary btn-full" (click)="openPdfDialog()"
+              [disabled]="isGeneratingPdf()">
               @if (isGeneratingPdf()) { در حال ساخت PDF... } @else { دانلود خروجی }
             </button>
           </div>
@@ -186,41 +143,29 @@
         <h2 class="preview-title">پیش‌نمایش زنده</h2>
         <p class="preview-subtitle">خروجی PDF دقیقاً از همین پیش‌نمایش ساخته می‌شود</p>
         <p class="preview-drag-hint">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-left: 4px;">
-            <circle cx="9" cy="12" r="1"/>
-            <circle cx="9" cy="5" r="1"/>
-            <circle cx="9" cy="19" r="1"/>
-            <circle cx="15" cy="12" r="1"/>
-            <circle cx="15" cy="5" r="1"/>
-            <circle cx="15" cy="19" r="1"/>
-          </svg>
+          <app-resume-icon name="social" [size]="14" style="vertical-align: middle; margin-left: 4px;" />
           برای تغییر ترتیب بخش‌ها، روی آیکون نقطه‌ها کلیک کرده و بکشید
         </p>
       </div>
       <div class="preview-content">
         @if (isEnoughDataFilled()) {
-          <app-resume-preview [resume]="previewResume()" />
+        <app-resume-preview [resume]="previewResume()" />
         } @else {
-          <div class="preview-placeholder">
-            <div class="placeholder-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="12" y1="18" x2="12" y2="12"/>
-                <line x1="9" y1="15" x2="15" y2="15"/>
-              </svg>
-            </div>
-            <h3 class="placeholder-title">رزومه شما هنوز آماده نمایش نیست</h3>
-            <p class="placeholder-text">
-              لطفاً حداقل 6 مورد از اطلاعات خود را در فرم سمت راست وارد کنید تا پیش‌نمایش زنده فعال شود.
-            </p>
-            <div class="placeholder-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="(filledFieldsCount() / 6) * 100"></div>
-              </div>
-              <span class="progress-text">{{ filledFieldsCount() }} از 8 مورد تکمیل شده</span>
-            </div>
+        <div class="preview-placeholder">
+          <div class="placeholder-icon">
+            <app-resume-icon name="summary" [size]="64" />
           </div>
+          <h3 class="placeholder-title">رزومه شما هنوز آماده نمایش نیست</h3>
+          <p class="placeholder-text">
+            لطفاً حداقل ۶ مورد از اطلاعات خود را در فرم سمت راست وارد کنید تا پیش‌نمایش زنده فعال شود.
+          </p>
+          <div class="placeholder-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="(filledFieldsCount() / 6) * 100"></div>
+            </div>
+            <span class="progress-text">{{ filledFieldsCount() }} از ۸ مورد تکمیل شده</span>
+          </div>
+        </div>
         }
       </div>
     </section>
@@ -230,42 +175,40 @@
   <app-footer />
 
   @if (showPdfDialog()) {
-    <div class="pdf-dialog-backdrop" (click)="closePdfDialog()">
-      <div class="pdf-dialog" (click)="$event.stopPropagation()">
-        <h3 class="pdf-dialog-title">ذخیره خروجی</h3>
-        <p class="pdf-dialog-desc">نام فایل را وارد کرده و فرمت مورد نظر را انتخاب کنید.</p>
-        
-        <label class="pdf-dialog-label">نام فایل</label>
-        <div class="pdf-filename-row">
-          <input
-            type="text"
-            class="pdf-filename-input"
-            [ngModel]="pdfFilename()"
-            (ngModelChange)="pdfFilename.set($event)"
-            placeholder="مثال: علی_محمدی"
-            dir="ltr"
-          />
-        </div>
-        <p class="pdf-dialog-hint">پیشنهاد: <button type="button" class="link-btn" (click)="pdfFilename.set(suggestedPdfFilename())">{{ suggestedPdfFilename() }}</button></p>
+  <div class="pdf-dialog-backdrop" (click)="closePdfDialog()">
+    <div class="pdf-dialog" (click)="$event.stopPropagation()">
+      <h3 class="pdf-dialog-title">ذخیره خروجی</h3>
+      <p class="pdf-dialog-desc">نام فایل را وارد کرده و فرمت مورد نظر را انتخاب کنید.</p>
 
-        <label class="pdf-dialog-label">فرمت خروجی</label>
-        <div class="format-options">
-          <button type="button" class="format-btn" [class.active]="!pdfFilename().toLowerCase().endsWith('.png')" (click)="pdfFilename.set(pdfFilename().replace(/\.(pdf|png)$/i, '') + '.pdf')">
-            <span>PDF</span>
-          </button>
-          <button type="button" class="format-btn" [class.active]="pdfFilename().toLowerCase().endsWith('.png')" (click)="pdfFilename.set(pdfFilename().replace(/\.(pdf|png)$/i, '') + '.png')">
-            <span>تصویر (PNG)</span>
-          </button>
-        </div>
+      <label class="pdf-dialog-label">نام فایل</label>
+      <div class="pdf-filename-row">
+        <input type="text" class="pdf-filename-input" [ngModel]="pdfFilename()"
+          (ngModelChange)="pdfFilename.set($event)" placeholder="مثال: علی_محمدی" dir="ltr" />
+      </div>
+      <p class="pdf-dialog-hint">پیشنهاد: <button type="button" class="link-btn"
+          (click)="pdfFilename.set(suggestedPdfFilename())">{{ suggestedPdfFilename() }}</button></p>
 
-        <div class="pdf-dialog-actions">
-          <button type="button" class="btn btn-secondary" (click)="closePdfDialog()" [disabled]="isGeneratingPdf()">انصراف</button>
-          <button type="button" class="btn btn-primary" (click)="confirmPdfDownload()" [disabled]="isGeneratingPdf()">
-            @if (isGeneratingPdf()) { در حال ساخت... } @else { دانلود }
-          </button>
-        </div>
+      <label class="pdf-dialog-label">فرمت خروجی</label>
+      <div class="format-options">
+        <button type="button" class="format-btn" [class.active]="!pdfFilename().toLowerCase().endsWith('.png')"
+          (click)="pdfFilename.set(pdfFilename().replace(/\.(pdf|png)$/i, '') + '.pdf')">
+          <span>PDF</span>
+        </button>
+        <button type="button" class="format-btn" [class.active]="pdfFilename().toLowerCase().endsWith('.png')"
+          (click)="pdfFilename.set(pdfFilename().replace(/\.(pdf|png)$/i, '') + '.png')">
+          <span>تصویر (PNG)</span>
+        </button>
+      </div>
+
+      <div class="pdf-dialog-actions">
+        <button type="button" class="btn btn-secondary" (click)="closePdfDialog()"
+          [disabled]="isGeneratingPdf()">انصراف</button>
+        <button type="button" class="btn btn-primary" (click)="confirmPdfDownload()" [disabled]="isGeneratingPdf()">
+          @if (isGeneratingPdf()) { در حال ساخت... } @else { دانلود }
+        </button>
       </div>
     </div>
+  </div>
   }
 
   <app-alert />

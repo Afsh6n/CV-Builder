@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, signal, computed, inject, ElementRef, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { AiResumeService } from './core/services/ai-resume.service';
 import { AlertService } from './core/services/alert.service';
 import { ExportService } from './core/services/export.service';
 import { FontLoaderService } from './core/services/font-loader.service';
@@ -26,6 +25,7 @@ import { AppFooter } from './layout/app-footer/app-footer';
 import { AppHeader } from './layout/app-header/app-header';
 import { Alert } from './shared/components/alert/alert';
 import { InitialInput } from "./features/initial-input/initial-input";
+import { ResumeIcon } from './shared/components/resume-icon/resume-icon';
 
 @Component({
   selector: 'app-root',
@@ -48,8 +48,9 @@ import { InitialInput } from "./features/initial-input/initial-input";
     AppFooter,
     AppHeader,
     Alert,
-    InitialInput
-],
+    InitialInput,
+    ResumeIcon
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -58,7 +59,6 @@ export class App {
   private exportService = inject(ExportService);
   private fontLoader = inject(FontLoaderService);
   private alertService = inject(AlertService);
-  private aiResumeService = inject(AiResumeService);
 
   fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
@@ -212,16 +212,6 @@ export class App {
       this.summary.set('');
       this.editingSection.set(null);
     }
-  }
-
-  getAiOptimizationPrompt(): string {
-    const currentResume = this.resume();
-    return this.aiResumeService.generateResumeOptimizationPrompt(currentResume);
-  }
-
-  getAiSummaryPrompt(): string {
-    const currentResume = this.resume();
-    return this.aiResumeService.generateSummaryOptimizationPrompt(currentResume);
   }
 
   showEditor(): void {

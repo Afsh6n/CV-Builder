@@ -1,190 +1,131 @@
 <div class="initial-input-container">
   <div class="input-header">
-    <h1 class="input-title">ساخت رزومه با هوش مصنوعی</h1>
-    <p class="input-subtitle">اطلاعات خود را به هر شکلی که دارید وارد کنید، هوش مصنوعی آن را استخراج و بهینه می‌کند</p>
+    <div class="header-icon-wrapper">
+      <app-resume-icon name="summary" [size]="28" class="header-icon"></app-resume-icon>
+    </div>
+    <div class="header-text">
+      <h1 class="input-title">ساخت رزومه با هوش مصنوعی</h1>
+      <p class="input-subtitle">ارتباط مستقیم با FreeLLMAPI، دریافت تمام مدل‌ها و ساخت خودکار رزومه</p>
+    </div>
   </div>
 
-  @if (!extractedData()) {
   <div class="input-section">
 
-    <div class="api-key-wrapper" style="margin-bottom: 24px; direction: rtl;">
-      <label for="apiKeyInput"
-        style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-weight: 700; color: #1e293b; font-size: 14px;">
-        <app-resume-icon name="user" [size]="16" style="color: #64748b;"></app-resume-icon>
-        کلید اتصال هوش مصنوعی (OpenRouter API Key):
-      </label>
-      <input id="apiKeyInput" type="password" [ngModel]="customApiKey()" (ngModelChange)="onApiKeyChange($event)"
-        placeholder="sk-or-v1-........................"
-        style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: monospace; font-size: 14px; direction: ltr; text-align: left; background-color: #f8fafc;"
-        [disabled]="isProcessing()" />
-      <p style="margin-top: 6px; font-size: 12px; color: #64748b; line-height: 1.6;">
-        * کلید شما با امنیت کامل فقط در مرورگر خودتان ذخیره می‌شود. در صورت نداشتن کلید، می‌توانید آن را از منوی
-        <a href="https://openrouter.ai/keys" target="_blank"
-          style="color: #3b82f6; text-decoration: underline; font-weight: bold;">Keys در OpenRouter</a>
-        به صورت رایگان یا پرمیوم بسازید.
+    <div class="ai-guide-card"
+      style="margin-bottom: 20px; padding: 15px; background: #eff6ff; border-radius: 12px; border: 1px solid #bfdbfe;">
+      <h3 style="margin-top: 0; color: #1e40af;">راهنمای اتصال به هوش مصنوعی</h3>
+      <p style="font-size: 14px; color: #374151;">
+        این برنامه از APIهای سازگار با استانداردهای OpenAI استفاده می‌کند. برای دریافت سرویس‌دهنده رایگان یا راه‌اندازی
+        شخصی:
       </p>
+      <ul style="font-size: 14px; color: #374151;">
+        <li>به مخزن اصلی <strong>FreeLLMAPI</strong> در گیت‌هاب مراجعه کنید.</li>
+        <li>پروژه را روی سرور خود یا سرویس‌های ابری مستقر کنید.</li>
+        <li>آدرس (Endpoint) و کلید (API Key) خود را در فیلدهای زیر وارد کنید.</li>
+      </ul>
+      <a href="https://github.com/tashfeenahmed/freellmapi" target="_blank"
+        style="color: #2563eb; font-weight: bold; text-decoration: none;">
+        مشاهده مخزن FreeLLMAPI در گیت‌هاب →
+      </a>
     </div>
 
-    <div class="textarea-wrapper">
-      <label
-        style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-weight: 700; color: #1e293b; font-size: 14px;">
-        <app-resume-icon name="summary" [size]="16" style="color: #64748b;"></app-resume-icon>
-        اطلاعات و سوابق خود را وارد کنید:
-      </label>
-      <textarea class="info-textarea" [ngModel]="rawInput()" (ngModelChange)="rawInput.set($event)" placeholder="اطلاعات خود را اینجا وارد کنید...
+    <div class="config-card">
+      <div class="config-card-header">
+        <app-resume-icon name="settings" [size]="18" class="card-header-icon"></app-resume-icon>
+        <span class="config-card-title">تنظیمات اتصال به FreeLLMAPI</span>
+      </div>
 
-مثال:
-من علی محمدی هستم، توسعه‌دهنده وب با ۵ سال تجربه. در شرکت‌های مختلف کار کرده‌ام:
-- از 1400 تا 1402 در شرکت X به عنوان فرانت‌اند دولوپر کار کردم
-- از 1403 تا الان در شرکت Y به عنوان سنیور دولوپر هستم
+      <div class="config-body">
+        <div class="config-row two-col">
+          <div class="form-group">
+            <label class="form-label" for="apiEndpoint">
+              <app-resume-icon name="website" [size]="14" class="label-icon"></app-resume-icon>
+              آدرس سرور (Endpoint)
+            </label>
+            <input id="apiEndpoint" class="form-input" type="text" [ngModel]="config().endpoint"
+              (ngModelChange)="updateConfig('endpoint', $event)" placeholder="http://localhost:3001/v1"
+              [disabled]="isProcessing() || isLoadingModels()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="apiKeyInput">
+              <app-resume-icon name="lock" [size]="14" class="label-icon"></app-resume-icon>
+              کلید اتصال (API Key)
+            </label>
+            <input id="apiKeyInput" class="form-input" type="password" [ngModel]="config().apiKey"
+              (ngModelChange)="updateConfig('apiKey', $event)" placeholder="freellmapi-..."
+              [disabled]="isProcessing() || isLoadingModels()" />
+          </div>
+        </div>
 
-تحصیلات:
-- لیسانس مهندسی نرم‌افزار از دانشگاه تهران
-
-مهارت‌ها:
-- JavaScript, TypeScript, Angular, React
-- HTML, CSS, Tailwind
-- Git, Docker
-
-ایمیل: ali@example.com
-موبایل: 09123456789
-شهر: تهران" rows="12" [disabled]="isProcessing()"></textarea>
-
-      <div class="input-hint-bar" [style.color]="rawInput().trim().length < 50 ? '#ef4444' : '#10b981'"
-        style="margin-top: 8px; font-size: 14px; display: flex; justify-content: space-between; direction: rtl;">
-        <span>* جهت پردازش دقیق، لطفاً حداقل ۵۰ کاراکتر درباره خودتان بنویسید.</span>
-        <strong>تعداد کاراکترها: {{ rawInput().trim().length }} / ۵۰</strong>
+        <div class="config-row single-col">
+          <div class="form-group">
+            <label class="form-label" for="modelSelect">
+              <app-resume-icon name="cpu" [size]="14" class="label-icon"></app-resume-icon>
+              مدل هوش مصنوعی
+            </label>
+            <div class="model-select-wrapper">
+              <select id="modelSelect" class="form-select" [ngModel]="config().model"
+                (ngModelChange)="updateConfig('model', $event)" [disabled]="isProcessing() || isLoadingModels()">
+                <option value="" disabled>یک مدل را انتخاب یا لیست را دریافت کنید...</option>
+                @if (availableModels().length > 0) {
+                @for (model of availableModels(); track model) {
+                <option [value]="model">{{ model }}</option>
+                }
+                } @else if (config().model) {
+                <option [value]="config().model">{{ config().model }}</option>
+                }
+              </select>
+              <button type="button" class="btn-fetch" (click)="fetchModels()"
+                [disabled]="isLoadingModels() || isProcessing() || !config().apiKey || !config().endpoint">
+                @if (isLoadingModels()) {
+                <span class="spinner"></span>
+                <span>در حال دریافت...</span>
+                } @else {
+                <app-resume-icon name="refresh" [size]="16" class="btn-icon"></app-resume-icon>
+                <span>دریافت مدل‌ها</span>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="input-actions" style="margin-top: 20px;">
-      <button type="button" class="btn btn-primary btn-large" (click)="processWithAi()"
-        [disabled]="isProcessing() || rawInput().trim().length < 50 || !customApiKey().trim()">
-        @if (isProcessing()) { در حال پردازش اطلاعات... } @else { 🪄 پردازش و ساخت رزومه }
+    <div class="textarea-card">
+      <div class="textarea-header">
+        <div class="textarea-label-group">
+          <app-resume-icon name="edit" [size]="18" class="textarea-icon"></app-resume-icon>
+          <span class="textarea-label">اطلاعات و سوابق خود را وارد کنید</span>
+        </div>
+        <span class="char-count" [class.valid]="rawInput().trim().length >= 50"
+          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
+          {{ rawInput().trim().length }} / ۵۰
+        </span>
+      </div>
+      <textarea class="info-textarea" [ngModel]="rawInput()" (ngModelChange)="rawInput.set($event)"
+        placeholder="اطلاعات خود را اینجا وارد کنید..." rows="10" [disabled]="isProcessing()"></textarea>
+      <div class="input-hint">
+        <app-resume-icon name="info" [size]="14" class="hint-icon" [class.valid]="rawInput().trim().length >= 50"
+          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0"></app-resume-icon>
+        <span class="hint-text" [class.valid]="rawInput().trim().length >= 50"
+          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
+          * جهت پردازش دقیق، لطفاً حداقل ۵۰ کاراکتر درباره خودتان بنویسید.
+        </span>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button type="button" class="btn-primary" (click)="processWithAi()"
+        [disabled]="isProcessing() || rawInput().trim().length < 50 || !config().apiKey || !config().model || !config().endpoint">
+        @if (isProcessing()) {
+        <span class="spinner"></span>
+        <span>در حال پردازش اطلاعات...</span>
+        } @else {
+        <app-resume-icon name="sparkles" [size]="20" class="btn-icon"></app-resume-icon>
+        <span>پردازش و ساخت رزومه</span>
+        }
       </button>
     </div>
+
   </div>
-  }
-
-  @if (extractedData(); as data) {
-  <div class="results-section">
-    <div class="results-grid">
-
-      @if (data.personalInfo) {
-      <div class="result-card">
-        <h3 class="result-card-title" style="display: flex; align-items: center; gap: 8px;">
-          <app-resume-icon name="user" [size]="20" style="color: #3b82f6;"></app-resume-icon>
-          اطلاعات فردی
-        </h3>
-        <div class="result-card-body" style="display: flex; flex-direction: column; gap: 8px;">
-          <p><strong>نام و نام خانوادگی:</strong> {{ data.personalInfo.firstName }} {{ data.personalInfo.lastName }}</p>
-          <p><strong>عنوان شغلی:</strong> {{ data.personalInfo.title }}</p>
-          <p style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <span style="display: inline-flex; align-items: center; gap: 4px;">
-              <app-resume-icon name="email" [size]="14"></app-resume-icon> {{ data.personalInfo.email }}
-            </span>
-            <span style="display: inline-flex; align-items: center; gap: 4px;">
-              <app-resume-icon name="mobile" [size]="14"></app-resume-icon> {{ data.personalInfo.mobile }}
-            </span>
-          </p>
-          <p style="display: inline-flex; align-items: center; gap: 4px;">
-            <app-resume-icon name="location" [size]="14"></app-resume-icon>
-            <strong>موقعیت:</strong> {{ data.personalInfo.country }}، {{ data.personalInfo.province }}، {{
-            data.personalInfo.city }}
-          </p>
-        </div>
-      </div>
-      }
-
-      @if (data.summary) {
-      <div class="result-card">
-        <h3 class="result-card-title" style="display: flex; align-items: center; gap: 8px;">
-          <app-resume-icon name="summary" [size]="20" style="color: #3b82f6;"></app-resume-icon>
-          خلاصه حرفه‌ای
-        </h3>
-        <div class="result-card-body">
-          <p>{{ data.summary }}</p>
-        </div>
-      </div>
-      }
-
-      @if (data.workExperience && data.workExperience.length) {
-      <div class="result-card">
-        <h3 class="result-card-title" style="display: flex; align-items: center; gap: 8px;">
-          <app-resume-icon name="work" [size]="20" style="color: #3b82f6;"></app-resume-icon>
-          سوابق شغلی
-        </h3>
-        <div class="result-card-body">
-          @for (work of data.workExperience; track $index) {
-          <div class="work-item" style="margin-bottom: 16px;">
-            <p><strong>{{ work.position }}</strong> در {{ work.company }}</p>
-            <p class="work-meta"
-              style="font-size: 13px; color: #64748b; margin: 4px 0 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <span style="display: inline-flex; align-items: center; gap: 4px;">
-                <app-resume-icon name="location" [size]="12"></app-resume-icon> {{ work.city }}
-              </span>
-              <span style="display: inline-flex; align-items: center; gap: 4px;">
-                <app-resume-icon name="calendar" [size]="12"></app-resume-icon> {{ work.startDate }} تا {{ work.current
-                ? 'اکنون' : work.endDate }}
-              </span>
-            </p>
-            <p class="work-desc" style="font-size: 14px; color: #475569;">{{ work.description }}</p>
-          </div>
-          }
-        </div>
-      </div>
-      }
-
-      @if (data.education && data.education.length) {
-      <div class="result-card">
-        <h3 class="result-card-title" style="display: flex; align-items: center; gap: 8px;">
-          <app-resume-icon name="education" [size]="20" style="color: #3b82f6;"></app-resume-icon>
-          تحصیلات
-        </h3>
-        <div class="result-card-body">
-          @for (edu of data.education; track $index) {
-          <div class="edu-item" style="margin-bottom: 12px;">
-            <p><strong>{{ edu.degree }}</strong> در {{ edu.field }}</p>
-            <p class="edu-meta"
-              style="font-size: 13px; color: #64748b; margin-top: 4px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <span style="display: inline-flex; align-items: center; gap: 4px;">
-                <app-resume-icon name="location" [size]="12"></app-resume-icon> {{ edu.institution }} - {{ edu.city }}
-              </span>
-              <span style="display: inline-flex; align-items: center; gap: 4px;">
-                <app-resume-icon name="calendar" [size]="12"></app-resume-icon> {{ edu.startDate }} تا {{
-                edu.currentlyStudying ? 'اکنون' : edu.endDate }}
-              </span>
-            </p>
-          </div>
-          }
-        </div>
-      </div>
-      }
-
-      @if (data.skills && data.skills.length) {
-      <div class="result-card">
-        <h3 class="result-card-title" style="display: flex; align-items: center; gap: 8px;">
-          <app-resume-icon name="skills" [size]="20" style="color: #3b82f6;"></app-resume-icon>
-          مهارت‌ها
-        </h3>
-        <div class="result-card-body">
-          <div class="skills-grid">
-            @for (skill of data.skills; track $index) {
-            <div class="skill-tag">
-              {{ skill.name }}
-              <span class="skill-level">{{ skill.level }}/5</span>
-            </div>
-            }
-          </div>
-        </div>
-      </div>
-      }
-    </div>
-
-    <div class="results-actions" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
-      <button type="button" class="btn btn-secondary" (click)="reset()">تلاش مجدد</button>
-      <button type="button" class="btn btn-primary" (click)="applyToForm()">تایید و اعمال روی رزومه</button>
-    </div>
-  </div>
-  }
 </div>

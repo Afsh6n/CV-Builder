@@ -28,7 +28,13 @@ export type ResumeIconName =
   | 'calendar'
   | 'edit'
   | 'delete'
-  | 'experience';
+  | 'experience'
+  | 'settings'
+  | 'sparkles'
+  | 'lock'
+  | 'refresh'
+  | 'info'
+  | 'cpu';
 
 @Component({
   selector: 'app-resume-icon',
