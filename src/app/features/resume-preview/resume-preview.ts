@@ -13,7 +13,6 @@ import { fontFamilyCss } from '@app/core/constants/font.constants';
 import { toPersianDigits } from '@app/shared/pipes/persian-digits.pipe';
 import { formatSalary } from '@app/shared/utils/salary.formatter';
 
-
 type SectionType = 'career' | 'education' | 'work' | 'technicalSkills' | 'softSkills' | 'certificates' | 'projects' | 'custom';
 
 @Component({
@@ -260,11 +259,7 @@ export class ResumePreview {
 
     switch (section) {
       case 'career':
-        return !!(
-          r.settings.sections.careerInfo &&
-          r.settings.display.showCareerInfo &&
-          (r.careerInfo.expectedSalary || r.careerInfo.totalExperience)
-        );
+        return !!(r.settings.sections.careerInfo && r.settings.display.showCareerInfo && (r.careerInfo.expectedSalary || r.careerInfo.totalExperience));
       case 'education':
         return r.education.length > 0;
       case 'work':
@@ -272,11 +267,11 @@ export class ResumePreview {
       case 'technicalSkills':
         return this.technicalSkills().length > 0;
       case 'softSkills':
-        return !!(r.settings.sections.softSkills && this.softSkills().length > 0);
+        return r.settings.sections.softSkills && this.softSkills().length > 0;
       case 'certificates':
-        return !!(r.settings.sections.certificates && r.certificates.length > 0);
+        return r.settings.sections.certificates && r.certificates.length > 0;
       case 'projects':
-        return !!(r.settings.sections.projects && r.projects.length > 0);
+        return r.settings.sections.projects && r.projects.length > 0;
       case 'custom':
         return r.customSections.length > 0;
       default:

@@ -26,7 +26,6 @@ import { AlertService } from './core/services/alert.service';
 import { countFilledFields, isEnoughDataForPreview } from './core/utils/resume.utils';
 import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, ResumeSettings, Skill, SocialMedia, WorkExperience } from './core/types/resume.types';
 
-
 @Component({
   selector: 'app-root',
   imports: [
@@ -77,7 +76,6 @@ export class App {
 
   constructor() {
     this.summary.set(this.resume().summary);
-    this.fontLoader.preloadCommon();
   }
 
   onPersonalInfoChanged(personalInfo: PersonalInfo): void {
