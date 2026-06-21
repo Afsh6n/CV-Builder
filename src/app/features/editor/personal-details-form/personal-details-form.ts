@@ -1,21 +1,15 @@
 ﻿import { CommonModule } from '@angular/common';
 import { Component, input, output, effect, signal, computed, untracked, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { MILITARY_OPTIONS } from '../../../core/constants/resume.constants';
-import { SuggestionService } from '../../../core/services/suggestion.service';
-import { MaritalStatus, PersonalInfo } from '../../../core/types/resume.types';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormSelect } from '../../../shared/components/form-select/form-select';
-import { SegmentedControl, SegmentOption } from '../../../shared/components/segmented-control/segmented-control';
-import {
-  emailError,
-  mobileError,
-  phoneError,
-  urlError,
-  requiredError
-} from '../../../shared/validators/field.validators';
+import { MaritalStatus, PersonalInfo } from '@app/core/types/resume.types';
+import { FormField } from '@app/shared/components/form-field/form-field';
 import { PersianDateInput } from '../persian-date-input/persian-date-input';
+import { SegmentedControl, SegmentOption } from '@app/shared/components/segmented-control/segmented-control';
+import { FormSelect } from '@app/shared/components/form-select/form-select';
+import { SuggestionService } from '@app/core/services/suggestion.service';
+import { MILITARY_OPTIONS } from '@app/core/constants/resume.constants';
+import { emailError, mobileError, phoneError, requiredError, urlError } from '@app/shared/validators/field.validators';
+
 
 type ModelFields = Pick<
   PersonalInfo,

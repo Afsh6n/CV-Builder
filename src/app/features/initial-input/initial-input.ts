@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, inject, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AiResumeService } from '@app/core/services/ai-resume.service';
+import { AlertService } from '@app/core/services/alert.service';
+import { ResumeService } from '@app/core/services/resume.service';
+import { AiConfig, ExtractedCertificate, ExtractedEducation, ExtractedLanguage, ExtractedProject, ExtractedResumeData, ExtractedSkill, ExtractedWorkExperience } from '@app/core/types/ai-resume.types';
+import { CareerInfo, Certificate, Education, Language, LanguageDisplayType, PersonalInfo, Project, Skill, SkillCategory, SkillLevel, WorkExperience } from '@app/core/types/resume.types';
+import { createEmptyCareerInfo, createEmptyCertificate, createEmptyEducation, createEmptyLanguage, createEmptyPersonalInfo, createEmptyProject, createEmptySkill, createEmptyWorkExperience } from '@app/core/utils/resume.factories';
+import { ResumeIcon } from '@app/shared/components/resume-icon/resume-icon';
 
-import { AlertService } from '../../core/services/alert.service';
-import { ResumeService } from '../../core/services/resume.service';
-import { PersonalInfo, WorkExperience, Education, Skill, SkillCategory, SkillLevel } from '../../core/types/resume.types';
-import { createEmptyPersonalInfo, createEmptyWorkExperience, createEmptyEducation, createEmptySkill } from '../../core/utils/resume.factories';
-import { AiResumeService, ExtractedResumeData, ExtractedWorkExperience, ExtractedEducation, ExtractedSkill, AiConfig } from '@app/core/services/ai-resume.service';
-import { ResumeIcon } from "@app/shared/components/resume-icon/resume-icon";
 
 @Component({
   selector: 'app-initial-input',
@@ -37,39 +38,39 @@ export class InitialInput implements OnInit {
 
   readonly minCharacterLength = 50;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.config.set({
       apiKey: localStorage.getItem('freellmapi_key') || '',
-      endpoint: localStorage.getItem('freellmapi_endpoint') || 'v1',
+      endpoint: localStorage.getItem('freellmapi_endpoint') || '/v1',
       model: localStorage.getItem('freellmapi_model') || ''
     });
   }
 
-  updateConfig(key: keyof AiConfig, value: string) {
+  updateConfig(key: keyof AiConfig, value: string): void {
     const cleanValue = value.trim();
     this.config.update(curr => ({ ...curr, [key]: cleanValue }));
     localStorage.setItem(`freellmapi_${key}`, cleanValue);
   }
 
-  async fetchModels() {
+  async fetchModels(): Promise<void> {
     const currentConfig = this.config();
     if (!currentConfig.apiKey || !currentConfig.endpoint) {
-       await this.alertService.error('لطفاً ابتدا آدرس سرور و کلید اتصال را وارد کنید.');
-       return;
+      await this.alertService.error('لطفاً ابتدا آدرس سرور و کلید اتصال را وارد کنید.');
+      return;
     }
 
     this.isLoadingModels.set(true);
     try {
       const models = await this.aiResumeService.fetchAvailableModels(currentConfig);
       this.availableModels.set(models);
-      
+
       if (models.length > 0 && !models.includes(currentConfig.model)) {
         this.updateConfig('model', models[0]);
       }
-      
+
       await this.alertService.success('لیست مدل‌ها با موفقیت دریافت شد.');
     } catch (error) {
-       await this.alertService.error(error instanceof Error ? error.message : 'خطا در دریافت مدل‌ها');
+      await this.alertService.error(error instanceof Error ? error.message : 'خطا در دریافت مدل‌ها');
     } finally {
       this.isLoadingModels.set(false);
     }
@@ -94,7 +95,7 @@ export class InitialInput implements OnInit {
     try {
       const parsedData = await this.aiResumeService.extractResumeData(text, currentConfig);
       this.extractedData.set(parsedData);
-      
+
       await this.applyToForm();
       await this.alertService.success('اطلاعات با موفقیت استخراج و اعمال شد!');
     } catch (error) {
@@ -106,51 +107,125 @@ export class InitialInput implements OnInit {
   }
 
   async applyToForm(): Promise<void> {
-    const data = this.extractedData();
-    if (!data) return;
+    const rawData = this.extractedData();
+    if (!rawData) return;
 
     try {
-      if (data.personalInfo) {
-        const personalInfo: PersonalInfo = {
-          ...createEmptyPersonalInfo(),
-          ...data.personalInfo
+      const personalInfo: PersonalInfo = {
+        ...createEmptyPersonalInfo(),
+        firstName: rawData.personalInfo?.firstName || '',
+        lastName: rawData.personalInfo?.lastName || '',
+        title: rawData.personalInfo?.title || '',
+        email: rawData.personalInfo?.email || '',
+        mobile: rawData.personalInfo?.mobile || '',
+        phone: rawData.personalInfo?.phone || '',
+        maritalStatus: rawData.personalInfo?.maritalStatus || '',
+        militaryStatus: rawData.personalInfo?.militaryStatus || '',
+        birthDate: rawData.personalInfo?.birthDate || '',
+        city: rawData.personalInfo?.city || '',
+        province: rawData.personalInfo?.province || '',
+        country: rawData.personalInfo?.country || '',
+        linkedin: rawData.personalInfo?.linkedin || '',
+        website: rawData.personalInfo?.website || ''
+      };
+      this.resumeService.updatePersonalInfo(personalInfo);
+
+      if (rawData.careerInfo) {
+        const careerInfo: CareerInfo = {
+          ...createEmptyCareerInfo(),
+          expectedSalary: rawData.careerInfo.expectedSalary || '',
+          totalExperience: rawData.careerInfo.totalExperience || ''
         };
-        this.resumeService.updatePersonalInfo(personalInfo);
+        this.resumeService.updateCareerInfo(careerInfo);
       }
 
-      if (data.workExperience && Array.isArray(data.workExperience)) {
-        const workExp: WorkExperience[] = data.workExperience.map((exp: ExtractedWorkExperience) => ({
-          ...createEmptyWorkExperience(),
-          ...exp
-        }));
-        this.resumeService.setWorkExperience(workExp);
+      const finalWorkExp: WorkExperience[] = (rawData.workExperience || []).map((exp: ExtractedWorkExperience) => ({
+        ...createEmptyWorkExperience(),
+        position: exp.position || '',
+        company: exp.company || '',
+        city: exp.city || '',
+        province: exp.province || '',
+        country: exp.country || '',
+        startDate: exp.startDate || '',
+        endDate: exp.endDate || '',
+        current: typeof exp.current === 'boolean' ? exp.current : false,
+        description: exp.description || ''
+      }));
+      if (finalWorkExp.length > 0) {
+        this.resumeService.setWorkExperience(finalWorkExp);
       }
 
-      if (data.education && Array.isArray(data.education)) {
-        const edu: Education[] = data.education.map((ed: ExtractedEducation) => ({
-          ...createEmptyEducation(),
-          ...ed
-        }));
-        this.resumeService.setEducation(edu);
+      const finalEducation: Education[] = (rawData.education || []).map((edu: ExtractedEducation) => ({
+        ...createEmptyEducation(),
+        degree: edu.degree || '',
+        field: edu.field || '',
+        institution: edu.institution || '',
+        city: edu.city || '',
+        province: edu.province || '',
+        country: edu.country || '',
+        startDate: edu.startDate || '',
+        endDate: edu.endDate || '',
+        currentlyStudying: typeof edu.currentlyStudying === 'boolean' ? edu.currentlyStudying : false
+      }));
+      if (finalEducation.length > 0) {
+        this.resumeService.setEducation(finalEducation);
       }
 
-      if (data.skills && Array.isArray(data.skills)) {
-        const skills: Skill[] = data.skills.map((sk: ExtractedSkill) => {
-          const category: SkillCategory = sk.category === 'soft' ? 'soft' : 'technical';
-          const level: SkillLevel = (sk.level >= 1 && sk.level <= 5) ? (Math.round(sk.level) as SkillLevel) : 3;
-
-          return {
-            ...createEmptySkill(category),
-            name: sk.name || '',
-            category,
-            level
-          };
-        });
-        this.resumeService.setSkills(skills);
+      const finalSkills: Skill[] = (rawData.skills || []).map((skill: ExtractedSkill) => {
+        const category: SkillCategory = skill.category === 'soft' ? 'soft' : 'technical';
+        const level: SkillLevel = (skill.level >= 1 && skill.level <= 5) ? (Math.round(skill.level) as SkillLevel) : 3;
+        return {
+          ...createEmptySkill(category),
+          name: skill.name || '',
+          category,
+          level
+        };
+      });
+      if (finalSkills.length > 0) {
+        this.resumeService.setSkills(finalSkills);
       }
 
-      if (data.summary) {
-        this.resumeService.updateSummary(data.summary);
+      const finalLanguages: Language[] = (rawData.languages || []).map((lang: ExtractedLanguage) => {
+        const level: SkillLevel = (lang.level >= 1 && lang.level <= 5) ? (Math.round(lang.level) as SkillLevel) : 3;
+        const displayType: LanguageDisplayType = lang.displayType === 'text' ? 'text' : 'graphic';
+        return {
+          ...createEmptyLanguage(),
+          name: lang.name || '',
+          level,
+          displayType
+        };
+      });
+      if (finalLanguages.length > 0) {
+        this.resumeService.setLanguages(finalLanguages);
+      }
+
+      const finalProjects: Project[] = (rawData.projects || []).map((proj: ExtractedProject) => ({
+        ...createEmptyProject(),
+        title: proj.title || '',
+        employer: proj.employer || '',
+        link: proj.link || '',
+        date: proj.date || '',
+        description: proj.description || ''
+      }));
+      if (finalProjects.length > 0) {
+        this.resumeService.setProjects(finalProjects);
+      }
+
+      const finalCertificates: Certificate[] = (rawData.certificates || []).map((cert: ExtractedCertificate) => ({
+        ...createEmptyCertificate(),
+        title: cert.title || '',
+        issuer: cert.issuer || '',
+        validFrom: cert.validFrom || '',
+        validTo: cert.validTo || '',
+        current: typeof cert.current === 'boolean' ? cert.current : true,
+        link: cert.link || ''
+      }));
+      if (finalCertificates.length > 0) {
+        this.resumeService.setCertificates(finalCertificates);
+      }
+
+      if (rawData.summary) {
+        this.resumeService.updateSummary(rawData.summary);
       }
 
       this.rawInput.set('');

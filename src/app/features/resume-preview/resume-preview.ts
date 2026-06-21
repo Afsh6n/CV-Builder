@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, computed, signal, effect, inject, untracked } from '@angular/core';
-
+import { ResumeIcon, ResumeIconName } from '@app/shared/components/resume-icon/resume-icon';
 import { CertificateLightbox } from './certificate-lightbox/certificate-lightbox';
 import { SkillCard } from './skill-card/skill-card';
 import { SkillChart } from './skill-chart/skill-chart';
-import { fontFamilyCss } from '../../core/constants/font.constants';
-import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '../../core/constants/resume.constants';
-import { FontLoaderService } from '../../core/services/font-loader.service';
-import { QrCodeService } from '../../core/services/qr-code.service';
-import { Certificate, Resume, SkillDisplayType, SocialPlatform, ThemeId } from '../../core/types/resume.types';
-import { ResumeIcon, ResumeIconName } from '../../shared/components/resume-icon/resume-icon';
-import { MonthFormatPipe } from '../../shared/pipes/month-format.pipe';
-import { toPersianDigits } from '../../shared/pipes/persian-digits.pipe';
-import { formatSalary } from '../../shared/utils/salary.formatter';
+import { MonthFormatPipe } from '@app/shared/pipes/month-format.pipe';
+import { FontLoaderService } from '@app/core/services/font-loader.service';
+import { QrCodeService } from '@app/core/services/qr-code.service';
+import { Certificate, Resume, SkillDisplayType, SocialPlatform,ThemeId } from '@app/core/types/resume.types';
+import { LANGUAGE_LEVEL_LABELS, SKILL_LEVEL_LABELS, THEME_PRESETS } from '@app/core/constants/resume.constants';
+import { fontFamilyCss } from '@app/core/constants/font.constants';
+import { toPersianDigits } from '@app/shared/pipes/persian-digits.pipe';
+import { formatSalary } from '@app/shared/utils/salary.formatter';
+
 
 type SectionType = 'career' | 'education' | 'work' | 'technicalSkills' | 'softSkills' | 'certificates' | 'projects' | 'custom';
 
@@ -41,7 +41,6 @@ export class ResumePreview {
   lightboxImage = signal<string>('');
   lightboxTitle = signal<string>('');
 
-  // Drag and drop for preview section reordering
   sectionOrder = signal<SectionType[]>(['career', 'education', 'work', 'technicalSkills', 'softSkills', 'certificates', 'projects', 'custom']);
   draggedSection = signal<SectionType | null>(null);
   isDragging = signal<boolean>(false);
@@ -212,7 +211,6 @@ export class ResumePreview {
     return `${value} سال`;
   }
 
-  // Drag and drop methods
   onDragStart(section: SectionType, event: DragEvent): void {
     this.draggedSection.set(section);
     this.isDragging.set(true);

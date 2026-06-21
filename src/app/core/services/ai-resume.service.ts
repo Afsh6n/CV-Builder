@@ -1,76 +1,12 @@
 import { Injectable } from '@angular/core';
 import JSON5 from 'json5';
-
-export interface AiConfig {
-  apiKey: string;
-  endpoint: string;
-  model: string;
-}
-
-export interface ExtractedPersonalInfo {
-  firstName: string;
-  lastName: string;
-  title: string;
-  email: string;
-  mobile: string;
-  city: string;
-  province: string;
-  country: string;
-}
-
-export interface ExtractedWorkExperience {
-  position: string;
-  company: string;
-  city: string;
-  province: string;
-  country: string;
-  startDate: string;
-  endDate: string;
-  current: boolean;
-  description: string;
-}
-
-export interface ExtractedEducation {
-  degree: string;
-  field: string;
-  institution: string;
-  city: string;
-  province: string;
-  country: string;
-  startDate: string;
-  endDate: string;
-  currentlyStudying: boolean;
-}
-
-export interface ExtractedSkill {
-  name: string;
-  category: string;
-  level: number;
-}
-
-export interface ExtractedResumeData {
-  personalInfo: ExtractedPersonalInfo;
-  summary: string;
-  workExperience: ExtractedWorkExperience[];
-  education: ExtractedEducation[];
-  skills: ExtractedSkill[];
-}
-
-interface ApiResponseModel {
-  id: string;
-}
-
-interface ApiResponseList {
-  data: ApiResponseModel[];
-}
-
-interface ApiChatResponse {
-  choices: {
-    message: {
-      content: string;
-    };
-  }[];
-}
+import {
+  AiConfig,
+  ExtractedResumeData,
+  ApiResponseList,
+  ApiResponseModel,
+  ApiChatResponse
+} from '../types/ai-resume.types';
 
 @Injectable({ providedIn: 'root' })
 export class AiResumeService {
@@ -99,9 +35,10 @@ export class AiResumeService {
         throw new Error(`خطا در دریافت مدل‌ها: ${response.statusText}`);
       }
 
-      const data: ApiResponseList = await response.json();
+      const data = await response.json() as ApiResponseList;
       if (data && Array.isArray(data.data)) {
-        return data.data.map((m: ApiResponseModel) => m.id);
+        const uniqueModels = Array.from(new Set(data.data.map((m: ApiResponseModel) => m.id)));
+        return uniqueModels;
       } else {
         throw new Error('ساختار پاسخ سرور برای لیست مدل‌ها معتبر نیست.');
       }
@@ -122,21 +59,125 @@ export class AiResumeService {
   }
 
   generateExtractionPrompt(text: string): string {
-    return `You are a resume parser. Extract information from the input into a valid JSON object.
+    return `You are an expert Resume Writer and ATS Optimizer. Extract information from the raw input and map it STRICTLY to the following JSON structure.
+    
+    CRITICAL INSTRUCTIONS:
+    1. Language: Write all content in highly professional Persian.
+    2. ATS Optimization: Use industry-standard keywords related to the user's profession.
+    3. Action Verbs: Begin bullet points in the 'description' fields with strong Persian action verbs (e.g., طراحی، توسعه، مدیریت، بهینه‌سازی).
+    4. Quantify Achievements: Wherever possible, infer or format numbers to show impact (e.g., افزایش ۲۰ درصدی کارایی).
+    5. Summary: Write a concise, impactful summary highlighting core strengths, years of experience, and key professional values.
+    6. Strict Typing: The "maritalStatus" MUST be either "مجرد", "متأهل", or "". The "militaryStatus" MUST be exactly one of: "پایان خدمت", "معاف", "معافیت تحصیلی", "در حال خدمت", "مشمول", or "". "category" MUST be "technical" or "soft".
+    7. Levels: Skill and Language levels MUST be an integer between 1 and 5.
+    
+    Expected JSON Structure:
+    {
+      "personalInfo": {
+        "firstName": "",
+        "lastName": "",
+        "title": "",
+        "email": "",
+        "mobile": "",
+        "phone": "",
+        "maritalStatus": "",
+        "militaryStatus": "",
+        "birthDate": "",
+        "city": "",
+        "province": "",
+        "country": "",
+        "linkedin": "",
+        "website": ""
+      },
+      "summary": "",
+      "careerInfo": {
+        "expectedSalary": "",
+        "totalExperience": ""
+      },
+      "workExperience": [
+        {
+          "position": "",
+          "company": "",
+          "city": "",
+          "province": "",
+          "country": "",
+          "startDate": "",
+          "endDate": "",
+          "current": false,
+          "description": ""
+        }
+      ],
+      "education": [
+        {
+          "degree": "",
+          "field": "",
+          "institution": "",
+          "city": "",
+          "province": "",
+          "country": "",
+          "startDate": "",
+          "endDate": "",
+          "currentlyStudying": false
+        }
+      ],
+      "skills": [
+        {
+          "name": "",
+          "category": "technical",
+          "level": 4
+        }
+      ],
+      "languages": [
+        {
+          "name": "",
+          "level": 3,
+          "displayType": "graphic"
+        }
+      ],
+      "projects": [
+        {
+          "title": "",
+          "employer": "",
+          "link": "",
+          "date": "",
+          "description": ""
+        }
+      ],
+      "certificates": [
+        {
+          "title": "",
+          "issuer": "",
+          "validFrom": "",
+          "validTo": "",
+          "current": true,
+          "link": ""
+        }
+      ]
+    }
+    
     User Raw Input: ${text}
+    
     Return ONLY a raw JSON object. Do not include markdown, code blocks, or explanations.
-    The content MUST be in Persian.
     Ensure all text values are properly escaped for JSON.`;
   }
 
   parseAiResponse(response: string): ExtractedResumeData | null {
     try {
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        return JSON5.parse(jsonMatch[0]) as ExtractedResumeData;
+      if (!response) return null;
+      const startIndex = response.indexOf('{');
+      const endIndex = response.lastIndexOf('}');
+
+      if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+        console.error("ساختار JSON در پاسخ هوش مصنوعی یافت نشد.");
+        return null;
       }
-      return null;
-    } catch {
+
+      const jsonString = response.substring(startIndex, endIndex + 1);
+
+      const parsedData = JSON5.parse(jsonString);
+
+      return parsedData as ExtractedResumeData;
+    } catch (error) {
+      console.error("خطا در پارس کردن پاسخ هوش مصنوعی:", error);
       return null;
     }
   }
@@ -145,6 +186,11 @@ export class AiResumeService {
     const url = config.endpoint.endsWith('/chat/completions')
       ? config.endpoint
       : `${config.endpoint.replace(/\/$/, '')}/chat/completions`;
+
+    const systemInstruction = `You are an expert resume builder. 
+    Output ONLY a raw JSON object based on the provided schema.
+    Do not include any preamble, markdown code blocks (like \`\`\`json), or conversational text.
+    Ensure the JSON is valid.`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -159,7 +205,7 @@ export class AiResumeService {
           { role: 'user', content: prompt }
         ],
         temperature: 0.2,
-        max_tokens: 4096
+        max_tokens: 8192
       })
     });
 
@@ -167,7 +213,7 @@ export class AiResumeService {
       throw new Error(`خطای API (${response.status})`);
     }
 
-    const data: ApiChatResponse = await response.json();
+    const data = await response.json() as ApiChatResponse;
     return data.choices?.[0]?.message?.content || '';
   }
 }

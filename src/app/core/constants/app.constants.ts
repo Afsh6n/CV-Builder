@@ -1,4 +1,4 @@
-﻿import { ResumeIconName } from '../../shared/components/resume-icon/resume-icon';
+﻿import { ResumeIconName } from "@app/shared/components/resume-icon/resume-icon";
 
 export const APP_META = {
   title: 'رزومه ساز',

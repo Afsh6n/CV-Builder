@@ -1,31 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, computed, inject, ElementRef, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { AlertService } from './core/services/alert.service';
-import { ExportService } from './core/services/export.service';
-import { FontLoaderService } from './core/services/font-loader.service';
-import { ResumeService } from './core/services/resume.service';
-import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, ResumeSettings, Skill, SocialMedia, WorkExperience } from './core/types/resume.types';
-import { countFilledFields, isEnoughDataForPreview } from './core/utils/resume.utils';
-import { CustomSectionForm } from './features/custom-section/custom-section-form';
-import { CareerInfoForm } from './features/editor/career-info-form/career-info-form';
-import { CertificatesForm } from './features/editor/certificates-form/certificates-form';
-import { EducationForm } from './features/editor/education-form/education-form';
-import { LanguagesForm } from './features/editor/languages-form/languages-form';
-import { PersonalDetailsForm } from './features/editor/personal-details-form/personal-details-form';
 import { PhotoUploader } from './features/editor/photo-uploader/photo-uploader';
-import { ProjectsForm } from './features/editor/projects-form/projects-form';
-import { ResumeSettingsPanel } from './features/editor/resume-settings-panel/resume-settings-panel';
-import { SkillsForm } from './features/editor/skills-form/skills-form';
-import { SocialMediaForm } from './features/editor/social-media-form/social-media-form';
+import { PersonalDetailsForm } from './features/editor/personal-details-form/personal-details-form';
 import { WorkExperienceForm } from './features/editor/work-experience-form/work-experience-form';
+import { EducationForm } from './features/editor/education-form/education-form';
+import { SkillsForm } from './features/editor/skills-form/skills-form';
+import { LanguagesForm } from './features/editor/languages-form/languages-form';
+import { ProjectsForm } from './features/editor/projects-form/projects-form';
+import { SocialMediaForm } from './features/editor/social-media-form/social-media-form';
+import { CertificatesForm } from './features/editor/certificates-form/certificates-form';
+import { CareerInfoForm } from './features/editor/career-info-form/career-info-form';
+import { CustomSectionForm } from './features/custom-section/custom-section-form';
+import { ResumeSettingsPanel } from './features/editor/resume-settings-panel/resume-settings-panel';
 import { ResumePreview } from './features/resume-preview/resume-preview';
 import { AppFooter } from './layout/app-footer/app-footer';
 import { AppHeader } from './layout/app-header/app-header';
 import { Alert } from './shared/components/alert/alert';
-import { InitialInput } from "./features/initial-input/initial-input";
+import { InitialInput } from './features/initial-input/initial-input';
 import { ResumeIcon } from './shared/components/resume-icon/resume-icon';
+import { ResumeService } from './core/services/resume.service';
+import { ExportService } from './core/services/export.service';
+import { FontLoaderService } from './core/services/font-loader.service';
+import { AlertService } from './core/services/alert.service';
+import { countFilledFields, isEnoughDataForPreview } from './core/utils/resume.utils';
+import { CareerInfo, Certificate, CustomSection, Education, Language, PersonalInfo, Project, ResumeSettings, Skill, SocialMedia, WorkExperience } from './core/types/resume.types';
+
 
 @Component({
   selector: 'app-root',

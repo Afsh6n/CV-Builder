@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '@app/core/constants/resume.constants';
+import { SkillLevel } from '@app/core/types/resume.types';
 
-import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '../../core/constants/resume.constants';
-import { SkillLevel } from '../../core/types/resume.types';
 
 @Pipe({ name: 'skillLevel'})
 export class SkillLevelPipe implements PipeTransform {

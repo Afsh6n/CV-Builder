@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-
 import { ResumeIcon } from '../resume-icon/resume-icon';
+
 
 @Component({
   selector: 'app-editor-item-actions',

@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
+import { APP_META } from '@app/core/constants/app.constants';
 
-import { APP_META } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-header',

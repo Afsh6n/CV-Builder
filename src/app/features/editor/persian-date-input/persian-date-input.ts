@@ -9,18 +9,10 @@ import {
   ElementRef,
   HostListener
 } from '@angular/core';
+import { toPersianDigits } from '@app/shared/pipes/persian-digits.pipe';
+import { buildCalendarGrid, buildYearOptions, formatJalali, JALALI_MONTHS, JalaliDateMode, parseJalali, todayJalali } from '@app/shared/utils/jalali-date.util';
 import moment from 'jalali-moment';
 
-import { toPersianDigits } from '../../../shared/pipes/persian-digits.pipe';
-import {
-  JalaliDateMode,
-  formatJalali,
-  parseJalali,
-  todayJalali,
-  buildCalendarGrid,
-  buildYearOptions,
-  JALALI_MONTHS
-} from '../../../shared/utils/jalali-date.util';
 
 export type PersianDateMode = JalaliDateMode;
 

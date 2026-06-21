@@ -158,5 +158,38 @@
   <line x1="1" y1="9" x2="4" y2="9" />
   <line x1="1" y1="14" x2="4" y2="14" />
   }
+  @case ('external-link') {
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+  <polyline points="15 3 21 3 21 9" />
+  <line x1="10" y1="14" x2="21" y2="3" />
+  }
+  @case ('menu') {
+  <line x1="3" y1="6" x2="21" y2="6" />
+  <line x1="3" y1="12" x2="21" y2="12" />
+  <line x1="3" y1="18" x2="21" y2="18" />
+  }
+  @case ('close') {
+  <line x1="18" y1="6" x2="6" y2="18" />
+  <line x1="6" y1="6" x2="18" y2="18" />
+  }
+  @case ('chevron-left') {
+  <polyline points="15 18 9 12 15 6" />
+  }
+  @case ('chevron-right') {
+  <polyline points="9 18 15 12 9 6" />
+  }
+  @case ('download') {
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+  <polyline points="7 10 12 15 17 10" />
+  <line x1="12" y1="15" x2="12" y2="3" />
+  }
+  @case ('print') {
+  <polyline points="6 9 6 2 18 2 18 9" />
+  <path d="M18 9h3v6h-3" />
+  <path d="M6 15H3V9h3" />
+  <rect x="6" y="15" width="12" height="7" rx="1" />
+  <line x1="9" y1="18" x2="15" y2="18" />
+  <line x1="9" y1="21" x2="11" y2="21" />
+  }
   }
 </svg>

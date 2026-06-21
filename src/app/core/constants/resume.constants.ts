@@ -1,5 +1,6 @@
-import { FontFamilyId } from "./font.constants";
+
 import { LayoutId, MilitaryStatus, ResumeDisplayOptions, ResumeSections, SkillDisplayType, SocialPlatform, ThemeId } from "../types/resume.types";
+import { FontFamilyId } from "./font.constants";
 
 
 export const SKILL_LEVEL_LABELS: Record<number, string> = {

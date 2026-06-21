@@ -6,95 +6,65 @@
 
   <div class="editor-item-list">
     @for (lang of languages(); track lang.id; let i = $index) {
-      <div class="common-list-card" [class.editing]="isEditing(lang.id)">
-        @if (isEditing(lang.id)) {
-          <div class="edit-form">
-            <app-form-field label="انتخاب زبان">
-              <app-form-select
-                [options]="languageSelectOptions"
-                [value]="isCustomLanguage(lang.name) ? '__custom__' : lang.name"
-                (valueChange)="onLanguageSelect(lang.id, $event)"
-              />
-            </app-form-field>
-            @if (isCustomLanguage(lang.name) || !lang.name) {
-              <app-form-field label="نام زبان">
-                <app-form-input
-                  [value]="lang.name"
-                  placeholder="نام زبان"
-                  (valueChange)="updateEntry(lang.id, 'name', $event)"
-                />
-              </app-form-field>
-            }
-            <app-form-field label="نوع نمایش سطح">
-              <app-form-select
-                [options]="displayTypeOptions"
-                [value]="lang.displayType"
-                placeholder=""
-                (valueChange)="updateEntry(lang.id, 'displayType', $event)"
-              />
-            </app-form-field>
-            <div class="form-group">
-              <label class="form-label">سطح: {{ levelLabels[lang.level] }} ({{ lang.level }}/۵)</label>
-              <input
-                type="range"
-                min="1"
-                max="5"
-                step="1"
-                [ngModel]="lang.level"
-                (ngModelChange)="updateEntry(lang.id, 'level', +$event)"
-                class="level-slider"
-              />
-              <div class="level-scale">
-                @for (lvl of levels; track lvl) {
-                  <span class="level-mark" [class.active]="lang.level === lvl">{{ levelLabels[lvl] }}</span>
-                }
-              </div>
-            </div>
-            <app-editor-form-actions
-              (cancel)="cancelEditing(lang.id)"
-              (save)="saveEditing(lang.id)"
-            />
-          </div>
-        } @else {
-          <div class="view-mode">
-            <app-order-buttons
-              [disableUp]="i === 0"
-              [disableDown]="i === languages().length - 1"
-              (moveUp)="moveEntry(lang.id, 'up')"
-              (moveDown)="moveEntry(lang.id, 'down')"
-            />
-            <div class="view-mode-body">
-              <div class="view-mode-content">
-                <div class="view-mode-main">
-                  <div class="item-brand">
-                    <div class="brand-icon">
-                      <app-resume-icon name="languages" [size]="20" />
+    <div class="common-list-card" [class.editing]="isEditing(lang.id)">
+      @if (isEditing(lang.id)) {
+      <div class="edit-form">
+        <app-form-field label="انتخاب زبان">
+          <app-form-select [options]="languageSelectOptions"
+            [value]="isCustomLanguage(lang.name) ? '__custom__' : lang.name"
+            (valueChange)="onLanguageSelect(lang.id, $event)" />
+        </app-form-field>
+        @if (isCustomLanguage(lang.name) || !lang.name) {
+        <app-form-field label="نام زبان">
+          <app-form-input [value]="lang.name" placeholder="نام زبان"
+            (valueChange)="updateEntry(lang.id, 'name', $event)" />
+        </app-form-field>
+        }
+        <app-form-field label="نوع نمایش سطح">
+          <app-form-select [options]="displayTypeOptions" [value]="lang.displayType" placeholder=""
+            (valueChange)="updateEntry(lang.id, 'displayType', $event)" />
+        </app-form-field>
+        <div class="form-group">
+          <app-form-field label="سطح تسلط">
+            <app-segmented-control [options]="levelOptions" [value]="lang.level" ariaLabel="سطح مهارت"
+              (valueChange)="updateEntry(lang.id, 'level', $event)" />
+          </app-form-field>
+        </div>
+        <app-editor-form-actions (cancel)="cancelEditing(lang.id)" (save)="saveEditing(lang.id)" />
+      </div>
+      } @else {
+      <div class="view-mode">
+        <app-order-buttons [disableUp]="i === 0" [disableDown]="i === languages().length - 1"
+          (moveUp)="moveEntry(lang.id, 'up')" (moveDown)="moveEntry(lang.id, 'down')" />
+        <div class="view-mode-body">
+          <div class="view-mode-content">
+            <div class="view-mode-main">
+              <div class="item-brand">
+                <div class="brand-icon">
+                  <app-resume-icon name="languages" [size]="20" />
+                </div>
+                <div class="brand-details">
+                  <h3 class="item-title">{{ lang.name || 'نام زبان' }}</h3>
+                  <div class="item-subtitle-row">
+                    @if (lang.displayType === 'graphic') {
+                    <div class="level-dots" aria-hidden="true">
+                      @for (dot of [1, 2, 3, 4, 5]; track dot) {
+                      <span class="level-dot" [class.filled]="dot <= lang.level"></span>
+                      }
                     </div>
-                    <div class="brand-details">
-                      <h3 class="item-title">{{ lang.name || 'نام زبان' }}</h3>
-                      <div class="item-subtitle-row">
-                        @if (lang.displayType === 'graphic') {
-                          <div class="level-dots" aria-hidden="true">
-                            @for (dot of [1, 2, 3, 4, 5]; track dot) {
-                              <span class="level-dot" [class.filled]="dot <= lang.level"></span>
-                            }
-                          </div>
-                        } @else {
-                          <span class="item-subtitle">{{ levelLabels[lang.level] }}</span>
-                        }
-                      </div>
-                    </div>
+                    } @else {
+                    <span class="item-subtitle">{{ levelLabels[lang.level] }}</span>
+                    }
                   </div>
                 </div>
-                <app-editor-item-actions
-                  (edit)="startEditing(lang.id)"
-                  (delete)="removeEntry(lang.id)"
-                />
               </div>
             </div>
+            <app-editor-item-actions (edit)="startEditing(lang.id)" (delete)="removeEntry(lang.id)" />
           </div>
-        }
+        </div>
       </div>
+      }
+    </div>
     }
   </div>
 

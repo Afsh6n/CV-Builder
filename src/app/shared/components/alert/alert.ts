@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { AlertService, AlertState } from '@app/core/services/alert.service';
 
-import { AlertService, AlertState } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-alert',

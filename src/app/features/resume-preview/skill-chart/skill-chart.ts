@@ -1,4 +1,6 @@
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '@app/core/constants/resume.constants';
+import { Skill, SkillDisplayType, SkillLevel } from '@app/core/types/resume.types';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {
   ApexChart,
@@ -12,8 +14,7 @@ import {
   ApexYAxis
 } from 'ng-apexcharts';
 
-import { SKILL_LEVEL_LABELS, SKILL_LEVEL_PERCENT } from '../../../core/constants/resume.constants';
-import { Skill, SkillDisplayType, SkillLevel } from '../../../core/types/resume.types';
+
 
 
 type ChartMode = Exclude<SkillDisplayType, 'cards'>;

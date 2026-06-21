@@ -1,19 +1,19 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
-
-import { SuggestionService } from '../../../core/services/suggestion.service';
-import { WorkExperience } from '../../../core/types/resume.types';
-import { createEmptyWorkExperience } from '../../../core/utils/resume.factories';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormInput } from '../../../shared/components/form-input/form-input';
-import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { ResumeIcon } from '../../../shared/components/resume-icon/resume-icon';
-import { moveItemInList } from '../../../shared/utils/array-order.util';
-import { ListEditController } from '../../../shared/utils/list-edit.controller';
-import { requiredError, jalaliDateError } from '../../../shared/validators/field.validators';
+import { FormField } from '@app/shared/components/form-field/form-field';
+import { FormInput } from '@app/shared/components/form-input/form-input';
 import { PersianDateInput } from '../persian-date-input/persian-date-input';
+import { OrderButtons } from '@app/shared/components/order-buttons/order-buttons';
+import { ResumeIcon } from '@app/shared/components/resume-icon/resume-icon';
+import { EditorItemActions } from '@app/shared/components/editor-item-actions/editor-item-actions';
+import { EditorFormActions } from '@app/shared/components/editor-form-actions/editor-form-actions';
+import { EditorAddButton } from '@app/shared/components/editor-add-button/editor-add-button';
+import { WorkExperience } from '@app/core/types/resume.types';
+import { SuggestionService } from '@app/core/services/suggestion.service';
+import { ListEditController } from '@app/shared/utils/list-edit.controller';
+import { createEmptyWorkExperience } from '@app/core/utils/resume.factories';
+import { moveItemInList } from '@app/shared/utils/array-order.util';
+import { jalaliDateError, requiredError } from '@app/shared/validators/field.validators';
+
 
 type FieldErrors = Partial<Record<keyof WorkExperience, string>>;
 
@@ -58,7 +58,11 @@ export class WorkExperienceForm {
 
   addEntry = (): void => { this.editCtrl.add(); };
   removeEntry = (id: string): void => {
-    this.editCtrl.remove(id);
+    const updated = this.workExperience().filter(exp => exp.id !== id);
+    this.workExperienceChanged.emit(updated);
+    if (this.editingId() === id) {
+      this.editModeChanged.emit(null);
+    }
     this.clearErrors(id);
   };
   startEditing = (id: string): void => { this.editCtrl.startEditing(id); };

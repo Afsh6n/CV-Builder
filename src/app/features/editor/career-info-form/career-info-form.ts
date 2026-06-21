@@ -1,11 +1,12 @@
 import { Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CareerInfo } from '@app/core/types/resume.types';
+import { FormField } from '@app/shared/components/form-field/form-field';
+import { FormInput } from '@app/shared/components/form-input/form-input';
+import { normalizeSalary } from '@app/shared/utils/salary.formatter';
+import { requiredError } from '@app/shared/validators/field.validators';
 
-import { CareerInfo } from '../../../core/types/resume.types';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormInput } from '../../../shared/components/form-input/form-input';
-import { normalizeSalary } from '../../../shared/utils/salary.formatter';
-import { requiredError } from '../../../shared/validators/field.validators';
+
 
 type FieldErrors = Partial<Record<keyof CareerInfo, string>>;
 

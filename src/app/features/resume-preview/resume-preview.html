@@ -162,364 +162,275 @@
 
     <main class="resume-main">
       @for (sectionType of getVisibleSections(); track sectionType) {
-        @switch (sectionType) {
-          @case ('career') {
-            <section
-              class="main-section career-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('career')"
-              draggable="true"
-              (dragstart)="onDragStart('career', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('career', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="salary" [size]="16" />
-                  حقوق و سابقه
-                </span>
-              </h2>
-              <div class="career-info-grid">
-                @if (resume()!.careerInfo.expectedSalary) {
-                <div class="career-info-item">
-                  <span class="career-label">حقوق مورد انتظار:</span>
-                  <span>
-                    {{ formatSalaryView(careerInfo()?.expectedSalary) }} تومان
-                  </span>
-                </div>
-                }
-                @if (resume()!.careerInfo.totalExperience) {
-                <div class="career-info-item">
-                  <span class="career-label">سابقه کاری:</span>
-                  {{ formatExperience(careerInfo()?.totalExperience) }}
-                </div>
-                }
-              </div>
-            </section>
+      @switch (sectionType) {
+      @case ('career') {
+      <section class="main-section career-section draggable-section" [class.dragging]="isSectionBeingDragged('career')"
+        draggable="true" (dragstart)="onDragStart('career', $event)" (dragend)="onDragEnd()"
+        (dragover)="onDragOver($event)" (drop)="onDrop('career', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="salary" [size]="16" />
+            حقوق و سابقه
+          </span>
+        </h2>
+        <div class="career-info-grid">
+          @if (resume()!.careerInfo.expectedSalary) {
+          <div class="career-info-item">
+            <span class="career-label">حقوق مورد انتظار:</span>
+            <span>
+              {{ formatSalaryView(careerInfo()?.expectedSalary) }} تومان
+            </span>
+          </div>
           }
-          @case ('education') {
-            <section
-              class="main-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('education')"
-              draggable="true"
-              (dragstart)="onDragStart('education', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('education', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="education" [size]="16" />
-                  سوابق تحصیلی
-                </span>
-              </h2>
-              @for (edu of resume()!.education; track edu.id) {
-              <div class="entry-block">
-                <div class="entry-header">
-                  <div class="entry-title-group">
-                    <h3 class="entry-title">{{ edu.degree }} {{ edu.field }}</h3>
-                    @if (edu.specialization) { <p class="entry-subtitle">گرایش: {{ edu.specialization }}</p> }
-                    <p class="entry-org">{{ edu.institution }}</p>
-                    @if (edu.city || edu.province) { <p class="entry-location">{{ getEducationLocation(edu) }}</p> }
-                  </div>
-                  <div class="entry-date">
-                    {{ formatMonth(edu.startDate) }} - {{ edu.currentlyStudying ? 'در حال تحصیل' : formatMonth(edu.endDate) }}
-                    @if (edu.gpa) { <span class="entry-gpa">معدل: {{ edu.gpa }}</span> }
-                  </div>
-                </div>
-              </div>
-              }
-            </section>
+          @if (resume()!.careerInfo.totalExperience) {
+          <div class="career-info-item">
+            <span class="career-label">سابقه کاری:</span>
+            {{ formatExperience(careerInfo()?.totalExperience) }}
+          </div>
           }
-          @case ('work') {
-            <section
-              class="main-section work-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('work')"
-              draggable="true"
-              (dragstart)="onDragStart('work', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('work', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="work" [size]="16" />
-                  سوابق شغلی
-                </span>
-              </h2>
-              <div class="work-timeline">
-                @for (exp of resume()!.workExperience; track exp.id) {
-                <article class="work-card">
-                  <div class="work-card-marker"></div>
-                  <div class="work-card-body">
-                    <div class="work-card-header">
-                      <div class="work-card-titles">
-                        <h3 class="work-card-position">{{ exp.position }}</h3>
-                        <p class="work-card-company">{{ exp.company }}</p>
-                        @if (exp.city || exp.province || exp.country) {
-                        <p class="work-card-location">{{ getWorkLocation(exp) }}</p>
-                        }
-                      </div>
-                      <div class="work-card-date">
-                        {{ formatMonth(exp.startDate) }} – {{ exp.current ? 'تا کنون' : formatMonth(exp.endDate) }}
-                      </div>
-                    </div>
-                    @if (exp.description) {
-                    <ul class="work-card-bullets">
-                      @for (line of getDescriptionLines(exp.description); track line) {
-                      <li>{{ line }}</li>
-                      }
-                    </ul>
-                    }
-                  </div>
-                </article>
-                }
-              </div>
-            </section>
-          }
-          @case ('technicalSkills') {
-            <section
-              class="main-section skills-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('technicalSkills')"
-              draggable="true"
-              (dragstart)="onDragStart('technicalSkills', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('technicalSkills', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="skills" [size]="16" />
-                  مهارت‌های فنی
-                </span>
-              </h2>
-              @if (useSkillCards(resume()!.settings.technicalSkillsDisplay)) {
-              <div class="skills-card-grid">
-                @for (skill of technicalSkills(); track skill.id) {
-                <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
-                }
-              </div>
-              } @else if (isChartMode(technicalDisplay())) {
-              <app-skill-chart [skills]="technicalSkills()" [displayType]="asChartMode(technicalDisplay())"
-                [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
-              }
-            </section>
-          }
-          @case ('softSkills') {
-            <section
-              class="main-section skills-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('softSkills')"
-              draggable="true"
-              (dragstart)="onDragStart('softSkills', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('softSkills', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="skills" [size]="16" />
-                  مهارت‌های نرم
-                </span>
-              </h2>
-              @if (useSkillCards(resume()!.settings.softSkillsDisplay)) {
-              <div class="skills-card-grid">
-                @for (skill of softSkills(); track skill.id) {
-                <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
-                }
-              </div>
-              } @else if (isChartMode(softDisplay())) {
-              <app-skill-chart [skills]="softSkills()" [displayType]="asChartMode(softDisplay())"
-                [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
-              }
-            </section>
-          }
-          @case ('certificates') {
-            <section
-              class="main-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('certificates')"
-              draggable="true"
-              (dragstart)="onDragStart('certificates', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('certificates', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="certificate" [size]="16" />
-                  گواهی‌ها
-                </span>
-              </h2>
-              @for (cert of certificatesForDisplay(); track cert.id) {
-              <div class="certificate-block">
-                @if (showCertThumbnail(cert)) {
-                <button type="button" class="cert-thumbnail-btn" (click)="openCertificateImage(cert)" title="مشاهده تصویر">
-                  <img [src]="cert.imageData" [alt]="cert.title" class="cert-thumbnail" />
-                </button>
-                } @else {
-                <app-resume-icon name="certificate" [size]="20" class="cert-block-icon" />
-                }
-                <div class="cert-block-body">
-                  <h3 class="entry-title">{{ cert.title }}</h3>
-                  @if (cert.issuer) { <p class="entry-subtitle">{{ cert.issuer }}</p> }
-                </div>
-                <div class="cert-block-meta">
-                  <span class="cert-validity">{{ getCertValidity(cert) }}</span>
-                  @if (cert.link) {
-                  <a class="cert-view-link" [href]="normalizeUrl(cert.link)" target="_blank">لینک گواهی</a>
-                  } @else if (cert.imageData && !showCertThumbnail(cert)) {
-                  <button type="button" class="cert-view-link cert-view-btn" (click)="openCertificateImage(cert)">مشاهده
-                    تصویر</button>
-                  }
-                </div>
-              </div>
-              }
-            </section>
-          }
-          @case ('projects') {
-            <section
-              class="main-section draggable-section"
-              [class.dragging]="isSectionBeingDragged('projects')"
-              draggable="true"
-              (dragstart)="onDragStart('projects', $event)"
-              (dragend)="onDragEnd()"
-              (dragover)="onDragOver($event)"
-              (drop)="onDrop('projects', $event)"
-            >
-              <div class="drag-handle" title="کشیدن برای جابجایی">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="9" cy="5" r="1"/>
-                  <circle cx="9" cy="19" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                  <circle cx="15" cy="5" r="1"/>
-                  <circle cx="15" cy="19" r="1"/>
-                </svg>
-              </div>
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon name="projects" [size]="16" />
-                  پروژه‌ها
-                </span>
-              </h2>
-              @for (project of resume()!.projects; track project.id) {
-              <div class="entry-block project-block">
-                <div class="entry-header">
-                  <div class="entry-title-group">
-                    <h3 class="entry-title">{{ project.title }}</h3>
-                    @if (project.employer) { <p class="entry-subtitle">{{ project.employer }}</p> }
-                  </div>
-                  @if (project.date) { <div class="entry-date">{{ formatMonth(project.date) }}</div> }
-                </div>
-                @if (project.link) {
-                <a class="project-link ltr-text" [href]="normalizeUrl(project.link)" target="_blank">{{ project.link }}</a>
-                }
-                @if (project.description) { <p class="project-desc">{{ project.description }}</p> }
-              </div>
-              }
-            </section>
-          }
-          @case ('custom') {
-            @for (section of resume()!.customSections; track section.id) {
-            @if (section.title && section.entries.length > 0) {
-            <section class="main-section custom-section-block">
-              <h2 class="main-section-title">
-                <span class="title-line"></span>
-                <span class="title-content">
-                  <app-resume-icon [name]="$any(section.icon)" [size]="16" />
-                  {{ section.title }}
-                </span>
-              </h2>
-              @for (entry of section.entries; track entry.id) {
-              @if (entry.title || entry.description) {
-              <div class="custom-entry">
-                <div class="custom-entry-header">
-                  <div>
-                    <h3 class="entry-title">{{ entry.title }}</h3>
-                    @if (entry.subtitle) { <p class="entry-subtitle">{{ entry.subtitle }}</p> }
-                  </div>
-                  @if (entry.date) {
-                  <span class="entry-date">{{ entry.date | monthFormat }}</span>
-                  }
-                </div>
-                @if (entry.description) { <p class="custom-entry-desc">{{ entry.description }}</p> }
-                @if (entry.link) {
-                <a class="project-link ltr-text" [href]="normalizeUrl(entry.link)" target="_blank">{{ entry.link }}</a>
-                }
-              </div>
-              }
-              }
-            </section>
-            }
-            }
-          }
+        </div>
+      </section>
+      }
+      @case ('education') {
+      <section class="main-section draggable-section" [class.dragging]="isSectionBeingDragged('education')"
+        draggable="true" (dragstart)="onDragStart('education', $event)" (dragend)="onDragEnd()"
+        (dragover)="onDragOver($event)" (drop)="onDrop('education', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="education" [size]="16" />
+            سوابق تحصیلی
+          </span>
+        </h2>
+        @for (edu of resume()!.education; track edu.id) {
+        <div class="entry-block">
+          <div class="entry-header">
+            <div class="entry-title-group">
+              <h3 class="entry-title">{{ edu.degree }} {{ edu.field }}</h3>
+              @if (edu.specialization) { <p class="entry-subtitle">گرایش: {{ edu.specialization }}</p> }
+              <p class="entry-org">{{ edu.institution }}</p>
+              @if (edu.city || edu.province) { <p class="entry-location">{{ getEducationLocation(edu) }}</p> }
+            </div>
+            <div class="entry-date">
+              {{ formatMonth(edu.startDate) }} - {{ edu.currentlyStudying ? 'در حال تحصیل' : formatMonth(edu.endDate) }}
+              @if (edu.gpa) { <span class="entry-gpa">معدل: {{ edu.gpa }}</span> }
+            </div>
+          </div>
+        </div>
         }
+      </section>
+      }
+      @case ('work') {
+      <section class="main-section work-section draggable-section" [class.dragging]="isSectionBeingDragged('work')"
+        draggable="true" (dragstart)="onDragStart('work', $event)" (dragend)="onDragEnd()"
+        (dragover)="onDragOver($event)" (drop)="onDrop('work', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="work" [size]="16" />
+            سوابق شغلی
+          </span>
+        </h2>
+        <div class="work-timeline">
+          @for (exp of resume()!.workExperience; track exp.id) {
+          <article class="work-card">
+            <div class="work-card-marker"></div>
+            <div class="work-card-body">
+              <div class="work-card-header">
+                <div class="work-card-titles">
+                  <h3 class="work-card-position">{{ exp.position }}</h3>
+                  <p class="work-card-company">{{ exp.company }}</p>
+                  @if (exp.city || exp.province || exp.country) {
+                  <p class="work-card-location">{{ getWorkLocation(exp) }}</p>
+                  }
+                </div>
+                <div class="work-card-date">
+                  {{ formatMonth(exp.startDate) }} – {{ exp.current ? 'تا کنون' : formatMonth(exp.endDate) }}
+                </div>
+              </div>
+              @if (exp.description) {
+              <ul class="work-card-bullets">
+                @for (line of getDescriptionLines(exp.description); track line) {
+                <li>{{ line }}</li>
+                }
+              </ul>
+              }
+            </div>
+          </article>
+          }
+        </div>
+      </section>
+      }
+      @case ('technicalSkills') {
+      <section class="main-section skills-section draggable-section"
+        [class.dragging]="isSectionBeingDragged('technicalSkills')" draggable="true"
+        (dragstart)="onDragStart('technicalSkills', $event)" (dragend)="onDragEnd()" (dragover)="onDragOver($event)"
+        (drop)="onDrop('technicalSkills', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="skills" [size]="16" />
+            مهارت‌های فنی
+          </span>
+        </h2>
+        @if (useSkillCards(resume()!.settings.technicalSkillsDisplay)) {
+        <div class="skills-card-grid">
+          @for (skill of technicalSkills(); track skill.id) {
+          <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
+          }
+        </div>
+        } @else if (isChartMode(technicalDisplay())) {
+        <app-skill-chart [skills]="technicalSkills()" [displayType]="asChartMode(technicalDisplay())"
+          [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
+        }
+      </section>
+      }
+      @case ('softSkills') {
+      <section class="main-section skills-section draggable-section"
+        [class.dragging]="isSectionBeingDragged('softSkills')" draggable="true"
+        (dragstart)="onDragStart('softSkills', $event)" (dragend)="onDragEnd()" (dragover)="onDragOver($event)"
+        (drop)="onDrop('softSkills', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="skills" [size]="16" />
+            مهارت‌های نرم
+          </span>
+        </h2>
+        @if (useSkillCards(resume()!.settings.softSkillsDisplay)) {
+        <div class="skills-card-grid">
+          @for (skill of softSkills(); track skill.id) {
+          <app-skill-card [name]="skill.name" [level]="skill.level" [accentColor]="themePrimary()" />
+          }
+        </div>
+        } @else if (isChartMode(softDisplay())) {
+        <app-skill-chart [skills]="softSkills()" [displayType]="asChartMode(softDisplay())"
+          [primaryColor]="themePrimary()" [accentColor]="themeAccent()" [fontFamily]="chartFont()" />
+        }
+      </section>
+      }
+      @case ('certificates') {
+      <section class="main-section draggable-section" [class.dragging]="isSectionBeingDragged('certificates')"
+        draggable="true" (dragstart)="onDragStart('certificates', $event)" (dragend)="onDragEnd()"
+        (dragover)="onDragOver($event)" (drop)="onDrop('certificates', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="certificate" [size]="16" />
+            گواهی‌ها
+          </span>
+        </h2>
+        @for (cert of certificatesForDisplay(); track cert.id) {
+        <div class="certificate-block">
+          @if (showCertThumbnail(cert)) {
+          <button type="button" class="cert-thumbnail-btn" (click)="openCertificateImage(cert)" title="مشاهده تصویر">
+            <img [src]="cert.imageData" [alt]="cert.title" class="cert-thumbnail" />
+          </button>
+          } @else {
+          <app-resume-icon name="certificate" [size]="20" class="cert-block-icon" />
+          }
+          <div class="cert-block-body">
+            <h3 class="entry-title">{{ cert.title }}</h3>
+            @if (cert.issuer) { <p class="entry-subtitle">{{ cert.issuer }}</p> }
+          </div>
+          <div class="cert-block-meta">
+            <span class="cert-validity">{{ getCertValidity(cert) }}</span>
+            @if (cert.link) {
+            <a class="cert-view-link" [href]="normalizeUrl(cert.link)" target="_blank">لینک گواهی</a>
+            } @else if (cert.imageData && !showCertThumbnail(cert)) {
+            <button type="button" class="cert-view-link cert-view-btn" (click)="openCertificateImage(cert)">مشاهده
+              تصویر</button>
+            }
+          </div>
+        </div>
+        }
+      </section>
+      }
+      @case ('projects') {
+      <section class="main-section draggable-section" [class.dragging]="isSectionBeingDragged('projects')"
+        draggable="true" (dragstart)="onDragStart('projects', $event)" (dragend)="onDragEnd()"
+        (dragover)="onDragOver($event)" (drop)="onDrop('projects', $event)">
+        <div class="drag-handle" title="کشیدن برای جابجایی">
+          <app-resume-icon name="menu" [size]="16" />
+        </div>
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon name="projects" [size]="16" />
+            پروژه‌ها
+          </span>
+        </h2>
+        @for (project of resume()!.projects; track project.id) {
+        <div class="entry-block project-block">
+          <div class="entry-header">
+            <div class="entry-title-group">
+              <h3 class="entry-title">{{ project.title }}</h3>
+              @if (project.employer) { <p class="entry-subtitle">{{ project.employer }}</p> }
+            </div>
+            @if (project.date) { <div class="entry-date">{{ formatMonth(project.date) }}</div> }
+          </div>
+          @if (project.link) {
+          <a class="project-link ltr-text" [href]="normalizeUrl(project.link)" target="_blank">{{ project.link }}</a>
+          }
+          @if (project.description) { <p class="project-desc">{{ project.description }}</p> }
+        </div>
+        }
+      </section>
+      }
+      @case ('custom') {
+      @for (section of resume()!.customSections; track section.id) {
+      @if (section.title && section.entries.length > 0) {
+      <section class="main-section custom-section-block">
+        <h2 class="main-section-title">
+          <span class="title-line"></span>
+          <span class="title-content">
+            <app-resume-icon [name]="$any(section.icon)" [size]="16" />
+            {{ section.title }}
+          </span>
+        </h2>
+        @for (entry of section.entries; track entry.id) {
+        @if (entry.title || entry.description) {
+        <div class="custom-entry">
+          <div class="custom-entry-header">
+            <div>
+              <h3 class="entry-title">{{ entry.title }}</h3>
+              @if (entry.subtitle) { <p class="entry-subtitle">{{ entry.subtitle }}</p> }
+            </div>
+            @if (entry.date) {
+            <span class="entry-date">{{ entry.date | monthFormat }}</span>
+            }
+          </div>
+          @if (entry.description) { <p class="custom-entry-desc">{{ entry.description }}</p> }
+          @if (entry.link) {
+          <a class="project-link ltr-text" [href]="normalizeUrl(entry.link)" target="_blank">{{ entry.link }}</a>
+          }
+        </div>
+        }
+        }
+      </section>
+      }
+      }
+      }
+      }
       }
 
       <footer class="resume-footer">

@@ -1,19 +1,19 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
+import { SKILL_LEVEL_LABELS } from '@app/core/constants/resume.constants';
+import { SuggestionService } from '@app/core/services/suggestion.service';
+import { Skill, SkillCategory, SkillLevel } from '@app/core/types/resume.types';
+import { createEmptySkill } from '@app/core/utils/resume.factories';
+import { EditorAddButton } from '@app/shared/components/editor-add-button/editor-add-button';
+import { EditorFormActions } from '@app/shared/components/editor-form-actions/editor-form-actions';
+import { EditorItemActions } from '@app/shared/components/editor-item-actions/editor-item-actions';
+import { FormField } from '@app/shared/components/form-field/form-field';
+import { FormInput } from '@app/shared/components/form-input/form-input';
+import { OrderButtons } from '@app/shared/components/order-buttons/order-buttons';
+import { SegmentedControl, SegmentOption } from '@app/shared/components/segmented-control/segmented-control';
+import { ListEditController } from '@app/shared/utils/list-edit.controller';
+import { requiredError } from '@app/shared/validators/field.validators';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import { SKILL_LEVEL_LABELS } from '../../../core/constants/resume.constants';
-import { SuggestionService } from '../../../core/services/suggestion.service';
-import { Skill, SkillCategory, SkillLevel } from '../../../core/types/resume.types';
-import { createEmptySkill } from '../../../core/utils/resume.factories';
-import { EditorAddButton } from '../../../shared/components/editor-add-button/editor-add-button';
-import { EditorFormActions } from '../../../shared/components/editor-form-actions/editor-form-actions';
-import { EditorItemActions } from '../../../shared/components/editor-item-actions/editor-item-actions';
-import { FormField } from '../../../shared/components/form-field/form-field';
-import { FormInput } from '../../../shared/components/form-input/form-input';
-import { OrderButtons } from '../../../shared/components/order-buttons/order-buttons';
-import { SegmentedControl, SegmentOption } from '../../../shared/components/segmented-control/segmented-control';
-import { ListEditController } from '../../../shared/utils/list-edit.controller';
-import { requiredError } from '../../../shared/validators/field.validators';
 
 @Component({
   selector: 'app-skills-form',
@@ -66,7 +66,16 @@ export class SkillsForm {
   }
 
   removeSkill(id: string): void {
-    this.editCtrl.remove(id);
+    const updated = this.skills().filter(s => s.id !== id);
+    this.skillsChanged.emit(updated);
+    if (this.editingId() === id) {
+      this.editModeChanged.emit(null);
+    }
+    this.nameErrors.update(m => {
+      const next = { ...m };
+      delete next[id];
+      return next;
+    });
   }
 
   updateSkill(id: string, field: keyof Skill, value: unknown): void {

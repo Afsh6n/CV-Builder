@@ -34,7 +34,14 @@ export type ResumeIconName =
   | 'lock'
   | 'refresh'
   | 'info'
-  | 'cpu';
+  | 'cpu'
+  | 'external-link'
+  | 'menu'
+  | 'close'
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'download'
+  | 'print';
 
 @Component({
   selector: 'app-resume-icon',

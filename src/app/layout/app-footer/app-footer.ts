@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { APP_FOOTER } from '@app/core/constants/app.constants';
+import { ResumeIcon } from '@app/shared/components/resume-icon/resume-icon';
 
-import { APP_FOOTER } from '../../core/constants/app.constants';
-import { ResumeIcon } from '../../shared/components/resume-icon/resume-icon';
 
 @Component({
   selector: 'app-footer',

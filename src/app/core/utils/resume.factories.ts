@@ -44,7 +44,7 @@ export const createEmptyResume = (): Resume => ({
 });
 
 export const createEmptyWorkExperience = (): WorkExperience => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   position: '',
   company: '',
   country: '',
@@ -57,7 +57,7 @@ export const createEmptyWorkExperience = (): WorkExperience => ({
 });
 
 export const createEmptyEducation = (): Education => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   degree: '',
   field: '',
   specialization: '',
@@ -72,21 +72,21 @@ export const createEmptyEducation = (): Education => ({
 });
 
 export const createEmptySkill = (category: 'technical' | 'soft' = 'technical'): Skill => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   name: '',
   category,
   level: 3
 });
 
 export const createEmptyLanguage = (): Language => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   name: '',
   level: 3,
   displayType: 'graphic'
 });
 
 export const createEmptyProject = (): Project => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   title: '',
   employer: '',
   link: '',
@@ -95,14 +95,14 @@ export const createEmptyProject = (): Project => ({
 });
 
 export const createEmptySocialMedia = (): SocialMedia => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   platform: 'github',
   username: '',
   url: ''
 });
 
 export const createEmptyCertificate = (): Certificate => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   title: '',
   issuer: '',
   validFrom: '',
@@ -113,7 +113,7 @@ export const createEmptyCertificate = (): Certificate => ({
 });
 
 export const createEmptyCustomSectionEntry = (): CustomSectionEntry => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   title: '',
   subtitle: '',
   date: '',
@@ -122,7 +122,7 @@ export const createEmptyCustomSectionEntry = (): CustomSectionEntry => ({
 });
 
 export const createEmptyCustomSection = (): CustomSection => ({
-  id: Date.now().toString(),
+  id: crypto.randomUUID(),
   title: '',
   icon: 'projects',
   entries: []
