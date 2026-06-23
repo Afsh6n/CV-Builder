@@ -464,10 +464,20 @@
   gap: 6px;
   transition: all 0.2s;
 }
+
 .btn-outline-primary:hover {
   background: #3b82f6;
   color: #fff;
 }
+
 .btn-outline-primary:active {
   transform: scale(0.96);
+}
+
+.btn-outline-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #e2e8f0;
+  color: #94a3b8;
+  border-color: #cbd5e1;
 }

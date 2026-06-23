@@ -1,129 +1,121 @@
 <div class="initial-input-container">
   <div class="input-header">
     <div class="header-text">
-      <h1 class="input-title">ساخت رزومه با هوش مصنوعی</h1>
-      <p class="input-subtitle">ارتباط مستقیم با FreeLLMAPI، دریافت تمام مدل‌ها و ساخت خودکار رزومه</p>
+      <h1 class="input-title">ساخت رزومه با هوش مصنوعی <span
+          style="font-size: 12px; background: #fef08a; color: #854d0e; padding: 2px 8px; border-radius: 12px; vertical-align: middle;">Beta</span>
+      </h1>
+      <p class="input-subtitle">دریافت تمام مدل‌ها و ساخت خودکار رزومه از طریق پروکسی داخلی سیستم</p>
     </div>
   </div>
 
   <div class="input-section">
-
     <div class="ai-guide-card"
       style="margin-bottom: 20px; padding: 15px; background: #eff6ff; border-radius: 12px; border: 1px solid #bfdbfe;">
       <h3 style="margin-top: 0; color: #1e40af;">راهنمای اتصال به هوش مصنوعی</h3>
-      <p style="font-size: 14px; color: #374151;">
-        این برنامه از APIهای سازگار با استانداردهای OpenAI استفاده می‌کند. برای دریافت سرویس‌دهنده رایگان یا راه‌اندازی
-        شخصی:
-      </p>
       <ul style="font-size: 14px; color: #374151; padding-right: 20px;">
-        <li>به مخزن اصلی <strong>FreeLLMAPI</strong> در گیت‌هاب مراجعه کنید.</li>
-        <li>پس از راه‌اندازی، <strong>API Key</strong> خود را در فیلد مربوطه وارد کنید.</li>
-        <li>روی دکمه <strong>「دریافت مدل‌ها」</strong> کلیک کنید تا لیست مدل‌ها بارگذاری شود.</li>
-        <li>مدل مورد نظر را انتخاب کنید — پیشنهاد ما حالت <strong>«auto»</strong> است.</li>
+        <li>پروژه <strong>FreeLLMAPI</strong> و <strong>CVfast</strong> را از گیت‌هاب دریافت کرده و روی سیستم خود
+          (Localhost) اجرا کنید.</li>
+        <li><strong>API Key</strong> خود را وارد کرده و مدل‌ها را دریافت کنید.</li>
       </ul>
       <a href="https://github.com/tashfeenahmed/freellmapi" target="_blank"
         style="color: #2563eb; font-weight: bold; text-decoration: none;">
-        مشاهده مخزن FreeLLMAPI در گیت‌هاب →
+        دریافت FreeLLMAPI از گیت‌هاب →
+      </a>
+      <br>
+      <a href="https://github.com/Afsh6n/CV-Builder" target="_blank"
+        style="color: #2563eb; font-weight: bold; text-decoration: none;">
+        دریافت CVFast از گیت‌هاب →
       </a>
     </div>
 
-    <div class="config-card">
-      <div class="config-card-header">
-        <app-resume-icon name="settings" [size]="18" class="card-header-icon"></app-resume-icon>
-        <span class="config-card-title">تنظیمات اتصال به FreeLLMAPI</span>
+  </div>
+
+  <div class="config-card">
+    <div class="config-card-header">
+      <app-resume-icon name="settings" [size]="18" class="card-header-icon"></app-resume-icon>
+      <span class="config-card-title">تنظیمات اتصال</span>
+    </div>
+
+    <div class="config-body">
+      <div class="config-row single-col">
+        <div class="form-group">
+          <label class="form-label" for="apiKeyInput">
+            <app-resume-icon name="lock" [size]="14" class="label-icon"></app-resume-icon>
+            کلید اتصال (API Key)
+          </label>
+          <input id="apiKeyInput" class="form-input" type="password" [ngModel]="config().apiKey"
+            (ngModelChange)="updateConfig('apiKey', $event)" placeholder="freellmapi-..."
+            [disabled]="isProcessing() || isLoadingModels()" />
+        </div>
       </div>
 
-      <div class="config-body">
-        <div class="config-row two-col">
-          <div class="form-group">
-            <label class="form-label" for="apiEndpoint">
-              <app-resume-icon name="website" [size]="14" class="label-icon"></app-resume-icon>
-              آدرس سرور (Endpoint)
-            </label>
-            <input id="apiEndpoint" class="form-input" type="text" [ngModel]="config().endpoint"
-              (ngModelChange)="updateConfig('endpoint', $event)" placeholder="http://localhost:3001/v1"
-              [disabled]="isProcessing() || isLoadingModels()" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="apiKeyInput">
-              <app-resume-icon name="lock" [size]="14" class="label-icon"></app-resume-icon>
-              کلید اتصال (API Key)
-            </label>
-            <input id="apiKeyInput" class="form-input" type="password" [ngModel]="config().apiKey"
-              (ngModelChange)="updateConfig('apiKey', $event)" placeholder="freellmapi-..."
-              [disabled]="isProcessing() || isLoadingModels()" />
-          </div>
-        </div>
-
-        <div class="config-row single-col">
-          <div class="form-group">
-            <label class="form-label" for="modelSelect">
-              <app-resume-icon name="cpu" [size]="14" class="label-icon"></app-resume-icon>
-              مدل هوش مصنوعی
-            </label>
-            <div class="model-select-wrapper">
-              <select id="modelSelect" class="form-select" [ngModel]="config().model"
-                (ngModelChange)="updateConfig('model', $event)" [disabled]="isProcessing() || isLoadingModels()">
-                <option value="" disabled>یک مدل را انتخاب یا لیست را دریافت کنید...</option>
-                @if (availableModels().length > 0) {
-                @for (model of availableModels(); track model) {
-                <option [value]="model">{{ model }}</option>
-                }
-                } @else if (config().model) {
-                <option [value]="config().model">{{ config().model }}</option>
-                }
-              </select>
-              <button type="button" class="btn-fetch" (click)="fetchModels()"
-                [disabled]="isLoadingModels() || isProcessing() || !config().apiKey || !config().endpoint">
-                @if (isLoadingModels()) {
-                <span class="spinner"></span>
-                <span>در حال دریافت...</span>
-                } @else {
-                <app-resume-icon name="refresh" [size]="16" class="btn-icon"></app-resume-icon>
-                <span>دریافت مدل‌ها</span>
-                }
-              </button>
-            </div>
+      <div class="config-row single-col">
+        <div class="form-group">
+          <label class="form-label" for="modelSelect">
+            <app-resume-icon name="cpu" [size]="14" class="label-icon"></app-resume-icon>
+            مدل هوش مصنوعی
+          </label>
+          <div class="model-select-wrapper">
+            <select id="modelSelect" class="form-select" [ngModel]="config().model"
+              (ngModelChange)="updateConfig('model', $event)" [disabled]="isProcessing() || isLoadingModels()">
+              <option value="" disabled>یک مدل را انتخاب یا لیست را دریافت کنید...</option>
+              @if (availableModels().length > 0) {
+              @for (model of availableModels(); track model) {
+              <option [value]="model">{{ model }}</option>
+              }
+              } @else if (config().model) {
+              <option [value]="config().model">{{ config().model }}</option>
+              }
+            </select>
+            <button type="button" class="btn-fetch" (click)="fetchModels()"
+              [disabled]="isLoadingModels() || isProcessing() || !config().apiKey">
+              @if (isLoadingModels()) {
+              <span class="spinner"></span>
+              <span>در حال دریافت...</span>
+              } @else {
+              <app-resume-icon name="refresh" [size]="16" class="btn-icon"></app-resume-icon>
+              <span>دریافت مدل‌ها</span>
+              }
+            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="textarea-card">
-      <div class="textarea-header">
-        <div class="textarea-label-group">
-          <app-resume-icon name="edit" [size]="18" class="textarea-icon"></app-resume-icon>
-          <span class="textarea-label">اطلاعات و سوابق خود را وارد کنید</span>
-        </div>
-        <span class="char-count" [class.valid]="rawInput().trim().length >= 50"
-          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
-          {{ rawInput().trim().length }} / ۵۰
-        </span>
+  <div class="textarea-card">
+    <div class="textarea-header">
+      <div class="textarea-label-group">
+        <app-resume-icon name="edit" [size]="18" class="textarea-icon"></app-resume-icon>
+        <span class="textarea-label">اطلاعات و سوابق خود را وارد کنید</span>
       </div>
-      <textarea class="info-textarea" [ngModel]="rawInput()" (ngModelChange)="rawInput.set($event)"
-        placeholder="اطلاعات خود را اینجا وارد کنید..." rows="10" [disabled]="isProcessing()"></textarea>
-      <div class="input-hint">
-        <app-resume-icon name="info" [size]="14" class="hint-icon" [class.valid]="rawInput().trim().length >= 50"
-          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0"></app-resume-icon>
-        <span class="hint-text" [class.valid]="rawInput().trim().length >= 50"
-          [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
-          * جهت پردازش دقیق، لطفاً حداقل ۵۰ کاراکتر درباره خودتان بنویسید.
-        </span>
-      </div>
+      <span class="char-count" [class.valid]="rawInput().trim().length >= 50"
+        [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
+        {{ rawInput().trim().length }} / ۵۰
+      </span>
     </div>
-
-    <div class="action-row">
-      <button type="button" class="btn-primary" (click)="processWithAi()"
-        [disabled]="isProcessing() || rawInput().trim().length < 50 || !config().apiKey || !config().model || !config().endpoint">
-        @if (isProcessing()) {
-        <span class="spinner"></span>
-        <span>در حال پردازش اطلاعات...</span>
-        } @else {
-        <app-resume-icon name="sparkles" [size]="20" class="btn-icon"></app-resume-icon>
-        <span>پردازش و ساخت رزومه</span>
-        }
-      </button>
+    <textarea class="info-textarea" [ngModel]="rawInput()" (ngModelChange)="rawInput.set($event)"
+      placeholder="اطلاعات خود را اینجا وارد کنید..." rows="10" [disabled]="isProcessing()"></textarea>
+    <div class="input-hint">
+      <app-resume-icon name="info" [size]="14" class="hint-icon" [class.valid]="rawInput().trim().length >= 50"
+        [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0"></app-resume-icon>
+      <span class="hint-text" [class.valid]="rawInput().trim().length >= 50"
+        [class.invalid]="rawInput().trim().length < 50 && rawInput().trim().length > 0">
+        * جهت پردازش دقیق، لطفاً حداقل ۵۰ کاراکتر درباره خودتان بنویسید.
+      </span>
     </div>
+  </div>
 
+  <div class="action-row">
+    <button type="button" class="btn-primary" (click)="processWithAi()"
+      [disabled]="isProcessing() || rawInput().trim().length < 50 || !config().apiKey || !config().model">
+      @if (isProcessing()) {
+      <span class="spinner"></span>
+      <span>در حال پردازش اطلاعات...</span>
+      } @else {
+      <app-resume-icon name="sparkles" [size]="20" class="btn-icon"></app-resume-icon>
+      <span>پردازش و ساخت رزومه</span>
+      }
+    </button>
   </div>
 </div>

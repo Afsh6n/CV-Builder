@@ -72,7 +72,7 @@ export class App {
   showPdfDialog = signal<boolean>(false);
   pdfFilename = signal<string>('');
   summary = signal<string>('');
-  showInitialInput = signal<boolean>(true);
+  showInitialInput = signal<boolean>(false);
 
   constructor() {
     this.summary.set(this.resume().summary);

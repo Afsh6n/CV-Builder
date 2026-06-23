@@ -9,9 +9,9 @@ import { CareerInfo, Certificate, Education, Language, LanguageDisplayType, Pers
 import { createEmptyCareerInfo, createEmptyCertificate, createEmptyEducation, createEmptyLanguage, createEmptyPersonalInfo, createEmptyProject, createEmptySkill, createEmptyWorkExperience } from '@app/core/utils/resume.factories';
 import { ResumeIcon } from '@app/shared/components/resume-icon/resume-icon';
 
-
 @Component({
   selector: 'app-initial-input',
+  standalone: true,
   imports: [CommonModule, FormsModule, ResumeIcon],
   templateUrl: './initial-input.html',
   styleUrl: './initial-input.css'
@@ -41,7 +41,7 @@ export class InitialInput implements OnInit {
   ngOnInit(): void {
     this.config.set({
       apiKey: localStorage.getItem('freellmapi_key') || '',
-      endpoint: localStorage.getItem('freellmapi_endpoint') || '/v1',
+      endpoint: '/v1',
       model: localStorage.getItem('freellmapi_model') || ''
     });
   }
@@ -49,13 +49,15 @@ export class InitialInput implements OnInit {
   updateConfig(key: keyof AiConfig, value: string): void {
     const cleanValue = value.trim();
     this.config.update(curr => ({ ...curr, [key]: cleanValue }));
-    localStorage.setItem(`freellmapi_${key}`, cleanValue);
+    if (key !== 'endpoint') {
+      localStorage.setItem(`freellmapi_${key}`, cleanValue);
+    }
   }
 
   async fetchModels(): Promise<void> {
     const currentConfig = this.config();
-    if (!currentConfig.apiKey || !currentConfig.endpoint) {
-      await this.alertService.error('لطفاً ابتدا آدرس سرور و کلید اتصال را وارد کنید.');
+    if (!currentConfig.apiKey) {
+      await this.alertService.error('لطفاً ابتدا کلید اتصال را وارد کنید.');
       return;
     }
 
@@ -80,8 +82,8 @@ export class InitialInput implements OnInit {
     const text = this.rawInput().trim();
     const currentConfig = this.config();
 
-    if (!currentConfig.apiKey || !currentConfig.endpoint || !currentConfig.model) {
-      await this.alertService.error('لطفاً تنظیمات سرور هوش مصنوعی (آدرس، کلید و انتخاب مدل) را کامل کنید.');
+    if (!currentConfig.apiKey || !currentConfig.model) {
+      await this.alertService.error('لطفاً تنظیمات هوش مصنوعی (کلید و انتخاب مدل) را کامل کنید.');
       return;
     }
 

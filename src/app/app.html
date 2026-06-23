@@ -4,11 +4,12 @@
       @if (showInitialInput()) {
       <button type="button" class="btn btn-outline-primary" (click)="showEditor()">
         <app-resume-icon name="edit" [size]="18" style="margin-left: 6px;" />
-        ساخت دستی رزومه
+        بازگشت به ویرایشگر دستی
       </button>
       } @else {
-      <button type="button" class="btn btn-secondary" (click)="showInitialInputScreen()">ورود اطلاعات با هوش
-        مصنوعی</button>
+      <button type="button" class="btn btn-outline-primary" (click)="showInitialInputScreen()" disabled>
+        ساخت با هوش مصنوعی (Beta)
+      </button>
       <button type="button" class="btn btn-secondary" (click)="resetResume()"
         [disabled]="isGeneratingPdf()">بازنشانی</button>
       <button type="button" class="btn btn-primary" (click)="openPdfDialog()" [disabled]="isGeneratingPdf()">
