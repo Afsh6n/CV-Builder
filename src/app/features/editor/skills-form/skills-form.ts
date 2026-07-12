@@ -13,6 +13,7 @@ import { SegmentedControl, SegmentOption } from '@app/shared/components/segmente
 import { ListEditController } from '@app/shared/utils/list-edit.controller';
 import { requiredError } from '@app/shared/validators/field.validators';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import type { ApexOptions } from 'ng-apexcharts';
 
 
 @Component({
@@ -89,7 +90,7 @@ export class SkillsForm {
     return map[level];
   }
 
-  getChartOptions(level: SkillLevel): any {
+  getChartOptions(level: SkillLevel): ApexOptions {
     const percent = this.getPercent(level);
     return {
       series: [percent],
@@ -98,7 +99,6 @@ export class SkillsForm {
         radialBar: {
           hollow: { size: '50%' },
           dataLabels: {
-            showOn: 'always',
             name: { show: false },
             value: {
               show: true,
